@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--primary color直接影响状态栏的背景颜色-->
+    <color name="appBlue">#6FBBFF</color>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#cc1BCC7A</color>
+    <color name="colorAccentNoAlpha">#FF008B6A</color>
+    <color name="white">#ffffffff</color>
+    <color name="color_eeeeee">#ffeeeeee</color>
+    <color name="black">#ff000000</color>
+    <color name="black_half">#7f000000</color>
+    <color name="color_dddddd">#dddddd</color>
+    <!--smoke-->
+    <color name="color_f7f7f7">#fff7f7f7</color>
+    <color name="color_333333">#ff333333</color>
+    <color name="color_666666">#ff666666</color>
+    <color name="wheel_timebtn_pre">#CCCCCC</color>
+    <color name="color_e1e1e1">#e1e1e1</color>
+    <color name="color_323232">#323232</color>
+    <color name="color_909090">#909090</color>
+    <color name="transparent">#00000000</color>
+    <color name="color_999999">#999999</color>
+
+    <color name="login_bg">#00A780</color>
+    <color name="color_f5f5f5">#f5f5f5</color>
+    <color name="color_f8f8f8">#f8f8f8</color>
+    <color name="login_gray">#4FCD9E</color>
+
+    <color name="text1">#59B29C</color>
+    <color name="text2">#333333</color>
+    <color name="split_line">#11112233</color>
+    <color name="blue_tag">#65BCFF</color>
+    <color name="yellow_tag">#F7AF39</color>
+    <color name="green_tag">#4FCD9E</color>
+    <color name="red_tag">#FF506F</color>
+    <color name="color_bbbbbb">#BBBBBB</color>
+    <color name="index_search_bg">#E7E7E7</color>
+    <color name="marquee_bg">#f4f4f4</color>
+</resources>

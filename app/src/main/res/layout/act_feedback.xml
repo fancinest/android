@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_eeeeee"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_content"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@color/white"
+            android:gravity="left|top"
+            android:hint="愿望实现的心情如何？还处于小激动中吧！快来分享一下…"
+            android:padding="12dp"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:id="@+id/ln_pic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <com.narancommunity.app.common.ExpandableHeightGridView
+                android:id="@+id/gridview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:horizontalSpacing="16dp"
+                android:numColumns="3"
+                android:scrollbars="none"
+                android:verticalSpacing="12dp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/btn_release"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/login_gray"
+        android:text="发布"
+        android:textColor="@color/clickable_white_grey"
+        android:textSize="17sp" />
+
+</LinearLayout>

@@ -1,0 +1,23 @@
+<com.narancommunity.app.common.CenteredToolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="74dp"
+    android:background="@color/white"
+    android:contentInsetLeft="0dp"
+    android:contentInsetStart="0dp"
+    android:minHeight="?attr/actionBarSize"
+    android:paddingTop="26dp"
+    app:contentInsetLeft="0dp"
+    app:contentInsetStart="0dp"
+    app:elevation="0dp"
+    app:navigationIcon="@mipmap/back"
+    app:popupTheme="@style/AppTheme.PopupOverlay"
+    app:subtitleTextColor="#ff646464"
+    app:theme="@style/AppTheme.AppBarOverlay"
+    app:title="Title"
+    app:titleTextAppearance="@style/ToolbarTitle"
+    app:titleTextColor="@color/color_333333">
+    <!--app:navigationIcon="@drawable/abc_ic_ab_back_mtrl_am_alpha"-->
+    <!--自定义区域-->
+</com.narancommunity.app.common.CenteredToolbar>

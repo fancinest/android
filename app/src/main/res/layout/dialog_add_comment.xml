@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/et_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:hint="在此输入评论"
+        android:textSize="15sp"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:textColor="@color/color_999999"
+        android:imeOptions="actionDone"
+        android:maxHeight="120dp"
+        android:minHeight="48dp" />
+</RelativeLayout>

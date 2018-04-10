@@ -1,0 +1,92 @@
+<resources>
+    <string name="app_name">那然公益</string>
+    <string name="index">首页</string>
+    <string name="plants">种树</string>
+    <string name="philanthropist">慈善家</string>
+    <string name="mine">我的</string>
+
+    <string name="please_press_back_again_to_exit">再按一次退出</string>
+    <string name="string_naran">那然</string>
+    <string name="string_week_rec">每周推荐</string>
+    <string name="release_wish">发布心愿</string>
+    <string name="search">搜索</string>
+    <string name="complete">保存</string>
+    <string name="prompt_username">手机号码</string>
+    <string name="prompt_password">输入密码</string>
+    <string name="action_sign_in">登陆</string>
+    <string name="action_forget_psd">忘记密码</string>
+    <string name="action_register">点击注册</string>
+
+    <string name="save">保存</string>
+    <string name="share">分享</string>
+    <string name="load_more">加载更多</string>
+    <string name="basement">生产者</string>
+    <string name="will_maker">即将入驻</string>
+    <string name="hudong_shequ">互动社区</string>
+    <string name="sheyuan_jiandu">社员监督</string>
+    <string name="info_look">信息披露</string>
+    <string name="info">资讯</string>
+    <string name="community">社区</string>
+    <string name="my_attention">我的关注</string>
+    <string name="my_join">我的参与</string>
+    <string name="info_edit">资料编辑</string>
+    <string name="my_collect">我的收藏</string>
+    <string name="my_notification">系统通知</string>
+    <string name="seting">系统设置</string>
+    <string name="feedback">意见反馈</string>
+    <string name="my_about">关于</string>
+    <string name="register">注册</string>
+    <string name="prompt_set_password">设置密码</string>
+    <string name="prompt_repeat_psd">重复密码</string>
+    <string name="prompt_verify_code">验证码</string>
+    <string name="prompt_register">我已阅读并同意</string>
+    <string name="prompt_register_two">《那然公益用户服务协定》</string>
+    <string name="send_code">发送验证码</string>
+    <string name="type_new_psd">输入新密码</string>
+    <string name="action_forget_psd_two">忘记密码</string>
+    <string name="submit">提交</string>
+    <string name="repead_new_psd">重复新密码</string>
+    <string name="title_agreement">那然公约</string>
+    <string name="send_verification_code_countdown">%1$s秒后可重发</string>
+    <string name="send_verification_code">发送验证码</string>
+    <string name="action_login">正在为您登录...</string>
+    <string name="selected">自选</string>
+    <string name="search_your_likes">搜索感兴趣关注</string>
+    <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
+    <string name="about_naran">关于那然</string>
+    <string name="naran_info">那然资讯</string>
+    <string name="conmmunity_act">社区活动</string>
+    <!--<string name="naran_act">公社活动</string>-->
+    <string name="more_makers">更多生产者</string>
+    <string name="viewpager_indicator">%1$d/%2$d</string>
+    <string name="personal_info">个人资料</string>
+    <string name="jubao">举报</string>
+    <string name="add_comment">发评论</string>
+    <string name="modify_psd">修改密码</string>
+    <string name="title_activity_login2">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."</string>
+    <string name="next">下一步</string>
+
+    <string name="cancle">取消</string>
+    <string name="title">请选择时间</string>
+    <string name="commit">确定</string>
+    <string name="year">年</string>
+    <string name="month">月</string>
+    <string name="day">日</string>
+    <string name="hour">时</string>
+    <string name="minute">分</string>
+
+    <string name="select_date">选择日期</string>
+    <string name="current_date">当前日期</string>
+    <string name="select_time">选择时间</string>
+    <string name="current_time">当前时间</string>
+</resources>

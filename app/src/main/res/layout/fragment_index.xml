@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="26dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.flyco.tablayout.SlidingTabLayout
+            android:id="@+id/slide_tab"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="12dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            tl:tl_indicator_color="@color/login_bg"
+            tl:tl_indicator_height="2dp"
+            tl:tl_indicator_width_equal_title="true"
+            tl:tl_tab_padding="6dp"
+            tl:tl_tab_space_equal="true"
+            tl:tl_textSelectColor="#333333"
+            tl:tl_textUnselectColor="#999999"
+            tl:tl_textsize="14sp"
+            tl:tl_underline_color="@color/login_bg"
+            tl:tl_underline_height="0dp" />
+
+        <ImageView
+            android:id="@+id/iv_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="30dp"
+            android:src="@mipmap/group_11" />
+
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_f5f5f5"
+        tl:layout_constraintBottom_toBottomOf="parent"
+        tl:layout_constraintEnd_toEndOf="parent"
+        tl:layout_constraintStart_toStartOf="parent"
+        tl:layout_constraintTop_toTopOf="parent" />
+
+</LinearLayout>

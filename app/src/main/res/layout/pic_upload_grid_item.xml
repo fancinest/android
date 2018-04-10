@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clipChildren="true"
+    android:clipToPadding="true"
+    android:descendantFocusability="afterDescendants">
+
+    <ImageView
+        android:id="@+id/pic_iv"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/fabu_icon_tianjiazhaopian" />
+
+    <ImageView
+        android:id="@+id/del_iv"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_gravity="top|right"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:src="@drawable/clear" />
+
+</FrameLayout>

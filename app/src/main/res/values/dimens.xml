@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="topbardimen">48dp</dimen>
+    <dimen name="textsize_10">10sp</dimen>
+    <dimen name="textsize_12">12sp</dimen>
+    <dimen name="textsize_14">14sp</dimen>
+    <dimen name="textsize_15">15sp</dimen>
+    <dimen name="default_divider_height">1px</dimen>
+    <dimen name="default_divider_padding">2dp</dimen>
+    <dimen name="sort_divider_horizontal">0.5dp</dimen>
+    <dimen name="sort_divider_vertical">0.5dp</dimen>
+    <dimen name="farm_divider">8dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="three_divider">10dp</dimen>
+</resources>

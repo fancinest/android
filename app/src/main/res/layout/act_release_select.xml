@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:zhy="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+    <!--<com.narancommunity.app.common.CenteredToolbar xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--android:id="@+id/toolbar"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="74dp"-->
+    <!--android:background="@color/white"-->
+    <!--android:contentInsetLeft="0dp"-->
+    <!--android:contentInsetStart="0dp"-->
+    <!--android:minHeight="?attr/actionBarSize"-->
+    <!--android:paddingTop="26dp"-->
+    <!--app:contentInsetLeft="0dp"-->
+    <!--app:contentInsetStart="0dp"-->
+    <!--app:elevation="0dp"-->
+    <!--app:navigationIcon="@mipmap/back"-->
+    <!--app:popupTheme="@style/AppTheme.PopupOverlay"-->
+    <!--app:subtitleTextColor="#ff646464"-->
+    <!--app:theme="@style/AppTheme.AppBarGreen"-->
+    <!--app:title="Title"-->
+    <!--app:titleTextAppearance="@style/ToolbarTitle"-->
+    <!--app:titleTextColor="@color/color_333333">-->
+    <!--&lt;!&ndash;app:navigationIcon="@drawable/abc_ic_ab_back_mtrl_am_alpha"&ndash;&gt;-->
+    <!--&lt;!&ndash;自定义区域&ndash;&gt;-->
+    <!--</com.narancommunity.app.common.CenteredToolbar>-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="50dp"
+        android:paddingRight="40dp">
+
+        <com.zhy.view.flowlayout.TagFlowLayout
+            android:id="@+id/id_flowlayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            zhy:max_select="1" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/login_gray"
+        android:gravity="center"
+        android:text="下一步"
+        android:textColor="@color/clickable_green_grey"
+        android:textSize="16sp" />
+</LinearLayout>

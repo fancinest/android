@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.narancommunity.app">
+
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+
+    <application
+        android:name=".MApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name="com.narancommunity.app.MainActivity"
+            android:theme="@style/ImageTranslucentTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activity.ReleaseAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+
+        <activity
+            android:name=".activity.MakeWishAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+
+        <activity
+            android:name=".activity.FindFourAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+
+        <activity
+            android:name=".activity.RangeAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+
+        <activity
+            android:name=".activity.WallListAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+
+        <activity
+            android:name=".activity.SettingAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.AddressAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.EditAddressAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+
+        <activity
+            android:name=".activity.AuthoriseFirstAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+
+        <activity
+            android:name=".activity.AuthoriseSecondAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+
+        <activity
+            android:name=".activity.MyInfoAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+
+        <activity
+            android:name=".activity.LoginAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+
+        <activity
+            android:name=".activity.AgreementAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+
+        <activity
+            android:name=".activity.RegisterAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+
+        <activity
+            android:name=".activity.ForgetAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+
+        <activity
+            android:name=".activity.SplashAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.ReleaseSelectAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <!--<activity-->
+        <!--android:name=".activity.NameAndAddressAct"-->
+        <!--android:theme="@style/ImageTranslucentTheme"></activity>-->
+        <activity
+            android:name=".activity.AskPaperAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.WishDetailAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.HelpItAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.DonateDetailAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.MoreCommentAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.IWantAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.DonateWishDetailAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.picbroswer.ImagePagerActivity"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.StartFahuoAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.ExpAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.WishDonateDetailAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.WishFeedBackAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.TransitAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.JubaoAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.AppFeedbackAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.AssistantDetailAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.ModifyPsdAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.MsgAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.MyCollectionAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+    </application>
+
+</manifest>
