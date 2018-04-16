@@ -58,16 +58,16 @@ public class FindSortAdapter extends ListBaseAdapter<String> {
                 tv_name.setText("工具器材");
                 break;
             case 4:
-                Utils.setImgF(mContext, R.mipmap.meizhuanghuli, iv_img);
-                tv_name.setText("美妆护理2");
+                Utils.setImgF(mContext, R.mipmap.muyingyongping, iv_img);
+                tv_name.setText("母婴用品");
                 break;
             case 5:
-                Utils.setImgF(mContext, R.mipmap.meizhuanghuli, iv_img);
-                tv_name.setText("美妆护理3");
+                Utils.setImgF(mContext, R.mipmap.xiebaofushi, iv_img);
+                tv_name.setText("鞋包服饰");
                 break;
             case 6:
-                Utils.setImgF(mContext, R.mipmap.meizhuanghuli, iv_img);
-                tv_name.setText("美妆护理4");
+                Utils.setImgF(mContext, R.mipmap.chongwuyongping, iv_img);
+                tv_name.setText("宠物用品");
                 break;
         }
 

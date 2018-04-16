@@ -3,6 +3,7 @@ package com.narancommunity.app;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.narancommunity.app.activity.BookHouseAct;
 import com.narancommunity.app.activity.FindFourAct;
 import com.narancommunity.app.activity.RangeAct;
 import com.narancommunity.app.adapter.BannerPagerAdapter;
@@ -160,18 +162,26 @@ public class IndexNewFragment extends Fragment {
 //                        200
                         int y = scrollView.getScrollY();
                         if (y >= 300) {
-                            //这里还有问题
-                            viewBg.setAlpha(1);
-                            float alpha = (float) y / 300;
-                            if (alpha <= 1) {
-                                viewBg.setBackgroundColor(getResources().getColor(R.color.appBlue));
+                            if (viewBg.getAlpha() < 1) {
+                                viewBg.setAlpha(1);
+                                viewBg.setBackgroundResource(R.drawable.bookhouse_top_gradient);
+                                etSearch.setBackgroundResource(R.drawable.round_corner_color_search_lighter);
+                                etSearch.setHintTextColor(getResources().getColor(R.color.white));
+                                Drawable drawable = getResources().getDrawable(R.mipmap.topnav_btn_sousuo_white);
+                                drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), (int) (drawable.getMinimumHeight()));
+                                etSearch.setCompoundDrawables(drawable, null, null, null);
                                 viewBg.setAlpha(1);
                                 Log.i("fancy", " y = " + y);
                             }
                         } else {
                             float alpha = (float) y / 300;
                             viewBg.setAlpha(alpha);
-                            Log.i("fancy", " y = " + y + "alpha:" + alpha);
+                            etSearch.setBackgroundResource(R.drawable.round_corner_color_search);
+                            etSearch.setHintTextColor(getResources().getColor(R.color.appBlue));
+                            Drawable drawable = getResources().getDrawable(R.mipmap.topnav_btn_sousuo_blue);
+                            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), (int) (drawable.getMinimumHeight()));
+                            etSearch.setCompoundDrawables(drawable, null, null, null);
+                            Log.i("fancy", " y = " + y + "  alpha:" + alpha);
                         }
 
 //                        if (scrollView.getScrollY() <= 50) {
@@ -328,10 +338,15 @@ public class IndexNewFragment extends Fragment {
         if (mBannerPager != null) mBannerPager.removeCallbacks(mBannerChgRunnable);
     }
 
-    @OnClick({R.id.ln_week, R.id.ln_assistant, R.id.ln_topic, R.id.ln_rank})
+    @OnClick({R.id.ln_week, R.id.ln_assistant, R.id.ln_topic, R.id.ln_rank, R.id.ln_book})
     public void onViewClicked(View view) {
         Intent it = new Intent(getContext(), FindFourAct.class);
         switch (view.getId()) {
+            case R.id.ln_book:
+                Intent itBook = new Intent(getContext(), BookHouseAct.class);
+                itBook.putExtra("tag", 0);
+                startActivity(itBook);
+                break;
             case R.id.ln_week:
                 it.putExtra("tag", 0);
                 startActivity(it);

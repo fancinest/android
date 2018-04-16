@@ -1,14 +1,17 @@
 package com.narancommunity.app.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.narancommunity.app.R;
+import com.narancommunity.app.activity.BookDetailAct;
 import com.narancommunity.app.adapter.base.ListBaseAdapter;
 import com.narancommunity.app.adapter.base.SuperViewHolder;
 import com.narancommunity.app.common.Utils;
@@ -24,6 +27,7 @@ import okhttp3.internal.Util;
  */
 public class FindLatestAdapter extends ListBaseAdapter<BookEntity> {
     OnItemClickListener listener;
+    boolean isSearch = false;
 
     public FindLatestAdapter(Context context) {
         super(context);
@@ -32,6 +36,10 @@ public class FindLatestAdapter extends ListBaseAdapter<BookEntity> {
 
     public void setListener(OnItemClickListener listener) {
         this.listener = listener;
+    }
+
+    public void isSearch(boolean isSearch) {
+        this.isSearch = isSearch;
     }
 
     @Override
@@ -47,6 +55,7 @@ public class FindLatestAdapter extends ListBaseAdapter<BookEntity> {
         if (entity == null)
             return;
 
+        LinearLayout lnScore = holder.getView(R.id.ln_score);
         CardView cardView = holder.getView(R.id.card_parent);
         ImageView ivImg = holder.getView(R.id.iv_img);
         TextView tvName = holder.getView(R.id.tv_name);
@@ -60,19 +69,28 @@ public class FindLatestAdapter extends ListBaseAdapter<BookEntity> {
 
         tvName.setText(Utils.getValue(entity.getName()));
         tvWriter.setText(Utils.getValue(entity.getMwriter()));
-        tvScore.setText(Utils.getValue(entity.getScore()));
-        rating.setRating(Float.parseFloat(Utils.getValue(entity.getScore())));
         tvDesc.setText(Utils.getValue(entity.getDesc()));
         tvDistance.setText(Utils.getValue(entity.getDistance()));
 
         if (!"".equals(Utils.getValue(entity.getUrl()))) {
             Utils.setImgF(mContext, entity.getUrl(), ivImg);
+        } else {
+            Utils.setImgF(mContext, R.mipmap.bg, ivImg);
+        }
+
+        if (isSearch) {
+            tvWriter.setVisibility(View.GONE);
+            lnScore.setVisibility(View.GONE);
+        } else {
+            tvScore.setText(Utils.getValue(entity.getScore()) + "");
+            rating.setRating(Float.parseFloat(Utils.getValue(entity.getScore())));
         }
 
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onItemClick(position);
+//                listener.onItemClick(position);
+                mContext.startActivity(new Intent(mContext, BookDetailAct.class));
             }
         });
     }

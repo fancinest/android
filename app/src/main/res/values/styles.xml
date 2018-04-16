@@ -145,4 +145,10 @@
         <item name="android:windowEnterAnimation">@anim/pop_enter_anim</item>
         <item name="android:windowExitAnimation">@anim/pop_exit_anim</item>
     </style>
+
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/color_999999</item>
+        <item name="colorControlActivated">@color/starRed</item>
+    </style>
+
 </resources>

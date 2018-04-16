@@ -14,4 +14,6 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="three_divider">10dp</dimen>
+    <dimen name="book_divider_horizontal">36dp</dimen>
+    <dimen name="book_divider_vertical">0dp</dimen>
 </resources>

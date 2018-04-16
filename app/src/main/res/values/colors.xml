@@ -2,6 +2,8 @@
 <resources>
     <!--primary color直接影响状态栏的背景颜色-->
     <color name="appBlue">#6FBBFF</color>
+    <color name="appRed">#FF739A</color>
+    <color name="starRed">#FF5A88</color>
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#cc1BCC7A</color>
@@ -10,6 +12,7 @@
     <color name="color_eeeeee">#ffeeeeee</color>
     <color name="black">#ff000000</color>
     <color name="black_half">#7f000000</color>
+    <color name="white_half">#7fFFFFFF</color>
     <color name="color_dddddd">#dddddd</color>
     <!--smoke-->
     <color name="color_f7f7f7">#fff7f7f7</color>

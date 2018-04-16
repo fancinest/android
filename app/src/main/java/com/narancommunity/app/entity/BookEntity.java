@@ -7,7 +7,15 @@ package com.narancommunity.app.entity;
  */
 
 public class BookEntity {
-    String name, url, mwriter, score, desc, distance;
+    String name, url, mwriter, score, desc, distance, id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

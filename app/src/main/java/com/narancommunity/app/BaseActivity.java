@@ -1,10 +1,17 @@
 package com.narancommunity.app;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.narancommunity.app.activity.ReportAct;
 import com.narancommunity.app.common.CenteredToolbar;
 
 /**
@@ -19,7 +26,7 @@ public class BaseActivity extends AppCompatActivity {
         return this;
     }
 
-    public void setBar(CenteredToolbar toolbar){
+    public void setBar(CenteredToolbar toolbar) {
 //        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
 //            LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) toolbar.getLayoutParams();
 //            linearParams.height = Utils.dip2px(getContext(), 48);
@@ -36,7 +43,95 @@ public class BaseActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
+        } else if (item.getItemId() == R.id.action_share) {
+            showShareBoard();
+        } else if (item.getItemId() == R.id.action_jubao) {
+            startActivity(new Intent(getContext(), ReportAct.class));
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private Dialog mWindowDialog;
+
+    public void showShareBoard() {
+        mWindowDialog = new Dialog(this, R.style.more_dialog);
+        View view = LinearLayout.inflate(this, R.layout.share_board, null);
+        mWindowDialog.setContentView(view);
+        mWindowDialog.setCanceledOnTouchOutside(false);
+        view.getLayoutParams().width = getWindow().getWindowManager().getDefaultDisplay().getWidth();
+
+        TextView sina = (TextView) view.findViewById(R.id.tv_sina);
+        TextView weixin = (TextView) view.findViewById(R.id.tv_weixin);
+        TextView weixin_circle = (TextView) view.findViewById(R.id.tv_wexin_circle);
+        TextView qq = (TextView) view.findViewById(R.id.tv_qq);
+        ImageView cha = (ImageView) view.findViewById(R.id.iv_close);
+
+        sina.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                NRApplication.ItemClick(getContext(),"那然公益APP",
+//                        "分享APP", "http://wx4.sinaimg.cn/square/006behBIgy1fe6d1v8mr3j3028028q2t.jpg",
+//                        "", 0, platformActionListener);
+            }
+        });
+        weixin.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+//                NRApplication.ItemClick(getContext(),"那然公益APP",
+//                        "分享APP", "http://wx4.sinaimg.cn/square/006behBIgy1fe6d1v8mr3j3028028q2t.jpg",
+//                        "", 1, platformActionListener);
+            }
+        });
+        weixin_circle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                NRApplication.ItemClick(getContext(),"那然公益APP",
+//                        "分享APP", "http://wx4.sinaimg.cn/square/006behBIgy1fe6d1v8mr3j3028028q2t.jpg",
+//                        "", 2, platformActionListener);
+            }
+        });
+        qq.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+//                NRApplication.ItemClick(getContext(),"那然公益APP",
+//                        "分享APP", "http://wx4.sinaimg.cn/square/006behBIgy1fe6d1v8mr3j3028028q2t.jpg",
+//                        "", 3, platformActionListener);
+            }
+        });
+        cha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mWindowDialog.dismiss();
+            }
+        });
+        mWindowDialog.show();
+    }
+
+//    PlatformActionListener platformActionListener = new PlatformActionListener() {
+//
+//        @Override
+//        public void onError(Platform arg0, int arg1, Throwable arg2) {
+//            //操作失败啦，打印提供的错误，方便调试
+//            arg2.printStackTrace();
+//            mWindowDialog.dismiss();
+//        }
+//
+//        @Override
+//        public void onComplete(Platform arg0, int arg1, HashMap<String, Object> arg2) {
+//            //操作成功，在这里可以做后续的步骤
+//            //这里需要说明的一个参数就是HashMap<String, Object> arg2
+//            //这个参数在你进行登录操作的时候里面会保存有用户的数据，例如用户名之类的。
+//            Toaster.toast(getContext(), "分享成功！");
+//            mWindowDialog.dismiss();
+//        }
+//
+//        @Override
+//        public void onCancel(Platform arg0, int arg1) {
+//            //用户取消操作会调用这里
+//            Toaster.toast(getContext(), "取消分享");
+//            mWindowDialog.dismiss();
+//        }
+//    };
 }

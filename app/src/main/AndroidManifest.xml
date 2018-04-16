@@ -168,6 +168,54 @@
         <activity
             android:name=".activity.MyCollectionAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.BookHouseAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.AixinBookAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.DonateBookAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.BookDetailAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.BookLendCardAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.BookCommentAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.AddBookCommentAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.BookCommentDetailAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.ReportAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.RangeBookAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.SearchBookAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.NeedBookAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.BookCommunityAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.BookYSHYDetailAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.BookHelpDetailAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.BookOrdererListAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
     </application>
 
 </manifest>

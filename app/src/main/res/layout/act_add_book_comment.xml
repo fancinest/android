@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_eeeeee"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <Button
+        android:id="@+id/btn_release"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="16dp"
+        android:background="@color/appBlue"
+        android:text="完成"
+        android:textColor="@color/clickable_white_grey"
+        android:textSize="17sp" />
+
+    <EditText
+        android:id="@+id/et_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_marginTop="16dp"
+        android:background="@color/white"
+        android:gravity="left|top"
+        android:hint="说点什么吧"
+        android:minHeight="274dp"
+        android:padding="12dp"
+        android:textColor="@color/color_999999"
+        android:textColorHint="@color/color_999999"
+        android:textSize="15sp" />
+
+</RelativeLayout>

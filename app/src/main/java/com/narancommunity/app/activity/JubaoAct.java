@@ -18,7 +18,7 @@ import butterknife.OnClick;
 /**
  * Writer：fancy on 2018/1/24 16:33
  * Email：120760202@qq.com
- * FileName :
+ * FileName : 老版举报，不知道哪里要用的，现在用这个{@link ReportAct}
  */
 
 public class JubaoAct extends BaseActivity {

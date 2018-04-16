@@ -34,13 +34,13 @@ import butterknife.ButterKnife;
  * FileName：我的收藏
  */
 public class MyCollectionSonFragment extends Fragment {
-    int type = 0;
     ArrayList<CollectEssayItem> listEssayData = new ArrayList<>();
     ArrayList<CollectDonateItem> listDonateData = new ArrayList<>();
     ArrayList<CollectWishItem> listWishData = new ArrayList<>();
     ArrayList<CollectTopicItem> listTopicData = new ArrayList<>();
     @BindView(R.id.recyclerView)
     RecyclerView recycleView;
+    int type = 0;
 
     public void setType(int type) {
         this.type = type;
