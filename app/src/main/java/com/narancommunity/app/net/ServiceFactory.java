@@ -25,10 +25,10 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
  */
 public class ServiceFactory {
 
-    public static final String API_BASE_URL = "http://118.178.122.9:8082";//正式的
+//    public static final String API_BASE_URL = "http://118.178.122.9:8082";//正式的
     public static final String API_BASE_URL_HTML = "http://h5.naranc.com";//html host（正式）
 
-//    public static final String API_BASE_URL = "http://118.178.122.9:8081";//测试的
+    public static final String API_BASE_URL = "http://47.98.218.205:8082";//测试的
 //    public static final String API_BASE_URL_HTML = "http://118.178.122.9:8081";//html host（测试）
 
     private static final OkHttpClient sHttpClient = new OkHttpClient.Builder()

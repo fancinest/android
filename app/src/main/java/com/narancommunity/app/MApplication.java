@@ -28,7 +28,8 @@ import java.util.Map;
  */
 
 public class MApplication extends Application {
-
+    public static int widthPixels = 720;// 屏幕宽度
+    public static int heightPixels = 1280;// 屏幕高度
     private static MApplication instance;
     public static boolean isRelease = false;//是否为发布版
     public static boolean isTest = true;//是否为测试

@@ -4,9 +4,15 @@ import com.narancommunity.app.entity.Address;
 import com.narancommunity.app.entity.ApplyDetailEntity;
 import com.narancommunity.app.entity.AskPapers;
 import com.narancommunity.app.entity.AssistantEntity;
+import com.narancommunity.app.entity.BannerData;
+import com.narancommunity.app.entity.BookDetail;
+import com.narancommunity.app.entity.BookListData;
 import com.narancommunity.app.entity.CollectEssayItem;
 import com.narancommunity.app.entity.CommentListEntity;
 import com.narancommunity.app.entity.DonateDetailData;
+import com.narancommunity.app.entity.NewsData;
+import com.narancommunity.app.entity.RecData;
+import com.narancommunity.app.entity.RecEntity;
 import com.narancommunity.app.entity.WallListData;
 import com.narancommunity.app.entity.Stationery;
 import com.narancommunity.app.entity.UpdateFilesEntity;
@@ -130,6 +136,43 @@ public interface NRService {
     @FormUrlEncoded
     @POST(NRConfig.URL_ORDER_APPLY_DETAIL)
     Call<Result<ApplyDetailEntity>> applyDetail(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//申请的人的订单详细
+
+    //TODO 以此为参考
+    @FormUrlEncoded
+    @POST(NRConfig.URL_BANNER_LIST)
+    Call<Result<BannerData>> getBannerList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取banner列表
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_HOUSE_HOT_REC)
+    Call<Result<RecData>> getHouseHotRec(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取爱心书屋热门榜
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_HOUSE_REC)
+    Call<Result<RecData>> getHouseBookRec(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取爱心书屋书单推荐
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_HOUSE_TOPLINES)
+    Call<Result<NewsData>> getBookTopLinesList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取banner列表
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_HOUSE_BANNER)
+    Call<Result<BannerData>> getBannerHouseList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取banner列表
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_DONATE_BOOK)
+    Call<Result<Void>> donateBook(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//捐书
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_GET_BOOK_DETAIL)
+    Call<Result<BookDetail>> getBookDetail(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//扫描获取书库中的书的信息
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_BOOK_LIST)
+    Call<Result<BookListData>> getBookList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取首页最新发布书籍列表
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_TOPLINE_LIST)
+    Call<Result<NewsData>> getTopLinesList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取快报列表
 
     @FormUrlEncoded
     @POST(NRConfig.URL_GET_ESSAY_LIST)

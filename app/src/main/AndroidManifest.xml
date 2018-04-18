@@ -216,6 +216,15 @@
         <activity
             android:name=".activity.BookOrdererListAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.OrderBookAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name="simplezxing.activity.CaptureActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ImageTranslucentTheme"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
     </application>
 
 </manifest>

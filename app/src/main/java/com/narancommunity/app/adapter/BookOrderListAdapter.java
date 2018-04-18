@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.media.Image;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.joooonho.SelectableRoundedImageView;
@@ -45,6 +46,7 @@ public class BookOrderListAdapter extends ListBaseAdapter<BookOrderer> {
             return;
         BookOrderer entity = getDataList().get(position);
         View ivFirst = holder.getView(R.id.iv_first);
+        LinearLayout lnParent = holder.getView(R.id.ln_wanter);
         if (position == 0)
             ivFirst.setVisibility(View.VISIBLE);
         else
@@ -60,6 +62,12 @@ public class BookOrderListAdapter extends ListBaseAdapter<BookOrderer> {
             @Override
             public void onClick(View v) {
 //                mContext.startActivity(new Intent(mContext, BookOrdererListAct.class));
+            }
+        });
+        lnParent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClick(position);
             }
         });
     }

@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.entity.BannerItem;
+import com.narancommunity.app.entity.Publicitys;
 import com.viewpagerindicator.IconPagerAdapter;
 
 import java.util.ArrayList;
@@ -24,22 +25,22 @@ import java.util.List;
 public class BannerPagerAdapter extends PagerAdapter implements IconPagerAdapter {
     Context context;
 
-    private List<BannerItem> mBannerList;
+    private List<Publicitys> mBannerList;
 
-    public BannerPagerAdapter(Context context, List<BannerItem> bannerList) {
+    public BannerPagerAdapter(Context context, List<Publicitys> bannerList) {
         this.context = context;
         setBannerList(bannerList);
     }
 
-    public void setBannerList(List<BannerItem> bannerList) {
+    public void setBannerList(List<Publicitys> bannerList) {
         if (bannerList != null) {
             this.mBannerList = bannerList;
         } else {
-            this.mBannerList = new ArrayList<BannerItem>();
+            this.mBannerList = new ArrayList<Publicitys>();
         }
     }
 
-    public List<BannerItem> getBannerList() {
+    public List<Publicitys> getBannerList() {
         return mBannerList;
     }
 
@@ -74,16 +75,16 @@ public class BannerPagerAdapter extends PagerAdapter implements IconPagerAdapter
         bannerImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BannerItem item = getBannerList().get(position);
-                String url = item.getPubUrl();
-                if (null != null && !url.equals("")) {
-                    Toaster.toast(context, "是要跳转的这里");
-                }
+                Publicitys item = getBannerList().get(position);
+//                String url = item.getPubUrl();
+//                if (null != null && !url.equals("")) {
+//                    Toaster.toast(context, "是要跳转的这里");
+//                }
 //                    context.startActivity(new Intent(context, WebViewTwoAct.class).putExtra(
 //                            "url", url).putExtra("title", ""));
             }
         });
-        String url = getBannerList().get(position).getPubCover();
+        String url = getBannerList().get(position).getPublicityImg();
         Glide.with(container.getContext()).load(url).placeholder(R.mipmap.banner).into(bannerImageView);
         ((ViewPager) container).addView(bannerImageView, 0);
         return bannerImageView;

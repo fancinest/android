@@ -210,15 +210,28 @@
                             android:layout_width="match_parent"
                             android:layout_height="130dp" />
 
+                        <!--<com.narancommunity.app.common.IconPageIndicator-->
+                        <!--android:id="@+id/banner_indicator"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_below="@id/banner_pager"-->
+                        <!--android:layout_centerHorizontal="true"-->
+                        <!--android:layout_gravity="bottom|center_horizontal"-->
+                        <!--android:layout_marginTop="16dp"-->
+                        <!--android:orientation="horizontal" />-->
+
                         <com.narancommunity.app.common.IconPageIndicator
                             android:id="@+id/banner_indicator"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@id/banner_pager"
-                            android:layout_centerHorizontal="true"
                             android:layout_gravity="bottom|center_horizontal"
-                            android:layout_marginTop="16dp"
-                            android:orientation="horizontal" />
+                            android:layout_below="@id/banner_pager"
+                            android:layout_marginTop="6dp"
+                            android:layout_centerHorizontal="true"
+                            android:orientation="horizontal"
+                            android:padding="10dp"
+                            app:paddingEnd="10dp"
+                            app:paddingStart="10dp" />
 
                     </RelativeLayout>
 

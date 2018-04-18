@@ -6,4 +6,5 @@
     android:background="@drawable/tag_bg"
     android:gravity="center"
     android:text="dfdsfa"
+    android:textSize="14sp"
     android:textColor="@color/clickable_grey_white" />

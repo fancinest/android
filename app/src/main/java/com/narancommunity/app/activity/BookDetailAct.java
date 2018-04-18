@@ -1,13 +1,19 @@
 package com.narancommunity.app.activity;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -48,6 +54,7 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import simplezxing.activity.CaptureActivity;
 
 /**
  * Writer：fancy on 2018/4/12 10:50
@@ -132,6 +139,8 @@ public class BookDetailAct extends BaseActivity {
     LinearLayout lnOrders;
     @BindView(R.id.scrollView)
     NestedScrollView scrollView;
+    @BindView(R.id.ln_top)
+    LinearLayout lnTop;
     @BindView(R.id.ln_tool)
     LinearLayout lnTool;
 
@@ -172,7 +181,7 @@ public class BookDetailAct extends BaseActivity {
                 @Override
                 public void onScrollChanged() {
                     try {
-                        if (isViewCovered(lnTool))
+                        if (isViewCovered(tvDesc) && isViewCovered(lnTool))
                             showPop();
                         else {
                             if (mPop != null)
@@ -204,6 +213,16 @@ public class BookDetailAct extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_jubao_share, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        } else if (item.getItemId() == R.id.action_scan) {
+            startActivity(new Intent(getContext(), CaptureActivity.class));
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @OnClick({R.id.iv_lend_card, R.id.iv_donater, R.id.tv_donater, R.id.tv_shuping, R.id.iv_watcher, R.id.tv_watcher, R.id.tv_distance, R.id.ln_collect, R.id.ln_comment, R.id.ln_like, R.id.iv_hot_one, R.id.iv_hot_two, R.id.iv_hot_three, R.id.ln_hot_switch, R.id.btn_operate})
@@ -245,6 +264,7 @@ public class BookDetailAct extends BaseActivity {
                 changeRec();
                 break;
             case R.id.btn_operate:
+                startActivity(new Intent(getContext(), OrderBookAct.class));
                 break;
         }
     }
@@ -331,46 +351,6 @@ public class BookDetailAct extends BaseActivity {
                 }
             });
         }
-    }
-
-    public boolean isViewCovered(final View view) {
-        View currentView = view;
-
-        Rect currentViewRect = new Rect();
-        boolean partVisible = currentView.getGlobalVisibleRect(currentViewRect);
-        boolean totalHeightVisible = (currentViewRect.bottom - currentViewRect.top) >= view.getMeasuredHeight();
-        boolean totalWidthVisible = (currentViewRect.right - currentViewRect.left) >= view.getMeasuredWidth();
-        boolean totalViewVisible = partVisible && totalHeightVisible && totalWidthVisible;
-        if (!totalViewVisible)//if any part of the view is clipped by any of its parents,return true
-            return true;
-
-        while (currentView.getParent() instanceof ViewGroup) {
-            ViewGroup currentParent = (ViewGroup) currentView.getParent();
-            if (currentParent.getVisibility() != View.VISIBLE)//if the parent of view is not visible,return true
-                return true;
-
-            int start = indexOfViewInParent(currentView, currentParent);
-            for (int i = start + 1; i < currentParent.getChildCount(); i++) {
-                Rect viewRect = new Rect();
-                view.getGlobalVisibleRect(viewRect);
-                View otherView = currentParent.getChildAt(i);
-                Rect otherViewRect = new Rect();
-                otherView.getGlobalVisibleRect(otherViewRect);
-                if (Rect.intersects(viewRect, otherViewRect))//if view intersects its older brother(covered),return true
-                    return true;
-            }
-            currentView = currentParent;
-        }
-        return false;
-    }
-
-    private int indexOfViewInParent(View view, ViewGroup parent) {
-        int index;
-        for (index = 0; index < parent.getChildCount(); index++) {
-            if (parent.getChildAt(index) == view)
-                break;
-        }
-        return index;
     }
 
 }

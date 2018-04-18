@@ -3,16 +3,20 @@ package com.narancommunity.app;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.narancommunity.app.activity.ReportAct;
 import com.narancommunity.app.common.CenteredToolbar;
+
+import simplezxing.activity.CaptureActivity;
 
 /**
  * Writer：fancy on 2017/4/14 13:33
@@ -134,4 +138,45 @@ public class BaseActivity extends AppCompatActivity {
 //            mWindowDialog.dismiss();
 //        }
 //    };
+
+
+    public boolean isViewCovered(final View view) {
+        View currentView = view;
+
+        Rect currentViewRect = new Rect();
+        boolean partVisible = currentView.getGlobalVisibleRect(currentViewRect);
+        boolean totalHeightVisible = (currentViewRect.bottom - currentViewRect.top) >= view.getMeasuredHeight();
+        boolean totalWidthVisible = (currentViewRect.right - currentViewRect.left) >= view.getMeasuredWidth();
+        boolean totalViewVisible = partVisible && totalHeightVisible && totalWidthVisible;
+        if (!totalViewVisible)//if any part of the view is clipped by any of its parents,return true
+            return true;
+
+        while (currentView.getParent() instanceof ViewGroup) {
+            ViewGroup currentParent = (ViewGroup) currentView.getParent();
+            if (currentParent.getVisibility() != View.VISIBLE)//if the parent of view is not visible,return true
+                return true;
+
+            int start = indexOfViewInParent(currentView, currentParent);
+            for (int i = start + 1; i < currentParent.getChildCount(); i++) {
+                Rect viewRect = new Rect();
+                view.getGlobalVisibleRect(viewRect);
+                View otherView = currentParent.getChildAt(i);
+                Rect otherViewRect = new Rect();
+                otherView.getGlobalVisibleRect(otherViewRect);
+                if (Rect.intersects(viewRect, otherViewRect))//if view intersects its older brother(covered),return true
+                    return true;
+            }
+            currentView = currentParent;
+        }
+        return false;
+    }
+
+    public int indexOfViewInParent(View view, ViewGroup parent) {
+        int index;
+        for (index = 0; index < parent.getChildCount(); index++) {
+            if (parent.getChildAt(index) == view)
+                break;
+        }
+        return index;
+    }
 }

@@ -24,6 +24,6 @@
         android:id="@+id/iv_add_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/side_btn_pinglun" />
+        android:src="@mipmap/side_btn_zan_pinglun" />
 
 </LinearLayout>

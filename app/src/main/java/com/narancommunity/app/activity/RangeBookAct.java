@@ -11,6 +11,7 @@ import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.R;
+import com.narancommunity.app.activity.fragment.BookDonateRangeFragment;
 import com.narancommunity.app.activity.fragment.RangeDaRenFragment;
 import com.narancommunity.app.activity.fragment.RangeRangeFragment;
 import com.narancommunity.app.common.CenteredToolbar;
@@ -37,9 +38,9 @@ public class RangeBookAct extends BaseActivity implements OnTabSelectListener {
 
     private String[] mTitles = {"赠书榜", "读书榜", "书评榜"};
     private ArrayList<Fragment> mFragments = new ArrayList<>();
-    RangeDaRenFragment firstFrag = RangeDaRenFragment.newInstance();
-    RangeRangeFragment secondFrag = RangeRangeFragment.newInstance();
-    RangeRangeFragment thirdFrag = RangeRangeFragment.newInstance();
+    BookDonateRangeFragment firstFrag = BookDonateRangeFragment.newInstance();
+    BookDonateRangeFragment secondFrag = BookDonateRangeFragment.newInstance();
+    BookDonateRangeFragment thirdFrag = BookDonateRangeFragment.newInstance();
 
 
     @Override

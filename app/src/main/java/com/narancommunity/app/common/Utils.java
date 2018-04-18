@@ -13,6 +13,7 @@ import android.database.Cursor;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -35,11 +36,16 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.narancommunity.app.interfaces.PicLoadCallBack;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
@@ -469,8 +475,9 @@ public class Utils {
             try {
                 Glide.with(context)
                         .load(imgUrl)
+                        .asBitmap()
                         .centerCrop()
-//                        .dontAnimate()
+                        .dontAnimate()
 //                        .placeholder(R.drawable.img_loading_f)
                         .into(imageView);
             } catch (Exception e) {
@@ -478,6 +485,50 @@ public class Utils {
             }
         }
     }
+
+    //Glide保存图片
+    public static void savePicture(Context context, final String fileName, String url, final PicLoadCallBack listener) {
+        if (url.equals("")) {
+            Toaster.toast(context, "未查询到图片！");
+            return;
+        }
+        Glide.with(context).load(url).asBitmap().toBytes().into(new SimpleTarget<byte[]>() {
+            @Override
+            public void onResourceReady(byte[] bytes, GlideAnimation<? super byte[]> glideAnimation) {
+                try {
+                    String address = savaFileToSD(fileName, bytes);
+                    listener.OnComplete(address);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    //往SD卡写入文件的方法
+    public static String savaFileToSD(String filename, byte[] bytes) throws Exception {
+        //如果手机已插入sd卡,且app具有读写sd卡的权限
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            String filePath = Environment.getExternalStorageDirectory().getCanonicalPath() + "/wishSea";
+            File dir1 = new File(filePath);
+            if (!dir1.exists()) {
+                dir1.mkdirs();
+            }
+            filename = filePath + "/" + filename;
+            //这里就不要用openFileOutput了,那个是往手机内存中写数据的
+            FileOutputStream output = new FileOutputStream(filename);
+            output.write(bytes);
+            //将bytes写入到输出流中
+            output.close();
+            Log.i("fancy", "图片已成功保存到" + filePath);
+            return filename;
+            //关闭输出流
+        } else {
+            Log.i("fancy", "SD卡不存在或者不可读写");
+            return "";
+        }
+    }
+
 //
 //    /**
 //     * 设置宽的长款

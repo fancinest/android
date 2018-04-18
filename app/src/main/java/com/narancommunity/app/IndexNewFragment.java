@@ -22,7 +22,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.narancommunity.app.activity.BookHouseAct;
 import com.narancommunity.app.activity.FindFourAct;
@@ -32,14 +31,26 @@ import com.narancommunity.app.adapter.FindLatestAdapter;
 import com.narancommunity.app.adapter.FindSortAdapter;
 import com.narancommunity.app.adapter.OnItemClickListener;
 import com.narancommunity.app.common.IconPageIndicator;
+import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.ObservableScrollView;
+import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
+import com.narancommunity.app.entity.BannerData;
 import com.narancommunity.app.entity.BannerItem;
-import com.narancommunity.app.entity.BookEntity;
+import com.narancommunity.app.entity.BookListData;
+import com.narancommunity.app.entity.BookListEntity;
+import com.narancommunity.app.entity.NewsData;
+import com.narancommunity.app.entity.Publicitys;
+import com.narancommunity.app.entity.TopLines;
+import com.narancommunity.app.net.NRClient;
+import com.narancommunity.app.net.Result;
+import com.narancommunity.app.net.ResultCallback;
 import com.sunfusheng.marqueeview.MarqueeView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -85,13 +96,13 @@ public class IndexNewFragment extends Fragment {
     @BindView(R.id.scrollView)
     ObservableScrollView scrollView;
 
-    List<BannerItem> listBannerData = new ArrayList<>();
-
     BannerPagerAdapter mBannerPagerAdapter;
     FindSortAdapter sortAdapter;
     FindLatestAdapter latestAdapter;
-
     private static final int BANNER_CHG_PEROID = 3000;
+
+    List<Publicitys> listBannerData = new ArrayList<>();
+    List<BookListEntity> listBookData = new ArrayList<>();
 
     private Runnable mBannerChgRunnable = new Runnable() {
 
@@ -149,7 +160,7 @@ public class IndexNewFragment extends Fragment {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            setData();
+                            getData();
                         }
                     }, 1000);
                 }
@@ -198,7 +209,6 @@ public class IndexNewFragment extends Fragment {
             viewBg.setBackgroundColor(getResources().getColor(R.color.appBlue));
             viewBg.setAlpha(1);
 
-            setMarqueen();
             return rootView;
         } else {
             //缓存的rootView需要判断是否已经被加过parent， 如果有parent需要从parent删除，要不然会发生这个rootview已经有parent的错误。
@@ -213,39 +223,18 @@ public class IndexNewFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        BannerItem item1 = new BannerItem();
-        BannerItem item2 = new BannerItem();
-        BannerItem item3 = new BannerItem();
-        BannerItem item4 = new BannerItem();
-        listBannerData.add(item1);
-        listBannerData.add(item2);
-        listBannerData.add(item3);
-        listBannerData.add(item4);
 
         mBannerPagerAdapter = new BannerPagerAdapter(getContext(), listBannerData);
         mBannerPager.setAdapter(mBannerPagerAdapter);
         mBannerPager.postDelayed(mBannerChgRunnable, BANNER_CHG_PEROID);
 
         setSort();
-        setLatest();
+        setAdapter();
+        getData();
     }
 
-    private void setMarqueen() {
-        marqueeView = rootView.findViewById(R.id.marqueeView);
-
-        final List<String> info = new ArrayList<>();
-        info.add("大家好，我是fancy。");
-        info.add("欢迎大家关注我哦！");
-        info.add("新浪微博：fancinest");
-//        marqueeView.setNotices(info);
-        marqueeView.startWithList(info);
-
-        // 在代码里设置自己的动画
-        marqueeView.startWithList(info, R.anim.anim_bottom_in, R.anim.anim_top_out);
-    }
-
-    private void setLatest() {
-        final LinearLayoutManager lm_latest = new LinearLayoutManager(getContext());
+    private void setAdapter() {
+        LinearLayoutManager lm_latest = new LinearLayoutManager(getContext());
         lm_latest.setOrientation(LinearLayoutManager.VERTICAL);
         latestAdapter = new FindLatestAdapter(getContext());
         latestAdapter.setListener(new OnItemClickListener() {
@@ -257,24 +246,109 @@ public class IndexNewFragment extends Fragment {
         recyclerViewNew.setLayoutManager(lm_latest);
         recyclerViewNew.setAdapter(latestAdapter);
         recyclerViewNew.setNestedScrollingEnabled(false);
-        List<BookEntity> list = new ArrayList<>();
-        BookEntity entity = new BookEntity();
-        entity.setDesc("《红楼梦》，中国古典四大名著之首，清代作家曹雪芹创作的章回体长篇小说");
-        entity.setDistance("3km");
-        entity.setMwriter("曹雪芹");
-        entity.setName("红楼梦");
-        entity.setUrl("https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=cd0275550b24ab18f41be96554938da8/0b46f21fbe096b636940ce230e338744ebf8ac6c.jpg");
-        entity.setScore("4.0");
+        latestAdapter.setDataList(listBookData);
+        latestAdapter.notifyDataSetChanged();
+    }
 
-        list.add(entity);
-        list.add(entity);
-        list.add(entity);
-        list.add(entity);
-        list.add(entity);
-        list.add(entity);
-        list.add(entity);
-        list.add(entity);
-        latestAdapter.setDataList(list);
+    private void getData() {
+        //1.获取轮播图，2获取那然快报，3获取最新发布的
+        getBanner();
+        getMarqueen();
+        getLatest();
+    }
+
+    private void getLatest() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("commodityType", "");
+        map.put("pageNum", 1);
+        map.put("pageSize", 10);
+        NRClient.getBookList(map, new ResultCallback<Result<BookListData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<BookListData> result) {
+                LoadDialog.dismiss(getContext());
+                setLatest(result.getData());
+            }
+        });
+    }
+
+    private void getMarqueen() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("pageNum", 1);
+        map.put("pageSize", 10);
+        NRClient.getNewsList(map, new ResultCallback<Result<NewsData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<NewsData> result) {
+                LoadDialog.dismiss(getContext());
+                setMarqueen(result.getData());
+            }
+        });
+    }
+
+    private void getBanner() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("publicityType", "HOME");
+        map.put("pageNum", 1);
+        map.put("pageSize", 10);
+        NRClient.getBannerList(map, new ResultCallback<Result<BannerData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<BannerData> result) {
+                LoadDialog.dismiss(getContext());
+                if (result.getData() != null && result.getData().getTotalCount() > 0)
+                    setBannerData(result.getData().getPublicitys());
+                else
+                    Toaster.toast(getContext(), "没有轮播图！");
+            }
+        });
+    }
+
+    private void setMarqueen(NewsData data) {
+        List<TopLines> list = new ArrayList<>();
+        if (data != null && data.getTotalCount() > 0) {
+            list.addAll(data.getToplines());
+        } else
+            Toaster.toast(getContext(), "没有快报！");
+        List<String> info = revertData(list);
+        marqueeView = rootView.findViewById(R.id.marqueeView);
+        marqueeView.startWithList(info);
+        // 在代码里设置自己的动画
+        marqueeView.startWithList(info, R.anim.anim_bottom_in, R.anim.anim_top_out);
+
+    }
+
+    private List<String> revertData(List<TopLines> data) {
+        List<String> list = new ArrayList<>();
+        for (TopLines info : data) {
+            list.add(info.getToplineTitle());
+        }
+        return list;
+    }
+
+    private void setLatest(BookListData data) {
+        listBookData.clear();
+        if (data != null && data.getOrders() != null && data.getTotalCount() > 0) {
+            listBookData.addAll(data.getOrders());
+        } else {
+            Toaster.toast(getContext(), "没有发布！");
+        }
+        latestAdapter.setDataList(listBookData);
         latestAdapter.notifyDataSetChanged();
     }
 
@@ -306,7 +380,7 @@ public class IndexNewFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        setData();
+//        setData();
     }
 
     private void setData() {
@@ -319,17 +393,17 @@ public class IndexNewFragment extends Fragment {
         list.add(item2);
         list.add(item3);
         list.add(item4);
-        setBannerData(list);
-        mRefreshLayout.setRefreshing(false);
+//        setBannerData(list);
     }
 
-    private void setBannerData(List<BannerItem> data) {
+    private void setBannerData(List<Publicitys> data) {
         listBannerData.clear();
         if (data != null) {
             listBannerData.addAll(data);
             mBannerPagerAdapter.notifyDataSetChanged();
             mBannerIndicator.setViewPager(mBannerPager);
         }
+        mRefreshLayout.setRefreshing(false);
     }
 
     @Override

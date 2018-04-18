@@ -89,4 +89,6 @@
     <string name="current_date">当前日期</string>
     <string name="select_time">选择时间</string>
     <string name="current_time">当前时间</string>
+
+    <string name="msg_camera_framework_bug">Sorry, the Android camera encountered a problem. Have you given the camera permission to the APP? Or you may need to restart the device.</string>
 </resources>

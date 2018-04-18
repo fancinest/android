@@ -81,6 +81,42 @@ public class NRConfig {
     public static final String URL_BASE = ""/*"http://" + IP*/;
 
     /**
+     * 爱心书屋书单推荐
+     */
+    public static final String URL_HOUSE_REC = "/api/book/recommend/page";
+    /**
+     * 爱心书屋热门推荐
+     */
+    public static final String URL_HOUSE_HOT_REC = "/api/book/hot/page";
+    /**
+     * 爱心书屋快报
+     */
+    public static final String URL_HOUSE_TOPLINES = "/api/topline/book/page";
+    /**
+     * 爱心书屋banner
+     */
+    public static final String URL_HOUSE_BANNER = "/api/publicity/book/page";
+    /**
+     * 捐书
+     */
+    public static final String URL_DONATE_BOOK = "/api/book/donation";
+    /**
+     * 扫描获取书库中的书的信息
+     */
+    public static final String URL_GET_BOOK_DETAIL = "/api/book/by/isbn";
+    /**
+     * 获取首页最新发布书籍列表
+     */
+    public static final String URL_BOOK_LIST = "/api/book/order/page";
+    /**
+     * 获取首页那然快报列表
+     */
+    public static final String URL_TOPLINE_LIST = "/api/topline/page";
+    /**
+     * 获取首页banner列表
+     */
+    public static final String URL_BANNER_LIST = "/api/publicity/page";
+    /**
      * 获取专题报道列表
      */
     public static final String URL_COLLECT_LIST = "/api/record/collection/content";

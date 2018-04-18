@@ -20,13 +20,25 @@ import com.narancommunity.app.adapter.BannerPagerAdapter;
 import com.narancommunity.app.adapter.BookListAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.IconPageIndicator;
+import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
+import com.narancommunity.app.common.Utils;
+import com.narancommunity.app.entity.BannerData;
 import com.narancommunity.app.entity.BannerItem;
 import com.narancommunity.app.entity.BookEntity;
+import com.narancommunity.app.entity.NewsData;
+import com.narancommunity.app.entity.Publicitys;
+import com.narancommunity.app.entity.RecData;
+import com.narancommunity.app.entity.TopLines;
+import com.narancommunity.app.net.NRClient;
+import com.narancommunity.app.net.Result;
+import com.narancommunity.app.net.ResultCallback;
 import com.sunfusheng.marqueeview.MarqueeView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -67,7 +79,7 @@ public class BookHouseAct extends BaseActivity {
     @BindView(R.id.recyclerView_rec)
     RecyclerView recyclerViewRec;
 
-    List<BannerItem> listBannerData = new ArrayList<>();
+    List<Publicitys> listBannerData = new ArrayList<>();
     BookListAdapter adapterHot;
     BookListAdapter adapterRec;
     List<BookEntity> listHot = new ArrayList<>();
@@ -98,13 +110,62 @@ public class BookHouseAct extends BaseActivity {
         ButterKnife.bind(this);
         setBar(toolbar);
         toolbar.setTitle("爱心书屋");
-        toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
-        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
-        toolbar.setNavigationIcon(R.mipmap.nav_back);
-        setBanner();
-        setMarqueen();
         setData();
         setView();
+
+        getData();
+    }
+
+    private void getData() {
+        getMarqueen();
+        getBanner();
+        getHotData();
+        getRecData();
+    }
+
+    private void getHotData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("pageNum", 6);
+        map.put("pageSize", 1);
+        NRClient.getHouseHotRec(map, new ResultCallback<Result<RecData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<RecData> result) {
+                LoadDialog.dismiss(getContext());
+                setHot(result.getData());
+            }
+        });
+    }
+
+    private void setHot(RecData data) {
+        
+    }
+
+    private void getRecData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("pageNum", 1);
+        map.put("pageSize", 10);
+        NRClient.getHouseBookRec(map, new ResultCallback<Result<RecData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<RecData> result) {
+                LoadDialog.dismiss(getContext());
+                setBook(result.getData());
+            }
+        });
+    }
+
+    private void setBook(RecData data) {
     }
 
 
@@ -147,6 +208,10 @@ public class BookHouseAct extends BaseActivity {
         });
         recyclerViewRec.setAdapter(adapterRec);
         recyclerViewRec.setNestedScrollingEnabled(false);
+
+        mBannerPagerAdapter = new BannerPagerAdapter(getContext(), listBannerData);
+        mBannerPager.setAdapter(mBannerPagerAdapter);
+        mBannerPager.postDelayed(mBannerChgRunnable, BANNER_CHG_PEROID);
     }
 
     private void setData() {
@@ -170,40 +235,81 @@ public class BookHouseAct extends BaseActivity {
         }
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
-        mBannerIndicator.setViewPager(mBannerPager);
     }
 
-    private void setMarqueen() {
-        marqueeView = findViewById(R.id.marqueeView);
+    private void getMarqueen() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("pageNum", 1);
+        map.put("pageSize", 10);
+        NRClient.getBookTopLinesList(map, new ResultCallback<Result<NewsData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
 
-        final List<String> info = new ArrayList<>();
-        info.add("大家好，我是fancy。");
-        info.add("欢迎大家关注我哦！");
-        info.add("新浪微博：fancinest");
-//        marqueeView.setNotices(info);
+            @Override
+            public void onSuccess(Result<NewsData> result) {
+                LoadDialog.dismiss(getContext());
+                setMarqueen(result.getData());
+            }
+        });
+    }
+
+    private void getBanner() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("publicityType", "BOOK");
+        map.put("pageNum", 1);
+        map.put("pageSize", 10);
+        NRClient.getBannerHouseList(map, new ResultCallback<Result<BannerData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<BannerData> result) {
+                LoadDialog.dismiss(getContext());
+                if (result.getData() != null && result.getData().getTotalCount() > 0)
+                    setBannerData(result.getData().getPublicitys());
+                else
+                    Toaster.toast(getContext(), "没有轮播图！");
+            }
+        });
+    }
+
+    private void setMarqueen(NewsData data) {
+        List<TopLines> list = new ArrayList<>();
+        if (data != null && data.getTotalCount() > 0) {
+            list.addAll(data.getToplines());
+        } else
+            Toaster.toast(getContext(), "没有快报！");
+        List<String> info = revertData(list);
         marqueeView.startWithList(info);
-
         // 在代码里设置自己的动画
         marqueeView.startWithList(info, R.anim.anim_bottom_in, R.anim.anim_top_out);
+
     }
 
-    private void setBanner() {
-        BannerItem item1 = new BannerItem();
-        BannerItem item2 = new BannerItem();
-        BannerItem item3 = new BannerItem();
-        BannerItem item4 = new BannerItem();
-        listBannerData.add(item1);
-        listBannerData.add(item2);
-        listBannerData.add(item3);
-        listBannerData.add(item4);
+    private List<String> revertData(List<TopLines> data) {
+        List<String> list = new ArrayList<>();
+        for (TopLines info : data) {
+            list.add(info.getToplineTitle());
+        }
+        return list;
+    }
 
-        mBannerPagerAdapter = new BannerPagerAdapter(getContext(), listBannerData);
-        mBannerPager.setAdapter(mBannerPagerAdapter);
-        mBannerPager.postDelayed(mBannerChgRunnable, BANNER_CHG_PEROID);
+    private void setBannerData(List<Publicitys> data) {
+        listBannerData.clear();
+        if (data != null) {
+            listBannerData.addAll(data);
+            mBannerPagerAdapter.notifyDataSetChanged();
+            mBannerIndicator.setViewPager(mBannerPager);
+        }
     }
 
     @Override

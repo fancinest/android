@@ -1,6 +1,7 @@
 package com.narancommunity.app.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,6 +31,7 @@ import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.BookComment;
 import com.narancommunity.app.entity.BookEntity;
+import com.narancommunity.app.entity.BookListEntity;
 import com.narancommunity.app.entity.SearchHistoryEntity;
 import com.narancommunity.app.net.AppConstants;
 import com.snappydb.DB;
@@ -276,18 +280,17 @@ public class SearchBookAct extends BaseActivity {
     }
 
     FindLatestAdapter adapter;
-    List<BookEntity> listResult = new ArrayList<>();
+    List<BookListEntity> listResult = new ArrayList<>();
 
     private void setDataToView() {
-        BookEntity book;
+        BookListEntity book;
         listResult.clear();
         for (int i = 0; i < 10; i++) {
-            book = new BookEntity();
-            book.setDesc("《红楼梦》，中国古典四大名著之首，清代作家曹雪芹创作的章回体长篇小说");
-            book.setDistance("3km");
-            book.setMwriter("曹雪芹");
-            book.setName("红楼梦");
-            book.setUrl("https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=cd0275550b24ab18f41be96554938da8/0b46f21fbe096b636940ce230e338744ebf8ac6c.jpg");
+            book = new BookListEntity();
+            book.setOrderContent("《红楼梦》，中国古典四大名著之首，清代作家曹雪芹创作的章回体长篇小说");
+            book.setOrderAuthor("曹雪芹");
+            book.setOrderTitle("红楼梦");
+            book.setOrderImgs("https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=cd0275550b24ab18f41be96554938da8/0b46f21fbe096b636940ce230e338744ebf8ac6c.jpg");
             listResult.add(book);
         }
 
@@ -318,7 +321,7 @@ public class SearchBookAct extends BaseActivity {
                 finish();
                 break;
             case R.id.iv_clear:
-                clearHistory();
+                showPopView(ivClear);
                 break;
             case R.id.ln_need_help:
                 startActivity(new Intent(getContext(), NeedBookAct.class).putExtra("tag", 0));
@@ -333,5 +336,49 @@ public class SearchBookAct extends BaseActivity {
                 startActivity(new Intent(getContext(), BookDetailAct.class));
                 break;
         }
+    }
+
+    PopupWindow mPop;
+
+    private void showPopView(View view) {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View v = inflater.inflate(R.layout.normal_pop, null);
+
+        if (mPop == null) {
+            mPop = new PopupWindow(v, LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            mPop.setFocusable(true);
+            mPop.setOutsideTouchable(true);
+            mPop.setBackgroundDrawable(new BitmapDrawable());
+            TextView tv_content = (TextView) v.findViewById(R.id.dial);
+            TextView cancel = v.findViewById(R.id.cancel);
+            TextView ok = v.findViewById(R.id.ok);
+
+            ok.setTextColor(getResources().getColor(R.color.appBlue));
+            ok.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
+            cancel.setTextColor(getResources().getColor(R.color.appBlue));
+            cancel.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
+
+
+            tv_content.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+            tv_content.setText("确认删除所有记录吗？");
+            tv_content.setTextColor(getResources().getColor(R.color.black));
+            v.findViewById(R.id.ok).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    clearHistory();
+                    mPop.dismiss();
+                }
+            });
+            v.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View arg0) {
+                    mPop.dismiss();
+                }
+            });
+        }
+        if (mPop != null && !mPop.isShowing())
+            mPop.showAtLocation(view, Gravity.CENTER, 0, 0);
     }
 }
