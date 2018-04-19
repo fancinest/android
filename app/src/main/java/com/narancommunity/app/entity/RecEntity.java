@@ -1,12 +1,14 @@
 package com.narancommunity.app.entity;
 
+import java.io.Serializable;
+
 /**
  * Writer：fancy on 2018/4/18 19:53
  * Email：120760202@qq.com
  * FileName :
  */
 
-public class RecEntity {
+public class RecEntity implements Serializable {
     String average, createTime, orderAuthor, orderContent, orderImgs, orderTitle, orderType, typeName, updateTime;
     Integer orderId;
 

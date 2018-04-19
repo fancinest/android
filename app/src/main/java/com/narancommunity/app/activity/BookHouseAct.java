@@ -29,6 +29,7 @@ import com.narancommunity.app.entity.BookEntity;
 import com.narancommunity.app.entity.NewsData;
 import com.narancommunity.app.entity.Publicitys;
 import com.narancommunity.app.entity.RecData;
+import com.narancommunity.app.entity.RecEntity;
 import com.narancommunity.app.entity.TopLines;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
@@ -82,8 +83,8 @@ public class BookHouseAct extends BaseActivity {
     List<Publicitys> listBannerData = new ArrayList<>();
     BookListAdapter adapterHot;
     BookListAdapter adapterRec;
-    List<BookEntity> listHot = new ArrayList<>();
-    List<BookEntity> listRec = new ArrayList<>();
+    List<RecEntity> listHot = new ArrayList<>();
+    List<RecEntity> listRec = new ArrayList<>();
 
     BannerPagerAdapter mBannerPagerAdapter;
 
@@ -103,6 +104,9 @@ public class BookHouseAct extends BaseActivity {
         }
     };
 
+    int pageNumHot = 1, pageNumRec = 1;
+    int maxPageHot = 1, maxPageRec = 1;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,7 +114,6 @@ public class BookHouseAct extends BaseActivity {
         ButterKnife.bind(this);
         setBar(toolbar);
         toolbar.setTitle("爱心书屋");
-        setData();
         setView();
 
         getData();
@@ -119,14 +122,16 @@ public class BookHouseAct extends BaseActivity {
     private void getData() {
         getMarqueen();
         getBanner();
-        getHotData();
-        getRecData();
+        getHotData(false);
+        getRecData(false);
     }
 
-    private void getHotData() {
+    private void getHotData(boolean isShowProgress) {
+        if (isShowProgress)
+            LoadDialog.show(getContext(), "请稍后！");
         Map<String, Object> map = new HashMap<>();
-        map.put("pageNum", 6);
-        map.put("pageSize", 1);
+        map.put("pageNum", pageNumHot);
+        map.put("pageSize", 6);
         NRClient.getHouseHotRec(map, new ResultCallback<Result<RecData>>() {
             @Override
             public void onFailure(Throwable throwable) {
@@ -143,13 +148,20 @@ public class BookHouseAct extends BaseActivity {
     }
 
     private void setHot(RecData data) {
-        
+        listHot.clear();
+        if (data != null && data.getOrders().size() > 0) {
+            listHot.addAll(data.getOrders());
+            maxPageHot = data.getTotalPageNum();
+            adapterHot.notifyDataSetChanged();
+        }
     }
 
-    private void getRecData() {
+    private void getRecData(boolean isShowProgress) {
+        if (isShowProgress)
+            LoadDialog.show(getContext(), "请稍后！");
         Map<String, Object> map = new HashMap<>();
-        map.put("pageNum", 1);
-        map.put("pageSize", 10);
+        map.put("pageNum", pageNumRec);
+        map.put("pageSize", 6);
         NRClient.getHouseBookRec(map, new ResultCallback<Result<RecData>>() {
             @Override
             public void onFailure(Throwable throwable) {
@@ -166,6 +178,12 @@ public class BookHouseAct extends BaseActivity {
     }
 
     private void setBook(RecData data) {
+        listRec.clear();
+        if (data != null && data.getOrders().size() > 0) {
+            listRec.addAll(data.getOrders());
+            maxPageRec = data.getTotalPageNum();
+            adapterRec.notifyDataSetChanged();
+        }
     }
 
 
@@ -182,7 +200,8 @@ public class BookHouseAct extends BaseActivity {
             @Override
             public void OnItemClick(int position) {
                 Toaster.toast(getContext(), "准备跳转");
-                startActivity(new Intent(getContext(), BookDetailAct.class));
+                startActivity(new Intent(getContext(), BookDetailAct.class)
+                        .putExtra("data", listHot.get(position).getOrderId()));
             }
 
             @Override
@@ -198,7 +217,8 @@ public class BookHouseAct extends BaseActivity {
             @Override
             public void OnItemClick(int position) {
                 Toaster.toast(getContext(), "准备跳转");
-                startActivity(new Intent(getContext(), BookDetailAct.class));
+                startActivity(new Intent(getContext(), BookDetailAct.class)
+                        .putExtra("data", listRec.get(position).getOrderId()));
             }
 
             @Override
@@ -212,27 +232,6 @@ public class BookHouseAct extends BaseActivity {
         mBannerPagerAdapter = new BannerPagerAdapter(getContext(), listBannerData);
         mBannerPager.setAdapter(mBannerPagerAdapter);
         mBannerPager.postDelayed(mBannerChgRunnable, BANNER_CHG_PEROID);
-    }
-
-    private void setData() {
-        String[] arr = new String[]{"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523521822134&di=8f8ad66862e43356d2f611c75e837232&imgtype=0&src=http%3A%2F%2Fs9.sinaimg.cn%2Fmw690%2F001oghI3gy6RP8blcDK18%26690"
-                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523521840435&di=ccc40b13bce701c1243aa33e7ac8ccbf&imgtype=0&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fbaike%2Fw%253D268%253Bg%253D0%2Fsign%3Df7c629d8b9014a90813e41bb914c5e2f%2Fe61190ef76c6a7ef27ca3e4cfdfaaf51f2de66e8.jpg"
-                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523521857113&di=7c3fcec13a02545b16adf8064a80ab3f&imgtype=0&src=http%3A%2F%2Fimage.xinmin.cn%2F2016%2F10%2F31%2F1477875471441.jpg"
-                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523521876495&di=5e2f1c14077b7fd644a085d531bafe47&imgtype=0&src=http%3A%2F%2Fimg13.360buyimg.com%2FpopWaterMark%2Fjfs%2Ft481%2F15%2F977914362%2F15133%2F32d03cb1%2F54a1175aN3785b77e.jpg"
-                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523539651530&di=076380697cd9b09ecc6bd9f7b8cca7e7&imgtype=0&src=http%3A%2F%2Fp4.qhimg.com%2Ft0126b72b37e2c48a1c.jpg"
-                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523522043547&di=2b57cbb4ffac6d93fd4044374ff73297&imgtype=0&src=http%3A%2F%2Fimg34.ddimg.cn%2F24%2F8%2F486114-1_o.jpg"};
-
-        Random random = new Random();
-        BookEntity entity;
-        for (int i = 0; i < 6; i++) {
-            entity = new BookEntity();
-            entity.setName("三国志");
-            int position = random.nextInt(6);
-            Log.i("fancy", "random = " + position);
-            entity.setUrl(arr[position] + "");
-            listHot.add(entity);
-            listRec.add(entity);
-        }
     }
 
     @Override
@@ -348,8 +347,22 @@ public class BookHouseAct extends BaseActivity {
             case R.id.ln_summary:
                 break;
             case R.id.ln_hot_switch:
+                pageNumHot++;
+                if (pageNumHot < maxPageHot)
+                    getHotData(true);
+                else {
+                    pageNumHot = 1;
+                    getHotData(true);
+                }
                 break;
             case R.id.ln_rec_switch:
+                pageNumRec++;
+                if (pageNumRec < maxPageRec)
+                    getRecData(true);
+                else {
+                    pageNumRec = 1;
+                    getRecData(true);
+                }
                 break;
         }
     }

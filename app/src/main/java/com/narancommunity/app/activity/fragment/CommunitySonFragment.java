@@ -1,10 +1,8 @@
 package com.narancommunity.app.activity.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,14 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.BookDetailAct;
-import com.narancommunity.app.adapter.BookCommentAdapter;
-import com.narancommunity.app.adapter.BookListAdapter;
 import com.narancommunity.app.adapter.CommunityYSHYAdapter;
-import com.narancommunity.app.common.Toaster;
-import com.narancommunity.app.entity.BookComment;
 import com.narancommunity.app.entity.BookCommunityEntity;
-import com.narancommunity.app.entity.BookEntity;
 
 import java.util.ArrayList;
 import java.util.List;

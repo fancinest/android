@@ -114,7 +114,7 @@ public class DonateBookAct extends BaseActivity {
     String isbnCode = "";
     String average = "";//平均分
 
-    String[] bookCondition = new String[]{"  全新  ", " 九成新 ", " 七成新 ", "六成新以下"};
+    String[] bookCondition = new String[]{"全新", "九成新 ", "七成新", "六成新以下"};
     String[] bookType = new String[]{"教育教科", "文学小说", "人文社科", "童书绘本", "成功励志", "生活艺术", "金融经管", "其他书籍"};
     String[] realType = new String[]{"BOOK_EDUCATION", "BOOK_NOVEL", "BOOK_HUMANITY", "BOOK_CHILD", "BOOK_SUCCESS", "BOOK_LIFE", "BOOK_FINANCE", "BOOK_OTHER"};
 
@@ -234,7 +234,7 @@ public class DonateBookAct extends BaseActivity {
 
                 Map<String, Object> map = new HashMap<>();
                 map.put("accessToken", MApplication.getAccessToken(getContext()));
-                map.put("bookId", bookId);
+                map.put("bookId", bookId == 0 ? "" : bookId);
                 map.put("isbn", isbnCode);
                 map.put("title", bookName);
                 map.put("pages", pages);
@@ -242,11 +242,12 @@ public class DonateBookAct extends BaseActivity {
                 map.put("publisher", publisher);
                 map.put("price", price);
                 map.put("average", average);
-                map.put("summary", desc);
                 map.put("bookImg", fileName);
                 map.put("tags", sort);
                 map.put("agingDegree", condition);
                 map.put("bookReview", memo);
+                map.put("summary", desc);
+                Log.i("fancy", "data :" + map.toString());
                 donateBook(map);
                 break;
         }

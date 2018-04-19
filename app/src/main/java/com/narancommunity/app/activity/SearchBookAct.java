@@ -70,18 +70,6 @@ public class SearchBookAct extends BaseActivity {
     RelativeLayout rlHistoryView;
     @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.iv_hot_one)
-    ImageView ivHotOne;
-    @BindView(R.id.tv_hot_one)
-    TextView tvHotOne;
-    @BindView(R.id.iv_hot_two)
-    ImageView ivHotTwo;
-    @BindView(R.id.tv_hot_two)
-    TextView tvHotTwo;
-    @BindView(R.id.iv_hot_three)
-    ImageView ivHotThree;
-    @BindView(R.id.tv_hot_three)
-    TextView tvHotThree;
     @BindView(R.id.ln_hot_switch)
     LinearLayout lnHotSwitch;
     @BindView(R.id.recyclerView_result)
@@ -137,12 +125,6 @@ public class SearchBookAct extends BaseActivity {
             entity.setUrl(arr[position] + "");
             listRec.add(entity);
         }
-        tvHotOne.setText(Utils.getValue(listRec.get(0).getName()) + "");
-        tvHotTwo.setText(Utils.getValue(listRec.get(0).getName()) + "");
-        tvHotThree.setText(Utils.getValue(listRec.get(0).getName()) + "");
-        Utils.setImgF(getContext(), listRec.get(0).getUrl(), ivHotOne);
-        Utils.setImgF(getContext(), listRec.get(1).getUrl(), ivHotTwo);
-        Utils.setImgF(getContext(), listRec.get(2).getUrl(), ivHotThree);
     }
 
     private void setView() {
@@ -314,7 +296,7 @@ public class SearchBookAct extends BaseActivity {
         adapter.notifyDataSetChanged();
     }
 
-    @OnClick({R.id.tv_cancel, R.id.iv_clear, R.id.ln_need_help, R.id.iv_hot_one, R.id.iv_hot_two, R.id.iv_hot_three})
+    @OnClick({R.id.tv_cancel, R.id.iv_clear, R.id.ln_need_help})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_cancel:
@@ -325,15 +307,6 @@ public class SearchBookAct extends BaseActivity {
                 break;
             case R.id.ln_need_help:
                 startActivity(new Intent(getContext(), NeedBookAct.class).putExtra("tag", 0));
-                break;
-            case R.id.iv_hot_one:
-                startActivity(new Intent(getContext(), BookDetailAct.class));
-                break;
-            case R.id.iv_hot_two:
-                startActivity(new Intent(getContext(), BookDetailAct.class));
-                break;
-            case R.id.iv_hot_three:
-                startActivity(new Intent(getContext(), BookDetailAct.class));
                 break;
         }
     }

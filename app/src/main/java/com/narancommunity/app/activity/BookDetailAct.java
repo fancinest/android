@@ -1,34 +1,20 @@
 package com.narancommunity.app.activity;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.Rect;
-import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -39,16 +25,32 @@ import android.widget.TextView;
 
 import com.joooonho.SelectableRoundedImageView;
 import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
 import com.narancommunity.app.adapter.BookCommentAdapter;
+import com.narancommunity.app.adapter.BookListAdapter;
 import com.narancommunity.app.adapter.BookOrdererAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
+import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
+import com.narancommunity.app.entity.BookComment;
+import com.narancommunity.app.entity.BookCommentData;
+import com.narancommunity.app.entity.BookDetail;
+import com.narancommunity.app.entity.BookInfo;
+import com.narancommunity.app.entity.BookRelativeRecData;
+import com.narancommunity.app.entity.OrderData;
+import com.narancommunity.app.entity.OrderEntity;
+import com.narancommunity.app.entity.RecEntity;
+import com.narancommunity.app.net.NRClient;
+import com.narancommunity.app.net.Result;
+import com.narancommunity.app.net.ResultCallback;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -106,7 +108,7 @@ public class BookDetailAct extends BaseActivity {
     @BindView(R.id.ln_comment)
     LinearLayout lnComment;
     @BindView(R.id.tv_wish_share)
-    TextView tvWishShare;
+    TextView tvWishLike;
     @BindView(R.id.ln_like)
     LinearLayout lnLike;
     @BindView(R.id.tv_orders)
@@ -119,24 +121,18 @@ public class BookDetailAct extends BaseActivity {
     RecyclerView recyclerViewComment;
     @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.iv_hot_one)
-    ImageView ivHotOne;
-    @BindView(R.id.tv_hot_one)
-    TextView tvHotOne;
-    @BindView(R.id.iv_hot_two)
-    ImageView ivHotTwo;
-    @BindView(R.id.tv_hot_two)
-    TextView tvHotTwo;
-    @BindView(R.id.iv_hot_three)
-    ImageView ivHotThree;
-    @BindView(R.id.tv_hot_three)
-    TextView tvHotThree;
+    @BindView(R.id.tv_jianjie)
+    TextView tvJianjie;
+    @BindView(R.id.recyclerView_rec)
+    RecyclerView recyclerViewRec;
     @BindView(R.id.ln_hot_switch)
     LinearLayout lnHotSwitch;
     @BindView(R.id.btn_operate)
     Button btnOperate;
     @BindView(R.id.ln_Orders)
     LinearLayout lnOrders;
+    @BindView(R.id.ln_comment_view)
+    LinearLayout lnCommentView;
     @BindView(R.id.scrollView)
     NestedScrollView scrollView;
     @BindView(R.id.ln_top)
@@ -145,7 +141,12 @@ public class BookDetailAct extends BaseActivity {
     LinearLayout lnTool;
 
     BookOrdererAdapter orderAdapter;
-    List<String> listOrder = new ArrayList<>();
+    BookCommentAdapter commentAdapter;
+    BookListAdapter recAdapter;
+    List<OrderEntity> listOrder = new ArrayList<>();
+    List<BookComment> listComment = new ArrayList<>();
+    List<RecEntity> listRec = new ArrayList<>();
+    Integer bookId = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -154,21 +155,175 @@ public class BookDetailAct extends BaseActivity {
         ButterKnife.bind(this);
         setBar(toolbar);
         toolbar.setTitle("图书详情");
+
+        bookId = getIntent().getIntExtra("bookId", 0);
         setView();
         setPopView();
+        getData();
+    }
+
+    private void getData() {
+        getBookData();
+        getOrderData();
+        getComment();
+        getRec();
+    }
+
+    int pageNumRec = 1;
+    int totalPageRec = 1;
+
+    private void getRec() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("orderId", bookId);
+        map.put("pageNum", pageNumRec);
+        map.put("pageSize", 3);
+        NRClient.getBookRelativeRecList(map, new ResultCallback<Result<BookRelativeRecData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<BookRelativeRecData> result) {
+                LoadDialog.dismiss(getContext());
+                setRecData(result.getData());
+                totalPageRec = result.getData().getTotalPageNum();
+            }
+        });
+    }
+
+    private void setRecData(BookRelativeRecData data) {
+        if (data != null && data.getOrders() != null && data.getOrders().size() > 0) {
+            listRec.addAll(data.getOrders());
+            recAdapter.notifyDataSetChanged();
+        } else {
+            Toaster.toast(getContext(), "暂无更多推荐");
+        }
+    }
+
+    private void getBookData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("orderId", bookId);
+        NRClient.getBookInfo(map, new ResultCallback<Result<BookInfo>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<BookInfo> result) {
+                LoadDialog.dismiss(getContext());
+                setBookData(result.getData());
+            }
+        });
+    }
+
+    private void setBookData(BookInfo data) {
+        if (data != null) {
+            String watchIcon = Utils.getValue(data.getRecipientImg());
+            if (watchIcon.equals("")) {
+                Utils.setImgF(getContext(), R.mipmap.zw_morentouxiang, ivWatcher);
+            } else {
+                Utils.setImgF(getContext(), watchIcon, ivWatcher);
+            }
+            String donateIcon = Utils.getValue(data.getInitiatorImg());
+            if (donateIcon.equals(""))
+                Utils.setImgF(getContext(), R.mipmap.zw_morentouxiang, ivDonater);
+            else
+                Utils.setImgF(getContext(), donateIcon, ivDonater);
+            String img = Utils.getValue(data.getOrderImgs());
+            if (!img.equals(""))
+                Utils.setImgF(getContext(), img, ivImg);
+
+            float average = data.getAverage();
+            String score = "";
+            if (average > 0)
+                score = average + "";
+            else score = "" + 0.0;
+            int size = score.length();
+            score = score + "分";
+            Spannable string = new SpannableString(score);
+            // 字体大小
+            string.setSpan(new AbsoluteSizeSpan(40), size, size + 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            tvScore.setText(string);
+
+            tvDesc.setText(Utils.getValue(data.getOrderContent()) + "");
+            tvName.setText(Utils.getValue(data.getOrderTitle()) + "");
+            tvWriter.setText(Utils.getValue(data.getOrderAuthor()) + "");
+            tvWatcher.setText(Utils.getValue(data.getRecipientNike()) + "");
+            rating.setRating(Float.parseFloat(Utils.getValue(average)) / 2);
+            tvDonater.setText(Utils.getValue(data.getInitiatorNike()) + "");
+            tvPublisher.setText(Utils.getValue(data.getPublisher()) + "");
+            tvPrice.setText(Utils.getValue(data.getPrice()) + "元");
+            tvWishCollect.setText(Utils.getValue(data.getCollectionTimes()) + "");
+            tvWishComment.setText(Utils.getValue(data.getCommentTimes()) + "");
+            tvWishLike.setText(Utils.getValue(data.getLikeTimes()) + "");
+            tvPages.setText(Utils.getValue(data.getPages()) + "页");
+        }
+    }
+
+    private void getOrderData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("accessToken", MApplication.getAccessToken());
+        map.put("orderId", bookId);
+        NRClient.getBookOrderer(map, new ResultCallback<Result<OrderData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<OrderData> result) {
+                LoadDialog.dismiss(getContext());
+                setOrdererData(result.getData());
+            }
+        });
+    }
+
+    private void setOrdererData(OrderData data) {
+        listOrder.clear();
+        if (data != null && data.getApplys() != null && data.getApplys().size() > 0) {
+            listOrder.addAll(data.getApplys());
+            orderAdapter.setDataList(listOrder);
+            lnOrders.setVisibility(View.VISIBLE);
+        } else lnOrders.setVisibility(View.GONE);
+        orderAdapter.notifyDataSetChanged();
+    }
+
+    private void getComment() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("orderId", bookId);
+        map.put("accessToken", MApplication.getAccessToken());
+        NRClient.getBookCommentList(map, new ResultCallback<Result<BookCommentData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<BookCommentData> result) {
+                LoadDialog.dismiss(getContext());
+                setBookComment(result.getData());
+            }
+        });
+    }
+
+    private void setBookComment(BookCommentData data) {
+        listComment.clear();
+        if (data != null && data.getComments() != null && data.getComments().size() > 0F) {
+            listComment.addAll(data.getComments());
+            lnCommentView.setVisibility(View.VISIBLE);
+        } else {
+            lnCommentView.setVisibility(View.GONE);
+        }
+        commentAdapter.notifyDataSetChanged();
     }
 
     private void setView() {
-        Utils.setImgF(getContext(), R.mipmap.zw_morentouxiang, ivDonater);
-        Utils.setImgF(getContext(), R.mipmap.zw_morentouxiang, ivWatcher);
-
-//        Spannable string = new SpannableString("修改背景色、粗体、字体大小");
-        Spannable string = new SpannableString("8.0分");
-        // 字体大小
-        string.setSpan(new AbsoluteSizeSpan(40), 3, 4, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        tvScore.setText(string);
-
-        setOrderData();
         GridLayoutManager linearLayout = new GridLayoutManager(getContext(), 5);
         linearLayout.setOrientation(GridLayoutManager.VERTICAL);
         orderAdapter = new BookOrdererAdapter(getContext());
@@ -181,7 +336,7 @@ public class BookDetailAct extends BaseActivity {
                 @Override
                 public void onScrollChanged() {
                     try {
-                        if (isViewCovered(tvDesc) && isViewCovered(lnTool))
+                        if (isViewCovered(tvJianjie) && isViewCovered(tvDesc) && isViewCovered(lnTool))
                             showPop();
                         else {
                             if (mPop != null)
@@ -193,14 +348,30 @@ public class BookDetailAct extends BaseActivity {
                 }
             });
         }
-    }
 
-    private void setOrderData() {
-        String s;
-        for (int i = 0; i < 6; i++) {
-            s = "http://img.qqzhi.com/upload/img_3_1897173975D2024083860_27.jpg";
-            listOrder.add(s);
-        }
+        LinearLayoutManager lm_latest = new LinearLayoutManager(getContext());
+        lm_latest.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerViewComment.setLayoutManager(lm_latest);
+        commentAdapter = new BookCommentAdapter(getContext(), listComment);
+        recyclerViewComment.setAdapter(commentAdapter);
+
+        recAdapter = new BookListAdapter(getContext(), listRec);
+        GridLayoutManager linearLayoutRec = new GridLayoutManager(getContext(), 3);
+        linearLayoutRec.setOrientation(GridLayoutManager.VERTICAL);
+        recyclerViewRec.setLayoutManager(linearLayoutRec);
+        recyclerViewRec.setAdapter(recAdapter);
+        recAdapter.setListener(new MeItemInterface() {
+            @Override
+            public void OnItemClick(int position) {
+                startActivity(new Intent(getContext(), BookDetailAct.class)
+                        .putExtra("bookId", listRec.get(position).getOrderId()));
+            }
+
+            @Override
+            public void OnDelClick(int position) {
+
+            }
+        });
     }
 
 //    @Override
@@ -225,9 +396,8 @@ public class BookDetailAct extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.iv_lend_card, R.id.iv_donater, R.id.tv_donater, R.id.tv_shuping, R.id.iv_watcher, R.id.tv_watcher, R.id.tv_distance, R.id.ln_collect, R.id.ln_comment, R.id.ln_like, R.id.iv_hot_one, R.id.iv_hot_two, R.id.iv_hot_three, R.id.ln_hot_switch, R.id.btn_operate})
+    @OnClick({R.id.iv_lend_card, R.id.iv_donater, R.id.tv_donater, R.id.tv_shuping, R.id.iv_watcher, R.id.tv_watcher, R.id.tv_distance, R.id.ln_collect, R.id.ln_comment, R.id.ln_like, R.id.ln_hot_switch, R.id.btn_operate})
     public void onViewClicked(View view) {
-        Toaster.toast(getContext(), "点击了View");
         switch (view.getId()) {
             case R.id.iv_lend_card:
                 startActivity(new Intent(getContext(), BookLendCardAct.class));
@@ -237,7 +407,8 @@ public class BookDetailAct extends BaseActivity {
             case R.id.tv_donater:
                 break;
             case R.id.tv_shuping:
-                startActivity(new Intent(getContext(), BookCommentAct.class));
+                startActivity(new Intent(getContext(), BookCommentAct.class)
+                        .putExtra("bookId", bookId));
                 break;
             case R.id.iv_watcher:
                 break;
@@ -246,22 +417,21 @@ public class BookDetailAct extends BaseActivity {
             case R.id.tv_distance:
                 break;
             case R.id.ln_collect:
+                addCollect();
                 break;
             case R.id.ln_comment:
+                addComment();
                 break;
             case R.id.ln_like:
                 break;
-            case R.id.iv_hot_one:
-                startActivity(new Intent(getContext(), BookDetailAct.class));
-                break;
-            case R.id.iv_hot_two:
-                startActivity(new Intent(getContext(), BookDetailAct.class));
-                break;
-            case R.id.iv_hot_three:
-                startActivity(new Intent(getContext(), BookDetailAct.class));
-                break;
             case R.id.ln_hot_switch:
-                changeRec();
+                pageNumRec++;
+                if (pageNumRec < totalPageRec) {
+                    getRec();
+                } else {
+                    pageNumRec = 1;
+                    Toaster.toast(getContext(), "暂无更多推荐");
+                }
                 break;
             case R.id.btn_operate:
                 startActivity(new Intent(getContext(), OrderBookAct.class));
@@ -269,23 +439,14 @@ public class BookDetailAct extends BaseActivity {
         }
     }
 
-
-    private void changeRec() {
-        String[] arr = new String[]{"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523521822134&di=8f8ad66862e43356d2f611c75e837232&imgtype=0&src=http%3A%2F%2Fs9.sinaimg.cn%2Fmw690%2F001oghI3gy6RP8blcDK18%26690"
-                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523521840435&di=ccc40b13bce701c1243aa33e7ac8ccbf&imgtype=0&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fbaike%2Fw%253D268%253Bg%253D0%2Fsign%3Df7c629d8b9014a90813e41bb914c5e2f%2Fe61190ef76c6a7ef27ca3e4cfdfaaf51f2de66e8.jpg"
-                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523521857113&di=7c3fcec13a02545b16adf8064a80ab3f&imgtype=0&src=http%3A%2F%2Fimage.xinmin.cn%2F2016%2F10%2F31%2F1477875471441.jpg"
-                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523521876495&di=5e2f1c14077b7fd644a085d531bafe47&imgtype=0&src=http%3A%2F%2Fimg13.360buyimg.com%2FpopWaterMark%2Fjfs%2Ft481%2F15%2F977914362%2F15133%2F32d03cb1%2F54a1175aN3785b77e.jpg"
-                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523539651530&di=076380697cd9b09ecc6bd9f7b8cca7e7&imgtype=0&src=http%3A%2F%2Fp4.qhimg.com%2Ft0126b72b37e2c48a1c.jpg"
-                , "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523522043547&di=2b57cbb4ffac6d93fd4044374ff73297&imgtype=0&src=http%3A%2F%2Fimg34.ddimg.cn%2F24%2F8%2F486114-1_o.jpg"};
-
-        String[] newArr = getRandomFromArray(arr, 3);
-
-        Log.i("fancy", "1=" + newArr[0] + "\n2=" + newArr[1] + "\n3=" + newArr[2]);
-        Utils.setImgF(getContext(), newArr[0], ivHotOne);
-        Utils.setImgF(getContext(), newArr[1], ivHotTwo);
-        Utils.setImgF(getContext(), newArr[2], ivHotThree);
+    private void addComment() {
 
     }
+
+    private void addCollect() {
+
+    }
+
 
     public String[] getRandomFromArray(String[] array, int count) {
         // ArrayList<Integer>arrayList =null;

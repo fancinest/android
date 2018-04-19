@@ -81,6 +81,34 @@ public class NRConfig {
     public static final String URL_BASE = ""/*"http://" + IP*/;
 
     /**
+     * 图书书评列表
+     */
+    public static final String URL_BOOKCOMMENT_ADD_COMMENT = "/api/book/review/add";
+    /**
+     * 图书书评列表
+     */
+    public static final String URL_BOOKCOMMENT_LIST = "/api/book/review/page";
+    /**
+     * 图书相关书籍推荐(三个那个)
+     */
+    public static final String URL_BOOK_RELATIVE_REC = "/api/book/relevant/page";
+    /**
+     * 图书借书卡
+     */
+    public static final String URL_BOOK_LEND_CARD = "/api/book/apply/page";
+    /**
+     * 图书评论列表
+     */
+    public static final String URL_BOOK_COMMENT_LIST = "/api/record/comment/order/page";
+    /**
+     * 图书想要看的人
+     */
+    public static final String URL_BOOK_ORDERER = "/api/book/apply/want/page";
+    /**
+     * 图书详情
+     */
+    public static final String URL_BOOK_DETAIL = "/api/book/order/by/id";
+    /**
      * 爱心书屋书单推荐
      */
     public static final String URL_HOUSE_REC = "/api/book/recommend/page";

@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.narancommunity.app.activity.BookHouseAct;
+import com.narancommunity.app.activity.DonateBookAct;
 import com.narancommunity.app.activity.FindFourAct;
 import com.narancommunity.app.activity.RangeAct;
 import com.narancommunity.app.adapter.BannerPagerAdapter;
@@ -412,10 +413,13 @@ public class IndexNewFragment extends Fragment {
         if (mBannerPager != null) mBannerPager.removeCallbacks(mBannerChgRunnable);
     }
 
-    @OnClick({R.id.ln_week, R.id.ln_assistant, R.id.ln_topic, R.id.ln_rank, R.id.ln_book})
+    @OnClick({R.id.ln_week, R.id.ln_assistant, R.id.ln_topic, R.id.ln_rank, R.id.ln_book, R.id.et_search})
     public void onViewClicked(View view) {
         Intent it = new Intent(getContext(), FindFourAct.class);
         switch (view.getId()) {
+            case R.id.et_search:
+                startActivity(new Intent(getContext(), DonateBookAct.class));
+                break;
             case R.id.ln_book:
                 Intent itBook = new Intent(getContext(), BookHouseAct.class);
                 itBook.putExtra("tag", 0);

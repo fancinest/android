@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.adapter.EasyRecyclerAdapter;
+import com.narancommunity.app.entity.BookLendCardEntity;
 import com.narancommunity.app.entity.LendRec;
 import com.narancommunity.app.entity.MeFunctionEntity;
 
@@ -24,11 +25,11 @@ import butterknife.BindView;
  * FileName : 借书卡记录适配器
  */
 
-public class BookLendCardAdapter extends EasyRecyclerAdapter<LendRec> {
+public class BookLendCardAdapter extends EasyRecyclerAdapter<BookLendCardEntity> {
     boolean isLimited = false;
     MeItemInterface meItemInterface;
 
-    public BookLendCardAdapter(Context context, List<LendRec> list) {
+    public BookLendCardAdapter(Context context, List<BookLendCardEntity> list) {
         super(context, list);
     }
 
@@ -45,15 +46,15 @@ public class BookLendCardAdapter extends EasyRecyclerAdapter<LendRec> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final MyViewHolder hold = (MyViewHolder) (holder);
-        LendRec rec = getList().get(position);
+        BookLendCardEntity rec = getList().get(position);
         if (position == 0) {
             hold.ivDotRed.setVisibility(View.GONE);
             hold.ivDotNormal.setVisibility(View.VISIBLE);
             hold.ivDotNormal.setBackgroundResource(R.drawable.oval_blue);
             hold.tvDateLeft.setTextColor(mContext.getResources().getColor(R.color.appBlue));
-            hold.tvDateLeft.setText(rec.getState() + "预计还入");
+            hold.tvDateLeft.setText(rec.getApplyStatus() + "预计还入");
             hold.tvNameLeft.setTextColor(mContext.getResources().getColor(R.color.appBlue));
-            hold.tvNameLeft.setText(rec.getName());
+            hold.tvNameLeft.setText(rec.getAccountNike());
             hold.tvDateLeft.setVisibility(View.VISIBLE);
             hold.tvNameLeft.setVisibility(View.VISIBLE);
             hold.tvDateRight.setVisibility(View.GONE);
@@ -62,9 +63,9 @@ public class BookLendCardAdapter extends EasyRecyclerAdapter<LendRec> {
             hold.ivDotRed.setVisibility(View.VISIBLE);
             hold.ivDotNormal.setVisibility(View.GONE);
             hold.tvDateRight.setTextColor(mContext.getResources().getColor(R.color.appRed));
-            hold.tvDateRight.setText(rec.getState());
+            hold.tvDateRight.setText(rec.getApplyStatus());
             hold.tvNameRight.setTextColor(mContext.getResources().getColor(R.color.appRed));
-            hold.tvNameRight.setText(rec.getName() + "正在借阅...");
+            hold.tvNameRight.setText(rec.getAccountNike() + "正在借阅...");
             hold.tvDateRight.setVisibility(View.VISIBLE);
             hold.tvNameRight.setVisibility(View.VISIBLE);
             hold.tvDateLeft.setVisibility(View.GONE);
@@ -74,9 +75,9 @@ public class BookLendCardAdapter extends EasyRecyclerAdapter<LendRec> {
             hold.ivDotNormal.setVisibility(View.VISIBLE);
             hold.ivDotNormal.setBackgroundResource(R.drawable.oval_gray);
             hold.tvDateLeft.setTextColor(mContext.getResources().getColor(R.color.color_999999));
-            hold.tvDateLeft.setText(rec.getState() + "还入");
+            hold.tvDateLeft.setText(rec.getApplyStatus() + "还入");
             hold.tvNameLeft.setTextColor(mContext.getResources().getColor(R.color.color_999999));
-            hold.tvNameLeft.setText(rec.getName());
+            hold.tvNameLeft.setText(rec.getAccountNike());
             hold.tvDateLeft.setVisibility(View.VISIBLE);
             hold.tvNameLeft.setVisibility(View.VISIBLE);
             hold.tvDateRight.setVisibility(View.GONE);
@@ -86,9 +87,9 @@ public class BookLendCardAdapter extends EasyRecyclerAdapter<LendRec> {
             hold.ivDotNormal.setVisibility(View.VISIBLE);
             hold.ivDotNormal.setBackgroundResource(R.drawable.oval_gray);
             hold.tvDateRight.setTextColor(mContext.getResources().getColor(R.color.color_999999));
-            hold.tvDateRight.setText(rec.getState() + "借出");
+            hold.tvDateRight.setText(rec.getApplyStatus() + "借出");
             hold.tvNameRight.setTextColor(mContext.getResources().getColor(R.color.color_999999));
-            hold.tvNameRight.setText(rec.getName());
+            hold.tvNameRight.setText(rec.getAccountNike());
             hold.tvDateRight.setVisibility(View.VISIBLE);
             hold.tvNameRight.setVisibility(View.VISIBLE);
             hold.tvDateLeft.setVisibility(View.GONE);

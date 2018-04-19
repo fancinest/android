@@ -14,6 +14,7 @@ import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.common.adapter.EasyRecyclerAdapter;
 import com.narancommunity.app.entity.BookEntity;
 import com.narancommunity.app.entity.MeFunctionEntity;
+import com.narancommunity.app.entity.RecEntity;
 
 import org.w3c.dom.Text;
 
@@ -25,11 +26,11 @@ import java.util.List;
  * FileName : 公益活动
  */
 
-public class BookListAdapter extends EasyRecyclerAdapter<BookEntity> {
+public class BookListAdapter extends EasyRecyclerAdapter<RecEntity> {
     boolean isLimited = false;
     MeItemInterface meItemInterface;
 
-    public BookListAdapter(Context context, List<BookEntity> list) {
+    public BookListAdapter(Context context, List<RecEntity> list) {
         super(context, list);
     }
 
@@ -47,14 +48,14 @@ public class BookListAdapter extends EasyRecyclerAdapter<BookEntity> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final MyViewHolder hold = (MyViewHolder) (holder);
 
-        final BookEntity item = getList().get(position);
-        String url = Utils.getValue(item.getUrl());
+        final RecEntity item = getList().get(position);
+        String url = Utils.getValue(item.getOrderImgs());
         if (!url.equals("")) {
             Utils.setImgF(getContext(), url, hold.ivPic);
         } else {
             Utils.setImgF(getContext(), "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523510281803&di=d1eaf4c7d74e69730bf5889169cae5e7&imgtype=jpg&src=http%3A%2F%2Fimg3.imgtn.bdimg.com%2Fit%2Fu%3D3994969733%2C336727888%26fm%3D214%26gp%3D0.jpg", hold.ivPic);
         }
-        hold.tvName.setText(Utils.getValue(item.getName()));
+        hold.tvName.setText(Utils.getValue(item.getOrderTitle()));
 
 //        hold.iv_pic.setImageResource(url);
         hold.ivPic.setOnClickListener(new View.OnClickListener() {

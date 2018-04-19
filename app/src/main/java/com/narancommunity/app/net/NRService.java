@@ -5,12 +5,18 @@ import com.narancommunity.app.entity.ApplyDetailEntity;
 import com.narancommunity.app.entity.AskPapers;
 import com.narancommunity.app.entity.AssistantEntity;
 import com.narancommunity.app.entity.BannerData;
+import com.narancommunity.app.entity.BookCommentData;
 import com.narancommunity.app.entity.BookDetail;
+import com.narancommunity.app.entity.BookInfo;
+import com.narancommunity.app.entity.BookLendCardData;
 import com.narancommunity.app.entity.BookListData;
+import com.narancommunity.app.entity.BookRelativeRecData;
 import com.narancommunity.app.entity.CollectEssayItem;
 import com.narancommunity.app.entity.CommentListEntity;
 import com.narancommunity.app.entity.DonateDetailData;
 import com.narancommunity.app.entity.NewsData;
+import com.narancommunity.app.entity.OrderData;
+import com.narancommunity.app.entity.OrderEntity;
 import com.narancommunity.app.entity.RecData;
 import com.narancommunity.app.entity.RecEntity;
 import com.narancommunity.app.entity.WallListData;
@@ -141,6 +147,34 @@ public interface NRService {
     @FormUrlEncoded
     @POST(NRConfig.URL_BANNER_LIST)
     Call<Result<BannerData>> getBannerList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取banner列表
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_BOOKCOMMENT_LIST)
+    Call<Result<BookRelativeRecData>> getBookCommentCommentList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取书评列表
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_BOOKCOMMENT_ADD_COMMENT)
+    Call<Result<Void>> addBookCommentComment(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//添加书评
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_BOOK_RELATIVE_REC)
+    Call<Result<BookRelativeRecData>> getBookRelativeRecList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取图书相关推荐列表
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_BOOK_COMMENT_LIST)
+    Call<Result<BookCommentData>> getBookCommentList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取图书评论列表
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_BOOK_LEND_CARD)
+    Call<Result<BookLendCardData>> getBookLendCard(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取图书评论列表
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_BOOK_ORDERER)
+    Call<Result<OrderData>> getBookOrderer(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取预定列表
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_BOOK_DETAIL)
+    Call<Result<BookInfo>> getBookInfo(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取图书详情，区别于扫码的图书详情
 
     @FormUrlEncoded
     @POST(NRConfig.URL_HOUSE_HOT_REC)

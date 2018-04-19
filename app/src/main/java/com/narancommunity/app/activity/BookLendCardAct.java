@@ -6,13 +6,25 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.adapter.BookLendCardAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
+import com.narancommunity.app.common.LoadDialog;
+import com.narancommunity.app.common.Toaster;
+import com.narancommunity.app.common.Utils;
+import com.narancommunity.app.entity.BookInfo;
+import com.narancommunity.app.entity.BookLendCardData;
+import com.narancommunity.app.entity.BookLendCardEntity;
 import com.narancommunity.app.entity.LendRec;
+import com.narancommunity.app.net.NRClient;
+import com.narancommunity.app.net.Result;
+import com.narancommunity.app.net.ResultCallback;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,7 +42,8 @@ public class BookLendCardAct extends BaseActivity {
     RecyclerView recyclerView;
 
     BookLendCardAdapter adapter;
-    List<LendRec> list = new ArrayList<>();
+    List<BookLendCardEntity> list = new ArrayList<>();
+    Integer bookId = 0;//
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,22 +52,42 @@ public class BookLendCardAct extends BaseActivity {
         ButterKnife.bind(this);
         setBar(toolbar);
         toolbar.setTitle("借书卡");
-        setData();
 
-        final LinearLayoutManager lm_latest = new LinearLayoutManager(getContext());
+        LinearLayoutManager lm_latest = new LinearLayoutManager(getContext());
         lm_latest.setOrientation(LinearLayoutManager.VERTICAL);
         adapter = new BookLendCardAdapter(getContext(), list);
         recyclerView.setLayoutManager(lm_latest);
         recyclerView.setAdapter(adapter);
+
+        bookId = getIntent().getIntExtra("bookId", 0);
+        getData();
     }
 
-    private void setData() {
-        LendRec lendRec;
-        for (int i = 0; i < 20; i++) {
-            lendRec = new LendRec();
-            lendRec.setName("李爽");
-            lendRec.setState("2018-5-10");
-            list.add(lendRec);
-        }
+    private void getData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("orderId", bookId);
+        map.put("accessToken", MApplication.getAccessToken());
+        NRClient.getBookLendCard(map, new ResultCallback<Result<BookLendCardData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<BookLendCardData> result) {
+                LoadDialog.dismiss(getContext());
+                setData(result.getData());
+            }
+        });
     }
+
+    private void setData(BookLendCardData data) {
+        list.clear();
+        if (data != null && data.getApplys() != null && data.getApplys().size() > 0) {
+            list.addAll(data.getApplys());
+        } else Toaster.toast(getContext(), "暂无数据");
+        adapter.notifyDataSetChanged();
+    }
+
 }

@@ -13,6 +13,7 @@ import com.narancommunity.app.activity.BookOrdererListAct;
 import com.narancommunity.app.adapter.base.ListBaseAdapter;
 import com.narancommunity.app.adapter.base.SuperViewHolder;
 import com.narancommunity.app.common.Utils;
+import com.narancommunity.app.entity.OrderEntity;
 
 import okhttp3.internal.Util;
 
@@ -21,7 +22,7 @@ import okhttp3.internal.Util;
  * Email：120760202@qq.com
  * FileName :
  */
-public class BookOrdererAdapter extends ListBaseAdapter<String> {
+public class BookOrdererAdapter extends ListBaseAdapter<OrderEntity> {
     OnItemClickListener listener;
 
     public BookOrdererAdapter(Context context) {
@@ -42,9 +43,10 @@ public class BookOrdererAdapter extends ListBaseAdapter<String> {
     public void onBindItemHolder(SuperViewHolder holder, final int position) {
         if (mDataList.size() <= 0)
             return;
-        String url = getDataList().get(position);
+        OrderEntity entity = getDataList().get(position);
         ImageView iv_img = holder.getView(R.id.iv);
-        if (null != url && !"".equals(url)) {
+        String url = Utils.getValue(entity.getAccountImg());
+        if (!"".equals(url)) {
             Utils.setImgF(mContext, url, iv_img);
         } else
             Utils.setImgF(mContext, R.mipmap.zw_morentouxiang, iv_img);

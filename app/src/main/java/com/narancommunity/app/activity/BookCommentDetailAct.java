@@ -76,10 +76,10 @@ public class BookCommentDetailAct extends BaseActivity {
         BookComment bookComment;
         for (int i = 0; i < 5; i++) {
             bookComment = new BookComment();
-            bookComment.setCreateTime("2018-4-10 08:10:30");
-            bookComment.setUrl("https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=779431233,515089216&fm=27&gp=0.jpg");
-            bookComment.setLikes((new Random().nextInt(20)) + "");
-            bookComment.setName("赵小刀");
+//            bookComment.setCreateTime("2018-4-10 08:10:30");
+//            bookComment.setUrl("https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=779431233,515089216&fm=27&gp=0.jpg");
+//            bookComment.setLikes((new Random().nextInt(20)) + "");
+//            bookComment.setName("赵小刀");
             bookComment.setContent(" 那一日正当三月中浣，早饭后，宝玉携了一套《会真记》，走到沁芳闸桥边桃花底下一块石上坐着，展开《会真记》，从头细玩。正看到“落红成阵”，只见一阵风过，把树头上桃花吹下一大半来，落的满身满书满地皆是。 ");
             list.add(bookComment);
         }

@@ -43,6 +43,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="书名"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:textColor="@color/color_333333"
                     android:textSize="17sp" />
 
@@ -52,6 +54,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_book_name"
                     android:text="作者"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:textColor="@color/color_999999"
                     android:textSize="12sp" />
 

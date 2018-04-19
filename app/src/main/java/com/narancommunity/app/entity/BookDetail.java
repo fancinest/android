@@ -7,8 +7,8 @@ package com.narancommunity.app.entity;
  */
 
 public class BookDetail {
-    String author, bookImg, isbn, publisher, summary, title;
-    Integer bookId, pages, price;
+    String author, bookImg, isbn, publisher, summary, title, price;
+    Integer bookId, pages;
     float average;
 
     @Override
@@ -99,11 +99,11 @@ public class BookDetail {
         this.pages = pages;
     }
 
-    public Integer getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 }

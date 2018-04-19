@@ -55,7 +55,7 @@ public class FindLatestAdapter extends ListBaseAdapter<BookListEntity> {
     public void onBindItemHolder(SuperViewHolder holder, final int position) {
         if (mDataList.size() <= 0)
             return;
-        BookListEntity entity = mDataList.get(position);
+        final BookListEntity entity = mDataList.get(position);
         if (entity == null)
             return;
 
@@ -94,7 +94,8 @@ public class FindLatestAdapter extends ListBaseAdapter<BookListEntity> {
             @Override
             public void onClick(View v) {
 //                listener.onItemClick(position);
-                mContext.startActivity(new Intent(mContext, BookDetailAct.class));
+                mContext.startActivity(new Intent(mContext, BookDetailAct.class)
+                        .putExtra("bookId", entity.getOrderId()));
             }
         });
     }

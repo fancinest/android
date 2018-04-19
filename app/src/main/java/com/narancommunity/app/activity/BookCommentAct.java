@@ -8,14 +8,24 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 
 import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
 import com.narancommunity.app.adapter.BookCommentAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
+import com.narancommunity.app.common.LoadDialog;
+import com.narancommunity.app.common.Toaster;
+import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.BookComment;
+import com.narancommunity.app.entity.BookCommentData;
+import com.narancommunity.app.net.NRClient;
+import com.narancommunity.app.net.Result;
+import com.narancommunity.app.net.ResultCallback;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +47,7 @@ public class BookCommentAct extends BaseActivity {
 
     BookCommentAdapter adapter;
     List<BookComment> list = new ArrayList<>();
+    int bookId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,8 +57,38 @@ public class BookCommentAct extends BaseActivity {
         toolbar.setTitle("书评");
         setBar(toolbar);
 
-        setData();
+        bookId = getIntent().getIntExtra("bookId", 0);
+
         setView();
+        getData();
+    }
+
+    private void getData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("orderId", bookId);
+        map.put("accessToken", MApplication.getAccessToken());
+        NRClient.getBookCommentList(map, new ResultCallback<Result<BookCommentData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<BookCommentData> result) {
+                LoadDialog.dismiss(getContext());
+                setBookComment(result.getData());
+            }
+        });
+    }
+
+    private void setBookComment(BookCommentData data) {
+        if (data != null && data.getComments() != null) {
+            list.addAll(data.getComments());
+            adapter.notifyDataSetChanged();
+        }else {
+            Toaster.toast(getContext(),"暂无任何评论");
+        }
     }
 
     private void setView() {
@@ -69,22 +110,10 @@ public class BookCommentAct extends BaseActivity {
         });
     }
 
-    private void setData() {
-        BookComment bookComment;
-        for (int i = 0; i < 20; i++) {
-            bookComment = new BookComment();
-            bookComment.setName("李爽");
-            bookComment.setContent("那一日正当三月中浣，早饭后，宝玉携了一套《会真记》，走到沁芳闸桥边桃花底下一块石上坐着，展开《会真记》，从头细玩。正看到“落红成阵”，只…");
-            bookComment.setCount(46 + "");
-            bookComment.setLikes(101 + "");
-            bookComment.setUrl("http://img5.imgtn.bdimg.com/it/u=1294306278,3771827871&fm=27&gp=0.jpg");
-            bookComment.setCreateTime("2018-3-10 13:20:20");
-            list.add(bookComment);
-        }
-    }
 
     @OnClick(R.id.iv_release)
     public void onViewClicked() {
-        startActivity(new Intent(getContext(), AddBookCommentAct.class).putExtra("tag", 2));
+        startActivity(new Intent(getContext(), AddBookCommentAct.class).putExtra("tag", 2)
+                .putExtra("bookId", bookId));
     }
 }

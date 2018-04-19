@@ -51,17 +51,17 @@ public class BookCommentAdapter extends EasyRecyclerAdapter<BookComment> {
         final MyViewHolder hold = (MyViewHolder) (holder);
 
         final BookComment item = getList().get(position);
-        String url = item.getUrl();
+        String url = item.getAuthorImg();
         if (!"".equals(url)) {
             Utils.setImgF(mContext, url, hold.ivIcon);
         } else {
             Utils.setImgF(mContext, R.mipmap.zw_morentouxiang, hold.ivIcon);
         }
-        hold.tvName.setText(Utils.getValue(item.getName()));
+        hold.tvName.setText(Utils.getValue(item.getAuthor()));
         hold.tvContent.setText(Utils.getValue(item.getContent()));
-        hold.tvDate.setText(Utils.dateDiff(Utils.stringTimeToMillion(item.getCreateTime())) + "");
-        hold.tvComment.setText(Utils.getValue(item.getCount()) + "");
-        hold.tvLike.setText(Utils.getValue(item.getLikes()) + "");
+//        hold.tvDate.setText(Utils.dateDiff(Utils.stringTimeToMillion(item.get)) + "");
+        hold.tvComment.setText(Utils.getValue(item.getContent()) + "");
+//        hold.tvLike.setText(Utils.getValue(item.get) + "");
         hold.lnComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

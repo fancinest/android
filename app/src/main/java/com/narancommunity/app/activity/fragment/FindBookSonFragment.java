@@ -13,10 +13,8 @@ import android.view.ViewGroup;
 import com.narancommunity.app.R;
 import com.narancommunity.app.activity.BookDetailAct;
 import com.narancommunity.app.adapter.BookListAdapter;
-import com.narancommunity.app.common.ItemDecoration.GridItemDecoration;
 import com.narancommunity.app.common.Toaster;
-import com.narancommunity.app.entity.BookEntity;
-import com.narancommunity.app.entity.MeFunctionEntity;
+import com.narancommunity.app.entity.RecEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +34,7 @@ public class FindBookSonFragment extends Fragment {
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     BookListAdapter adapter;
-    List<BookEntity> list = new ArrayList<>();
+    List<RecEntity> list = new ArrayList<>();
 
     public static FindBookSonFragment newInstance() {
         FindBookSonFragment fragment = new FindBookSonFragment();
@@ -75,10 +73,10 @@ public class FindBookSonFragment extends Fragment {
     }
 
     private void setData() {
-        BookEntity entity = new BookEntity();
+        RecEntity entity = new RecEntity();
         for (int i = 0; i < 9; i++) {
-            entity.setName("三国志");
-            entity.setUrl("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523510442785&di=3b3a3a709ef91d5c13e4d4ed8cb8e456&imgtype=0&src=http%3A%2F%2Fimg1.gamersky.com%2Fimage2016%2F02%2F20160202_xtn_162_1%2Fgamersky_08small_16_20162210592B0.jpg");
+            entity.setOrderTitle("三国志");
+            entity.setOrderImgs("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523510442785&di=3b3a3a709ef91d5c13e4d4ed8cb8e456&imgtype=0&src=http%3A%2F%2Fimg1.gamersky.com%2Fimage2016%2F02%2F20160202_xtn_162_1%2Fgamersky_08small_16_20162210592B0.jpg");
             list.add(entity);
         }
     }
@@ -97,7 +95,8 @@ public class FindBookSonFragment extends Fragment {
             @Override
             public void OnItemClick(int position) {
                 Toaster.toast(getContext(), "准备跳转");
-                startActivity(new Intent(getContext(),BookDetailAct.class));
+                startActivity(new Intent(getContext(), BookDetailAct.class)
+                        .putExtra("bookId", list.get(position).getOrderId()));
             }
 
             @Override

@@ -7,30 +7,23 @@ package com.narancommunity.app.entity;
  */
 
 public class BookComment {
-    String name, url, createTime, content, count, likes;
+    String author, authorImg, content;
+    Integer authorId, bookId, orderId, reviewId;
 
-    public String getName() {
-        return name;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
-    public String getUrl() {
-        return url;
+    public String getAuthorImg() {
+        return authorImg;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+    public void setAuthorImg(String authorImg) {
+        this.authorImg = authorImg;
     }
 
     public String getContent() {
@@ -41,19 +34,35 @@ public class BookComment {
         this.content = content;
     }
 
-    public String getCount() {
-        return count;
+    public Integer getAuthorId() {
+        return authorId;
     }
 
-    public void setCount(String count) {
-        this.count = count;
+    public void setAuthorId(Integer authorId) {
+        this.authorId = authorId;
     }
 
-    public String getLikes() {
-        return likes;
+    public Integer getBookId() {
+        return bookId;
     }
 
-    public void setLikes(String likes) {
-        this.likes = likes;
+    public void setBookId(Integer bookId) {
+        this.bookId = bookId;
+    }
+
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
+    }
+
+    public Integer getReviewId() {
+        return reviewId;
+    }
+
+    public void setReviewId(Integer reviewId) {
+        this.reviewId = reviewId;
     }
 }
