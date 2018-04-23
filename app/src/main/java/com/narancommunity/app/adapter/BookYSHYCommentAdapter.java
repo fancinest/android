@@ -42,7 +42,7 @@ public class BookYSHYCommentAdapter extends EasyRecyclerAdapter<CommentEntity> {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.item_book_comment, parent, false);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.item_book_review, parent, false);
         return new MyViewHolder(view);
     }
 

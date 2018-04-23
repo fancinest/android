@@ -11,13 +11,15 @@ import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
-import com.narancommunity.app.adapter.BookCommentAdapter;
+import com.narancommunity.app.adapter.BookCommentCommentAdapter;
+import com.narancommunity.app.adapter.BookReviewAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.BookComment;
 import com.narancommunity.app.entity.BookCommentData;
+import com.narancommunity.app.entity.BookRelativeRecData;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
@@ -34,10 +36,9 @@ import butterknife.OnClick;
 /**
  * Writer：fancy on 2018/4/12 15:33
  * Email：120760202@qq.com
- * FileName :
+ * FileName : 书评列表
  */
-
-public class BookCommentAct extends BaseActivity {
+public class BookReviewAct extends BaseActivity {
     @BindView(R.id.toolbar)
     CenteredToolbar toolbar;
     @BindView(R.id.recyclerView)
@@ -45,7 +46,7 @@ public class BookCommentAct extends BaseActivity {
     @BindView(R.id.iv_release)
     ImageView ivRelease;
 
-    BookCommentAdapter adapter;
+    BookReviewAdapter adapter;
     List<BookComment> list = new ArrayList<>();
     int bookId;
 
@@ -64,10 +65,11 @@ public class BookCommentAct extends BaseActivity {
     }
 
     private void getData() {
+        LoadDialog.show(getContext(),"数据加载中...");
         Map<String, Object> map = new HashMap<>();
         map.put("orderId", bookId);
         map.put("accessToken", MApplication.getAccessToken());
-        NRClient.getBookCommentList(map, new ResultCallback<Result<BookCommentData>>() {
+        NRClient.getBookCommentCommentList(map, new ResultCallback<Result<BookCommentData>>() {
             @Override
             public void onFailure(Throwable throwable) {
                 LoadDialog.dismiss(getContext());
@@ -83,29 +85,29 @@ public class BookCommentAct extends BaseActivity {
     }
 
     private void setBookComment(BookCommentData data) {
-        if (data != null && data.getComments() != null) {
-            list.addAll(data.getComments());
+        if (data != null && data.getReviews() != null) {
+            list.addAll(data.getReviews());
             adapter.notifyDataSetChanged();
-        }else {
-            Toaster.toast(getContext(),"暂无任何评论");
+        } else {
+            Toaster.toast(getContext(), "暂无任何评论");
         }
     }
 
     private void setView() {
         final LinearLayoutManager lm_latest = new LinearLayoutManager(getContext());
         lm_latest.setOrientation(LinearLayoutManager.VERTICAL);
-        adapter = new BookCommentAdapter(getContext(), list);
+        adapter = new BookReviewAdapter(getContext(), list);
         recyclerView.setLayoutManager(lm_latest);
         recyclerView.setAdapter(adapter);
         adapter.setListener(new MeItemInterface() {
             @Override
             public void OnItemClick(int position) {
-                //TODO 评论
+                //TODO 点赞
+//                喜欢
             }
 
             @Override
             public void OnDelClick(int position) {
-                //TODO 点赞
             }
         });
     }

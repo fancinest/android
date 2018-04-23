@@ -2,6 +2,7 @@ package com.narancommunity.app.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -37,7 +38,9 @@ public class AddBookCommentAct extends BaseActivity {
     EditText etContent;
 
     int bookId;
-    int tag = 0;
+    int tag = 0;//2是添加书评  1是普通书籍评论 0是以书会友中添加以书会友
+    int commentId;
+    String replyName = "";//仅在tag=1时有，回复的评论人名
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,15 +48,22 @@ public class AddBookCommentAct extends BaseActivity {
         setContentView(R.layout.act_add_book_comment);
         ButterKnife.bind(this);
         setBar(toolbar);
-        toolbar.setTitle("填写书评");
 
         tag = getIntent().getIntExtra("tag", 0);
         bookId = getIntent().getIntExtra("bookId", 0);
-        if (tag == 0)
+        if (tag == 0) {
+            toolbar.setTitle("以书会友");
             etContent.setHint("请输入回复");
-        else if (tag == 1) {
-            etContent.setHint("请输入回复");
-        } else {
+        } else if (tag == 1) {
+            commentId = getIntent().getIntExtra("commentedId", 0);
+            replyName = getIntent().getStringExtra("replyName");
+            if (replyName.equals(""))
+                etContent.setHint("请输入评论");
+            else
+                etContent.setHint("回复：" + replyName);
+            toolbar.setTitle("填写评论");
+        } else if (tag == 2) {
+            toolbar.setTitle("填写书评");
             etContent.setHint("说点什么吧");
         }
 
@@ -62,13 +72,41 @@ public class AddBookCommentAct extends BaseActivity {
     @OnClick(R.id.btn_release)
     public void onViewClicked() {
         if (etContent.getText().toString().equals("")) {
-            Toaster.toast(getContext(), "请输入书评内容");
+            Toaster.toast(getContext(), "请输入内容");
             return;
         } else {
-            addComment();
+            if (tag == 2)
+                addComment();
+            else if (tag == 1)
+                addNormalComment();
         }
         finish();
     }
+
+    private void addNormalComment() {
+        LoadDialog.show(getContext(), "正在发布书评");
+        Map<String, Object> map = new HashMap<>();
+        map.put("commentContent", etContent.getText().toString());
+        map.put("orderId", bookId);
+        map.put("commentedId", commentId == 0 ? "" : commentId);
+        map.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", "addParams = " + map.toString());
+        NRClient.addComment(map, new ResultCallback<Result<Void>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<Void> result) {
+                LoadDialog.dismiss(getContext());
+                Toaster.toast(getContext(), "发布成功!");
+                finish();
+            }
+        });
+    }
+
 
     private void addComment() {
         LoadDialog.show(getContext(), "正在发布书评");

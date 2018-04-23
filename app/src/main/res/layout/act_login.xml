@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/bg"
+    android:background="@mipmap/dlzc_pic_bj"
     android:gravity="center"
     android:orientation="vertical">
 
@@ -23,15 +23,14 @@
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:focusableInTouchMode="true"
+            android:gravity="center"
             android:orientation="vertical">
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:src="@mipmap/dlzc_logo" />
+                android:src="@mipmap/xinyuanhai_logo" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -93,7 +92,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/click_login_btn"
+                android:background="@drawable/round_corner_gradient"
                 android:gravity="center"
                 android:text="登录"
                 android:textColor="@color/white"
@@ -116,7 +115,7 @@
                     android:gravity="right"
                     android:padding="12dp"
                     android:text="忘记密码"
-                    android:textColor="@color/color_333333"
+                    android:textColor="@color/white"
                     android:textSize="14sp" />
 
                 <View
@@ -139,7 +138,7 @@
                     android:gravity="center"
                     android:padding="12dp"
                     android:text="点击注册"
-                    android:textColor="@color/color_333333"
+                    android:textColor="@color/white"
                     android:textSize="13sp" />
 
             </LinearLayout>
@@ -163,7 +162,7 @@
                     android:gravity="center"
                     android:padding="5dp"
                     android:text="使用社交帐号登录"
-                    android:textColor="@color/color_666666"
+                    android:textColor="@color/white"
                     android:textSize="14sp" />
 
                 <View
@@ -187,7 +186,7 @@
                     android:drawablePadding="4dp"
                     android:drawableTop="@mipmap/dlzc_icon_qq"
                     android:text="QQ登录"
-                    android:textColor="@color/clickable_login_third"
+                    android:textColor="@color/clickable_white_grey"
                     android:textSize="14sp" />
 
                 <TextView
@@ -200,7 +199,7 @@
                     android:drawablePadding="4dp"
                     android:drawableTop="@mipmap/dlzc_icon_weibo"
                     android:text="微博登录"
-                    android:textColor="@color/clickable_login_third"
+                    android:textColor="@color/clickable_white_grey"
                     android:textSize="14sp" />
 
 
@@ -212,7 +211,7 @@
                     android:drawablePadding="4dp"
                     android:drawableTop="@mipmap/dlzc_icon_wechat"
                     android:text="微信登录"
-                    android:textColor="@color/clickable_login_third"
+                    android:textColor="@color/clickable_white_grey"
                     android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>

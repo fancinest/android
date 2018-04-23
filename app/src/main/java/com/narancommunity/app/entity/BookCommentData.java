@@ -14,6 +14,15 @@ public class BookCommentData {
     Integer pageSize;// 3
     Integer pageNum;// 3
     List<BookComment> comments;
+    List<BookComment> reviews;
+
+    public List<BookComment> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<BookComment> reviews) {
+        this.reviews = reviews;
+    }
 
     public Integer getTotalPageNum() {
         return totalPageNum;

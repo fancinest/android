@@ -1,5 +1,6 @@
 package com.narancommunity.app.activity;
 
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,17 +22,34 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.CenteredToolbar;
+import com.narancommunity.app.common.LoadDialog;
+import com.narancommunity.app.common.SDCardUtils;
+import com.narancommunity.app.common.Toaster;
+import com.narancommunity.app.common.Utils;
+import com.narancommunity.app.entity.AddressEntity;
+import com.narancommunity.app.entity.BookInfo;
+import com.narancommunity.app.net.NRClient;
+import com.narancommunity.app.net.Result;
+import com.narancommunity.app.net.ResultCallback;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 /**
  * Writer：fancy on 2018/4/16 20:00
  * Email：120760202@qq.com
- * FileName :
+ * FileName :  借阅活动
  */
 
 public class OrderBookAct extends BaseActivity {
@@ -79,10 +97,6 @@ public class OrderBookAct extends BaseActivity {
     CheckedTextView ctvNo;
     @BindView(R.id.tv2)
     TextView tv2;
-    @BindView(R.id.ctv_yes_anonymous)
-    CheckedTextView ctvYesAnonymous;
-    @BindView(R.id.ctv_no_anonymous)
-    CheckedTextView ctvNoAnonymous;
     @BindView(R.id.ln_check_view)
     LinearLayout lnCheckView;
     @BindView(R.id.et_memo)
@@ -92,34 +106,115 @@ public class OrderBookAct extends BaseActivity {
     @BindView(R.id.btn_want)
     Button btnWant;
 
+    BookInfo mData;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_order_book);
         ButterKnife.bind(this);
         setBar(toolbar);
-        toolbar.setTitle("预约/想要");
+        toolbar.setTitle("借阅");
 
+        mData = (BookInfo) getIntent().getSerializableExtra("data");
         setView();
     }
+
 
     private void setView() {
         cardParent.setCardElevation(0);
         cardParent.setBackgroundColor(getResources().getColor(R.color.white));
         lnScore.setVisibility(View.GONE);
+
+        tvSelectAddress.setVisibility(View.VISIBLE);
+        lnAddress.setVisibility(View.GONE);
+
+        tvBookName.setText("" + Utils.getValue(mData.getOrderTitle()));
+        tvWriter.setText("" + Utils.getValue(mData.getOrderAuthor()));
+        tvDesc.setText("" + Utils.getValue(mData.getOrderContent()));
+        String url = Utils.getValue(mData.getOrderImgs());
+        if (!url.equals(""))
+            Utils.setImgF(getContext(), url, ivImg);
     }
 
-    @OnClick({R.id.ln_address, R.id.btn_want})
+    @OnClick({R.id.ln_address, R.id.btn_want, R.id.tv_select_address, R.id.ctv_yes, R.id.ctv_no})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.tv_select_address:
             case R.id.ln_address:
+                Intent its = new Intent(getContext(), AddressAct.class);
+                its.putExtra("isForResult", true);
+                startActivityForResult(its, 2000);
                 break;
             case R.id.btn_want:
-                showPopView(btnWant);
+                LoadDialog.show(getContext(), "正在发送请求...");
+                if (mAddress == null) {
+                    Toaster.toast(getContext(), "请填写收货地址!");
+                    return;
+                }
+
+                Map<String, Object> map = new HashMap<>();
+                map.put("orderId", mData.getOrderId());
+                map.put("accessToken", MApplication.getAccessToken());
+                map.put("mailId", mAddress.getMailId());
+                map.put("getTime", "2018-5-1 12:00:00");
+                map.put("returnTime", "2018-5-21 12:00:00");
+                map.put("mailType", getWay());
+                map.put("applyContent", etMemo.getText().toString());
+                NRClient.lendBook(map, new ResultCallback<Result<Void>>() {
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                        LoadDialog.dismiss(getContext());
+                        Utils.showErrorToast(getContext(), throwable);
+                    }
+
+                    @Override
+                    public void onSuccess(Result<Void> result) {
+                        LoadDialog.dismiss(getContext());
+                        showPopView(btnWant);
+                    }
+                });
+
+                break;
+            case R.id.ctv_yes:
+                ctvYes.setChecked(true);
+                ctvNo.setChecked(false);
+                break;
+            case R.id.ctv_no:
+                ctvYes.setChecked(false);
+                ctvNo.setChecked(true);
                 break;
         }
     }
 
+    private String getWay() {
+        if (ctvYes.isChecked()) {
+            return "TO_PAY";
+        } else {
+            return "PICK_UP";
+        }
+    }
+
+    AddressEntity mAddress = null;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2000 && data != null) {
+            AddressEntity address = (AddressEntity) data.getSerializableExtra("address");
+            mAddress = address;
+            setAddress(address);
+        }
+    }
+
+    private void setAddress(AddressEntity address) {
+        tvSelectAddress.setVisibility(View.GONE);
+        lnAddress.setVisibility(View.VISIBLE);
+        tvName.setText("收货人：" + Utils.getValue(address.getMailName()) + "");
+        tvTel.setText(Utils.getValue(address.getMailPhone()) + "");
+        tvAddress.setText("收货地址：" + Utils.getValue(address.getProvince() + address.getCity() + address.getCounty()
+                + address.getMailAddress()) + "");
+    }
 
     PopupWindow mPop;
 
@@ -141,7 +236,7 @@ public class OrderBookAct extends BaseActivity {
             line.setVisibility(View.GONE);
             tv_content.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
             tv_content.setTextColor(getResources().getColor(R.color.color_333333));
-            tv_content.setText("预约成功！");
+            tv_content.setText("借阅成功！");
 
             ok.setTextColor(getResources().getColor(R.color.appBlue));
             ok.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);

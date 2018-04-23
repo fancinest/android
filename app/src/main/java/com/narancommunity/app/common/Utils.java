@@ -594,6 +594,9 @@ public class Utils {
      * @return 格式为System.currentTimeMillion
      */
     public static String stringTimeToMillion(String startTime) {
+        if (startTime.equals("")) {
+            return "";
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//小写的mm表示的是分钟
         Date date = null;
         try {

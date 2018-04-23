@@ -22,14 +22,14 @@
 ///**
 // * Writer：fancy on 2017/5/9 10:59
 // * Email：120760202@qq.com
-// * FileName : 评论 item
+// * FileName : 一般性评论 item
 // */
 //
-//public class BookCommentAdapter extends EasyRecyclerAdapter<BookComment> {
+//public class BookNormalCommentAdapter extends EasyRecyclerAdapter<BookComment> {
 //    boolean isLimited = false;
 //    MeItemInterface meItemInterface;
 //
-//    public BookCommentAdapter(Context context, List<BookComment> list) {
+//    public BookNormalCommentAdapter(Context context, List<BookComment> list) {
 //        super(context, list);
 //    }
 //
@@ -39,7 +39,7 @@
 //
 //    @Override
 //    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        View view = LayoutInflater.from(getContext()).inflate(R.layout.item_book_comment, parent, false);
+//        View view = LayoutInflater.from(getContext()).inflate(R.layout.item_book_review, parent, false);
 //        return new MyViewHolder(view);
 //    }
 //
@@ -81,7 +81,12 @@
 //
 //    @Override
 //    public int getItemCount() {
-//        return getList().size();
+//        if (isLimited) {
+//            if (getList().size() > 3)
+//                return 3;
+//            else return getList().size();
+//        } else
+//            return getList().size();
 //    }
 //
 //
@@ -90,22 +95,31 @@
 //        SelectableRoundedImageView ivIcon;
 //        TextView tvName;
 //        TextView tvContent;
+//        RecyclerView recyclerView;
+//        TextView tvMore;
 //        TextView tvDate;
+//        LinearLayout lnDate;
 //        TextView tvComment;
 //        LinearLayout lnComment;
 //        TextView tvLike;
 //        LinearLayout lnLike;
+//        LinearLayout lnTool;
 //
 //        public MyViewHolder(View itemView) {
 //            super(itemView);
 //            ivIcon = itemView.findViewById(R.id.iv_icon);
 //            tvName = itemView.findViewById(R.id.tv_name);
 //            tvContent = itemView.findViewById(R.id.tv_content);
+//            recyclerView = itemView.findViewById(R.id.recyclerView);
+//            tvMore = itemView.findViewById(R.id.tv_more);
 //            tvDate = itemView.findViewById(R.id.tv_date);
+//            lnDate = itemView.findViewById(R.id.ln_date);
+//
 //            tvComment = itemView.findViewById(R.id.tv_comment);
-//            tvLike = itemView.findViewById(R.id.tv_like);
 //            lnComment = itemView.findViewById(R.id.ln_comment);
+//            tvLike = itemView.findViewById(R.id.tv_like);
 //            lnLike = itemView.findViewById(R.id.ln_like);
+//            lnTool = itemView.findViewById(R.id.ln_tool);
 //        }
 //    }
 //}

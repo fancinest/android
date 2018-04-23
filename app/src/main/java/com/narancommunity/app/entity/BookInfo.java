@@ -1,12 +1,14 @@
 package com.narancommunity.app.entity;
 
+import java.io.Serializable;
+
 /**
  * Writer：fancy on 2018/4/17 21:36
  * Email：120760202@qq.com
  * FileName : 图书详情页的信息，区别于BookDetail
  */
 
-public class BookInfo {
+public class BookInfo implements Serializable{
     float average;
     String city, commodityType, county, createTime, mailAddress, mailName, mailPhone, orderAuthor, orderContent, price, publisher;
     String recipientImg, recipientNike, updateTime, orderImgs, orderStatus, orderTitle, orderType, initiatorNike, initiatorImg;

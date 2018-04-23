@@ -10,15 +10,23 @@ import android.widget.TextView;
 
 import com.joooonho.SelectableRoundedImageView;
 import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
 import com.narancommunity.app.adapter.BookCommentCommentAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
+import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.BookComment;
+import com.narancommunity.app.entity.BookCommentData;
+import com.narancommunity.app.net.NRClient;
+import com.narancommunity.app.net.Result;
+import com.narancommunity.app.net.ResultCallback;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -31,7 +39,7 @@ import butterknife.OnClick;
  * FileName :
  */
 
-public class BookCommentDetailAct extends BaseActivity {
+public class BookReviewDetailAct extends BaseActivity {
     @BindView(R.id.toolbar)
     CenteredToolbar toolbar;
     @BindView(R.id.iv_icon)
@@ -52,13 +60,15 @@ public class BookCommentDetailAct extends BaseActivity {
     TextView tvLike;
     @BindView(R.id.ln_like)
     LinearLayout lnLike;
-    @BindView(R.id.tv_comment_Count)
+    @BindView(R.id.tv_comment_count)
     TextView tvCommentCount;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
     BookCommentCommentAdapter adapter;
     List<BookComment> list = new ArrayList<>();
+    BookComment data;
+    int bookId = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,21 +78,35 @@ public class BookCommentDetailAct extends BaseActivity {
         setBar(toolbar);
         toolbar.setTitle("书评");
 
+        data = (BookComment) getIntent().getSerializableExtra("data");
+        bookId = data.getBookId();
+
         setData();
         setView();
+        getData();
+    }
+
+    private void getData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("orderId", bookId);
+        map.put("accessToken", MApplication.getAccessToken());
+        NRClient.getBookCommentCommentList(map, new ResultCallback<Result<BookCommentData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<BookCommentData> result) {
+                LoadDialog.dismiss(getContext());
+//                setBookComment(result.getData());
+            }
+        });
     }
 
     private void setData() {
-        BookComment bookComment;
-        for (int i = 0; i < 5; i++) {
-            bookComment = new BookComment();
-//            bookComment.setCreateTime("2018-4-10 08:10:30");
-//            bookComment.setUrl("https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=779431233,515089216&fm=27&gp=0.jpg");
-//            bookComment.setLikes((new Random().nextInt(20)) + "");
-//            bookComment.setName("赵小刀");
-            bookComment.setContent(" 那一日正当三月中浣，早饭后，宝玉携了一套《会真记》，走到沁芳闸桥边桃花底下一块石上坐着，展开《会真记》，从头细玩。正看到“落红成阵”，只见一阵风过，把树头上桃花吹下一大半来，落的满身满书满地皆是。 ");
-            list.add(bookComment);
-        }
+        
     }
 
     private void setView() {

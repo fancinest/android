@@ -3,24 +3,25 @@ package com.narancommunity.app.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.joooonho.SelectableRoundedImageView;
 import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.MApplication;
-import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
-import com.narancommunity.app.adapter.CommentAdapter;
-import com.narancommunity.app.adapter.FindSortAdapter;
-import com.narancommunity.app.adapter.OnItemClickListener;
+import com.narancommunity.app.adapter.CommentSonAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
+import com.narancommunity.app.entity.CommentDetail;
 import com.narancommunity.app.entity.CommentEntity;
 import com.narancommunity.app.entity.CommentListEntity;
+import com.narancommunity.app.entity.Comments;
 import com.narancommunity.app.interfaces.CommentInterfaces;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
@@ -33,56 +34,63 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
- * Writer：fancy on 2018/1/16 17:09
+ * Writer：fancy on 2018/4/23 11:49
  * Email：120760202@qq.com
- * FileName : 查看更多评论
+ * FileName : 单条评论的详细(子评论翻页的)
  */
 
-public class MoreCommentAct extends BaseActivity {
+public class SingleCommentDetailAct extends BaseActivity {
     @BindView(R.id.toolbar)
     CenteredToolbar toolbar;
+    @BindView(R.id.iv_icon)
+    SelectableRoundedImageView ivIcon;
+    @BindView(R.id.tv_name)
+    TextView tvName;
+    @BindView(R.id.tv_comment_count)
+    TextView tvCommentCount;
+    @BindView(R.id.tv_like)
+    TextView tvLike;
+    @BindView(R.id.tv_comment)
+    TextView tvComment;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView(R.id.swipe_refresh)
-    SwipeRefreshLayout swipeRefreshLayout;
 
-    CommentAdapter adapter;
-    List<CommentEntity> list = new ArrayList<>();
-    Integer bookId = 0;
-    int pageSize = 5;
+    int commentId = 0;
+    int bookId = 0;
+    CommentEntity data;
+    int pageSize = 10;
     int pageNum = 1;
     private int TOTAL_PAGE = 1;
+    List<Comments> list = new ArrayList<>();
+    CommentSonAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.act_normal_list_view_with_swipe_refresh);
+        setContentView(R.layout.act_single_comment_detail);
         ButterKnife.bind(this);
-        toolbar.setTitle("更多评论");
-
-        bookId = getIntent().getIntExtra("bookId", 0);
         setBar(toolbar);
+        toolbar.setTitle("查看全部回复");
 
+        commentId = getIntent().getIntExtra("commentId", 0);
+        bookId = getIntent().getIntExtra("bookId", 0);
+        data = (CommentEntity) getIntent().getSerializableExtra("data");
         setView();
         getData();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
     private void getData() {
         Map<String, Object> map = new HashMap<>();
-        map.put("orderId", bookId);
+        map.put("commentedId", commentId);
         map.put("pageSize", pageSize);
         map.put("pageNum", pageNum);
         map.put("accessToken", MApplication.getAccessToken());
-        NRClient.getCommentList(map, new ResultCallback<Result<CommentListEntity>>() {
+        NRClient.getCommentDetail(map, new ResultCallback<Result<CommentDetail>>() {
             @Override
-            public void onSuccess(Result<CommentListEntity> result) {
+            public void onSuccess(Result<CommentDetail> result) {
                 LoadDialog.dismiss(getContext());
                 setData(result.getData());
             }
@@ -95,20 +103,31 @@ public class MoreCommentAct extends BaseActivity {
         });
     }
 
-    private void setData(CommentListEntity data) {
+    private void setData(CommentDetail data) {
         if (pageNum == 1)
             list.clear();
-        TOTAL_PAGE = data.getTotalPageNum();
-        if (data != null && data.getComments() != null && data.getComments().size() > 0) {
-            list.addAll(data.getComments());
+        TOTAL_PAGE = data.getRecords().getTotalPageNum();
+        if (data != null && data.getRecords() != null) {
+            list.addAll(data.getRecords().getComments());
             pageNum++;
         }
         adapter.notifyDataSetChanged();
     }
 
-
     private void setView() {
-        adapter = new CommentAdapter(getContext(), list);
+        tvComment.setText(Utils.getValue(data.getCommentContent()) + "");
+        tvName.setText(Utils.getValue(data.getInitiatorNike()) + "");
+        String url = data.getInitiatorImg();
+        if (!url.equals(""))
+            Utils.setImgF(getContext(), url, ivIcon);
+        int commentCount = 0;
+        if (data.getRecords() != null && data.getRecords().getTotalCount() > 0)
+            commentCount = Utils.getValue(data.getRecords().getTotalCount());
+        tvCommentCount.setText(commentCount == 0 ? "0" : (commentCount + ""));
+        int likeCount = Utils.getValue(data.getLikeTimes());
+        tvLike.setText(likeCount == 0 ? "0" : (likeCount + ""));
+
+        adapter = new CommentSonAdapter(getContext(), list);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false) {
             @Override
@@ -121,32 +140,19 @@ public class MoreCommentAct extends BaseActivity {
         adapter.setListener(new CommentInterfaces() {
             @Override
             public void OnItemClick(int position) {
-                startActivity(new Intent(getContext(), AddBookCommentAct.class)
-                        .putExtra("tag", 1).putExtra("bookId", bookId)
-                        .putExtra("commentedId", list.get(position).getCommentId())
-                        .putExtra("replyName", list.get(position).getInitiatorNike()));
+
             }
 
             @Override
             public void OnAnswer(int id, String name) {
-//                showInputDialog(id, name);
                 startActivity(new Intent(getContext(), AddBookCommentAct.class)
                         .putExtra("tag", 1).putExtra("bookId", bookId)
                         .putExtra("commentedId", id)
                         .putExtra("replyName", name));
             }
         });
-        adapter.setClickLike(new MeItemInterface() {
-            @Override
-            public void OnItemClick(int position) {
-                clickLike(position);
-            }
-
-            @Override
-            public void OnDelClick(int position) {
-
-            }
-        }, bookId);
+        adapter.setLimited(false);
+        recyclerView.setNestedScrollingEnabled(true);
         recyclerView.setAdapter(adapter);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -163,25 +169,17 @@ public class MoreCommentAct extends BaseActivity {
                 }
             }
         });
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-
-            @Override
-            public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(true);
-                recyclerView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        pageNum = 1;
-                        getData();
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                });
-            }
-        });
     }
 
-    private void clickLike(int position) {
-        //TODO 点赞
+    @OnClick({R.id.tv_comment_count, R.id.tv_like, R.id.tv_comment})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tv_comment_count:
+                break;
+            case R.id.tv_like:
+                break;
+            case R.id.tv_comment:
+                break;
+        }
     }
 }

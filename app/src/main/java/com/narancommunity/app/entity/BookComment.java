@@ -1,14 +1,40 @@
 package com.narancommunity.app.entity;
 
+import java.io.Serializable;
+
 /**
  * Writer：fancy on 2018/4/12 16:43
  * Email：120760202@qq.com
  * FileName :
  */
 
-public class BookComment {
-    String author, authorImg, content;
-    Integer authorId, bookId, orderId, reviewId;
+public class BookComment implements Serializable {
+    String author, authorImg, content, createTime;
+    Integer authorId, bookId, orderId, reviewId, commentTimes, likeTimes;
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public Integer getCommentTimes() {
+        return commentTimes;
+    }
+
+    public void setCommentTimes(Integer commentTimes) {
+        this.commentTimes = commentTimes;
+    }
+
+    public Integer getLikeTimes() {
+        return likeTimes;
+    }
+
+    public void setLikeTimes(Integer likeTimes) {
+        this.likeTimes = likeTimes;
+    }
 
     public String getAuthor() {
         return author;

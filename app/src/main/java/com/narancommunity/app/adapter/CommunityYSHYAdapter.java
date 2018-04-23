@@ -7,23 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.joooonho.SelectableRoundedImageView;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.BookCommentDetailAct;
 import com.narancommunity.app.activity.BookHelpDetailAct;
 import com.narancommunity.app.activity.BookYSHYDetailAct;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.common.adapter.EasyRecyclerAdapter;
-import com.narancommunity.app.entity.BookComment;
 import com.narancommunity.app.entity.BookCommunityEntity;
 
 import java.util.List;
-
-import butterknife.BindView;
 
 /**
  * Writer：fancy on 2017/5/9 10:59

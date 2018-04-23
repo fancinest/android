@@ -184,13 +184,13 @@
             android:name=".activity.BookLendCardAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.BookCommentAct"
+            android:name=".activity.BookReviewAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.AddBookCommentAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.BookCommentDetailAct"
+            android:name=".activity.BookReviewDetailAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.ReportAct"
@@ -219,6 +219,11 @@
         <activity
             android:name=".activity.OrderBookAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
+
+        <activity
+            android:name=".activity.SingleCommentDetailAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+
         <activity
             android:name="simplezxing.activity.CaptureActivity"
             android:configChanges="orientation|keyboardHidden|navigation"

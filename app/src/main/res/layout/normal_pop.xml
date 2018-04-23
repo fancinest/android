@@ -68,6 +68,7 @@
             android:background="#d0d0d0" />
 
         <LinearLayout
+            android:id="@+id/ln_function"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">

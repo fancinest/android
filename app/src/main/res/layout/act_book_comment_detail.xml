@@ -139,7 +139,7 @@
                 android:background="@color/color_eeeeee" />
 
             <TextView
-                android:id="@+id/tv_comment_Count"
+                android:id="@+id/tv_comment_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"

@@ -23,13 +23,11 @@ import android.widget.TextView;
 
 import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.R;
-import com.narancommunity.app.adapter.BookCommentAdapter;
 import com.narancommunity.app.adapter.FindLatestAdapter;
 import com.narancommunity.app.adapter.OnItemClickListener;
 import com.narancommunity.app.common.DBHelper;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
-import com.narancommunity.app.entity.BookComment;
 import com.narancommunity.app.entity.BookEntity;
 import com.narancommunity.app.entity.BookListEntity;
 import com.narancommunity.app.entity.SearchHistoryEntity;
@@ -47,7 +45,6 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.internal.Util;
 
 /**
  * Writer：fancy on 2018/4/13 10:05

@@ -199,9 +199,8 @@ public class BookHouseAct extends BaseActivity {
         adapterHot.setListener(new com.narancommunity.app.MeItemInterface() {
             @Override
             public void OnItemClick(int position) {
-                Toaster.toast(getContext(), "准备跳转");
                 startActivity(new Intent(getContext(), BookDetailAct.class)
-                        .putExtra("data", listHot.get(position).getOrderId()));
+                        .putExtra("bookId", listHot.get(position).getOrderId()));
             }
 
             @Override
@@ -216,9 +215,8 @@ public class BookHouseAct extends BaseActivity {
         adapterRec.setListener(new com.narancommunity.app.MeItemInterface() {
             @Override
             public void OnItemClick(int position) {
-                Toaster.toast(getContext(), "准备跳转");
                 startActivity(new Intent(getContext(), BookDetailAct.class)
-                        .putExtra("data", listRec.get(position).getOrderId()));
+                        .putExtra("bookId", listRec.get(position).getOrderId()));
             }
 
             @Override

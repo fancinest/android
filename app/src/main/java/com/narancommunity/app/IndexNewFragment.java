@@ -26,6 +26,7 @@ import android.widget.RelativeLayout;
 import com.narancommunity.app.activity.BookHouseAct;
 import com.narancommunity.app.activity.DonateBookAct;
 import com.narancommunity.app.activity.FindFourAct;
+import com.narancommunity.app.activity.LoginAct;
 import com.narancommunity.app.activity.RangeAct;
 import com.narancommunity.app.adapter.BannerPagerAdapter;
 import com.narancommunity.app.adapter.FindLatestAdapter;
@@ -374,7 +375,6 @@ public class IndexNewFragment extends Fragment {
         list.add("");
         list.add("");
         sortAdapter.setDataList(list);
-        sortAdapter = new FindSortAdapter(getContext());
         sortAdapter.notifyDataSetChanged();
     }
 
@@ -418,7 +418,7 @@ public class IndexNewFragment extends Fragment {
         Intent it = new Intent(getContext(), FindFourAct.class);
         switch (view.getId()) {
             case R.id.et_search:
-                startActivity(new Intent(getContext(), DonateBookAct.class));
+                startActivity(new Intent(getContext(), LoginAct.class));
                 break;
             case R.id.ln_book:
                 Intent itBook = new Intent(getContext(), BookHouseAct.class);

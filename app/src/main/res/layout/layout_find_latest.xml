@@ -44,9 +44,10 @@
                     android:layout_height="wrap_content"
                     android:text="书名"
                     android:maxLines="1"
+                    android:maxEms="6"
                     android:ellipsize="end"
                     android:textColor="@color/color_333333"
-                    android:textSize="17sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/tv_writer"
@@ -55,6 +56,7 @@
                     android:layout_below="@id/tv_book_name"
                     android:text="作者"
                     android:maxLines="1"
+                    android:maxEms="8"
                     android:ellipsize="end"
                     android:textColor="@color/color_999999"
                     android:textSize="12sp" />

@@ -10,8 +10,8 @@ import java.io.Serializable;
 
 public class CommentEntity implements Serializable {
     //    {"commentContent":"不错不错","commentId":1,"createTime":"2018-01-16 15:54:54","initiatorId":5,"initiatorNike":"156****7367"}
-    String commentContent, createTime, initiatorNike,initiatorImg;// : "http://orkypu4y4.bkt.clouddn.com/home1.jpg-60";
-    Integer commentId, initiatorId;
+    String commentContent, createTime, initiatorNike, initiatorImg, recipientNike;// : "http://orkypu4y4.bkt.clouddn.com/home1.jpg-60";
+    Integer commentId, initiatorId, likeTimes, recipientId;
     AnswerComment records;
 
     @Override
@@ -21,10 +21,37 @@ public class CommentEntity implements Serializable {
                 ", createTime='" + createTime + '\'' +
                 ", initiatorNike='" + initiatorNike + '\'' +
                 ", initiatorImg='" + initiatorImg + '\'' +
+                ", recipientNike='" + recipientNike + '\'' +
                 ", commentId=" + commentId +
                 ", initiatorId=" + initiatorId +
+                ", likeTimes=" + likeTimes +
+                ", recipientId=" + recipientId +
                 ", records=" + records +
                 '}';
+    }
+
+    public String getRecipientNike() {
+        return recipientNike;
+    }
+
+    public void setRecipientNike(String recipientNike) {
+        this.recipientNike = recipientNike;
+    }
+
+    public Integer getRecipientId() {
+        return recipientId;
+    }
+
+    public void setRecipientId(Integer recipientId) {
+        this.recipientId = recipientId;
+    }
+
+    public Integer getLikeTimes() {
+        return likeTimes;
+    }
+
+    public void setLikeTimes(Integer likeTimes) {
+        this.likeTimes = likeTimes;
     }
 
     public String getInitiatorImg() {

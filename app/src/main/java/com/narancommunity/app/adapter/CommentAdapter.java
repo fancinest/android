@@ -7,14 +7,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.joooonho.SelectableRoundedImageView;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.MoreCommentAct;
+import com.narancommunity.app.activity.SingleCommentDetailAct;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.common.adapter.EasyRecyclerAdapter;
 import com.narancommunity.app.entity.AnswerComment;
@@ -22,8 +21,6 @@ import com.narancommunity.app.entity.CommentEntity;
 import com.narancommunity.app.interfaces.CommentInterfaces;
 
 import java.util.List;
-
-import butterknife.BindView;
 
 /**
  * Writer：fancy on 2017/5/9 10:59
@@ -34,7 +31,8 @@ import butterknife.BindView;
 public class CommentAdapter extends EasyRecyclerAdapter<CommentEntity> {
     boolean isLimited = false;
     CommentInterfaces meItemInterface;
-    int lastPosition = 0;
+    int bookId = 0;
+    MeItemInterface clickLike;
 
     public CommentAdapter(Context context, List<CommentEntity> list) {
         super(context, list);
@@ -42,6 +40,11 @@ public class CommentAdapter extends EasyRecyclerAdapter<CommentEntity> {
 
     public void setListener(CommentInterfaces meItemInterface) {
         this.meItemInterface = meItemInterface;
+    }
+
+    public void setClickLike(MeItemInterface clickLike, int bookId) {
+        this.clickLike = clickLike;
+        this.bookId = bookId;
     }
 
     @Override
@@ -75,7 +78,9 @@ public class CommentAdapter extends EasyRecyclerAdapter<CommentEntity> {
         hold.tvMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getContext().startActivity(new Intent(getContext(), MoreCommentAct.class));
+                getContext().startActivity(new Intent(getContext(), SingleCommentDetailAct.class)
+                        .putExtra("data", item).putExtra("commentId", item.getCommentId())
+                        .putExtra("bookId", bookId));
             }
         });
         hold.lnComment.setOnClickListener(new View.OnClickListener() {
@@ -86,6 +91,24 @@ public class CommentAdapter extends EasyRecyclerAdapter<CommentEntity> {
                 meItemInterface.OnItemClick(position);
             }
         });
+        hold.tvCommentCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                meItemInterface.OnItemClick(position);
+            }
+        });
+        int commentCount = 0;
+        if (item.getRecords() != null && item.getRecords().getTotalCount() > 0)
+            commentCount = Utils.getValue(item.getRecords().getTotalCount());
+        hold.tvCommentCount.setText(commentCount == 0 ? "0" : (commentCount + ""));
+        hold.tvLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickLike.OnItemClick(position);
+            }
+        });
+        int likeCount = Utils.getValue(item.getLikeTimes());
+        hold.tvLike.setText(likeCount == 0 ? "0" : (likeCount + ""));
     }
 
     private void setSonComment(RecyclerView recyclerView, final AnswerComment records) {
@@ -116,9 +139,18 @@ public class CommentAdapter extends EasyRecyclerAdapter<CommentEntity> {
         recyclerView.setNestedScrollingEnabled(false);
     }
 
+    public void setLimited(boolean isLimited) {
+        this.isLimited = isLimited;
+    }
+
     @Override
     public int getItemCount() {
-        return getList().size();
+        if (isLimited) {
+            if (getList().size() > 3)
+                return 3;
+            else return getList().size();
+        } else
+            return getList().size();
     }
 
 
@@ -131,16 +163,20 @@ public class CommentAdapter extends EasyRecyclerAdapter<CommentEntity> {
         TextView tvComment;
         RecyclerView recyclerView;
         TextView tvMore;
+        TextView tvCommentCount;
+        TextView tvLike;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             ivIcon = itemView.findViewById(R.id.iv_icon);
             tvName = itemView.findViewById(R.id.tv_name);
-            tvTimes = itemView.findViewById(R.id.tv_times);
+            tvTimes = itemView.findViewById(R.id.tv_date);
             tvComment = itemView.findViewById(R.id.tv_comment);
             recyclerView = itemView.findViewById(R.id.recyclerView);
             tvMore = itemView.findViewById(R.id.tv_more);
             lnComment = itemView.findViewById(R.id.ln_comment);
+            tvCommentCount = itemView.findViewById(R.id.tv_comment_count);
+            tvLike = itemView.findViewById(R.id.tv_like);
         }
     }
 }

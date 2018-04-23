@@ -1,6 +1,7 @@
 package com.narancommunity.app.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
@@ -10,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AbsoluteSizeSpan;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,21 +30,21 @@ import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
-import com.narancommunity.app.adapter.BookCommentAdapter;
 import com.narancommunity.app.adapter.BookListAdapter;
 import com.narancommunity.app.adapter.BookOrdererAdapter;
+import com.narancommunity.app.adapter.CommentAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
-import com.narancommunity.app.entity.BookComment;
-import com.narancommunity.app.entity.BookCommentData;
-import com.narancommunity.app.entity.BookDetail;
 import com.narancommunity.app.entity.BookInfo;
 import com.narancommunity.app.entity.BookRelativeRecData;
+import com.narancommunity.app.entity.CommentEntity;
+import com.narancommunity.app.entity.CommentListEntity;
 import com.narancommunity.app.entity.OrderData;
 import com.narancommunity.app.entity.OrderEntity;
 import com.narancommunity.app.entity.RecEntity;
+import com.narancommunity.app.interfaces.CommentInterfaces;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
@@ -139,14 +141,15 @@ public class BookDetailAct extends BaseActivity {
     LinearLayout lnTop;
     @BindView(R.id.ln_tool)
     LinearLayout lnTool;
+    @BindView(R.id.btn_more)
+    Button btn_more;
 
     BookOrdererAdapter orderAdapter;
-    BookCommentAdapter commentAdapter;
     BookListAdapter recAdapter;
     List<OrderEntity> listOrder = new ArrayList<>();
-    List<BookComment> listComment = new ArrayList<>();
     List<RecEntity> listRec = new ArrayList<>();
     Integer bookId = 0;
+    String desc;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -194,6 +197,7 @@ public class BookDetailAct extends BaseActivity {
     }
 
     private void setRecData(BookRelativeRecData data) {
+        listRec.clear();
         if (data != null && data.getOrders() != null && data.getOrders().size() > 0) {
             listRec.addAll(data.getOrders());
             recAdapter.notifyDataSetChanged();
@@ -220,7 +224,15 @@ public class BookDetailAct extends BaseActivity {
         });
     }
 
+    BookInfo mData;
+    String orderStatus = "INITIAL";
+
     private void setBookData(BookInfo data) {
+        mData = data;
+        orderStatus = data.getOrderStatus();
+        if (orderStatus.equals("INITIAL") || orderStatus.equals("WAITING"))
+            btnOperate.setText("借阅");
+        else btnOperate.setText("预约");
         if (data != null) {
             String watchIcon = Utils.getValue(data.getRecipientImg());
             if (watchIcon.equals("")) {
@@ -249,14 +261,15 @@ public class BookDetailAct extends BaseActivity {
             string.setSpan(new AbsoluteSizeSpan(40), size, size + 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             tvScore.setText(string);
 
+            desc = Utils.getValue(data.getOrderContent());
             tvDesc.setText(Utils.getValue(data.getOrderContent()) + "");
             tvName.setText(Utils.getValue(data.getOrderTitle()) + "");
             tvWriter.setText(Utils.getValue(data.getOrderAuthor()) + "");
-            tvWatcher.setText(Utils.getValue(data.getRecipientNike()) + "");
+            tvWatcher.setText(Utils.getValue(data.getRecipientNike()) + "正在借阅中...");
             rating.setRating(Float.parseFloat(Utils.getValue(average)) / 2);
             tvDonater.setText(Utils.getValue(data.getInitiatorNike()) + "");
             tvPublisher.setText(Utils.getValue(data.getPublisher()) + "");
-            tvPrice.setText(Utils.getValue(data.getPrice()) + "元");
+            tvPrice.setText(Utils.getValue(data.getPrice()) + "");
             tvWishCollect.setText(Utils.getValue(data.getCollectionTimes()) + "");
             tvWishComment.setText(Utils.getValue(data.getCommentTimes()) + "");
             tvWishLike.setText(Utils.getValue(data.getLikeTimes()) + "");
@@ -297,31 +310,111 @@ public class BookDetailAct extends BaseActivity {
         Map<String, Object> map = new HashMap<>();
         map.put("orderId", bookId);
         map.put("accessToken", MApplication.getAccessToken());
-        NRClient.getBookCommentList(map, new ResultCallback<Result<BookCommentData>>() {
+        NRClient.getCommentList(map, new ResultCallback<Result<CommentListEntity>>() {
+            @Override
+            public void onSuccess(Result<CommentListEntity> result) {
+                LoadDialog.dismiss(getContext());
+                setCommentList(result.getData());
+            }
+
             @Override
             public void onFailure(Throwable throwable) {
                 LoadDialog.dismiss(getContext());
                 Utils.showErrorToast(getContext(), throwable);
             }
-
-            @Override
-            public void onSuccess(Result<BookCommentData> result) {
-                LoadDialog.dismiss(getContext());
-                setBookComment(result.getData());
-            }
         });
     }
 
-    private void setBookComment(BookCommentData data) {
-        listComment.clear();
-        if (data != null && data.getComments() != null && data.getComments().size() > 0F) {
-            listComment.addAll(data.getComments());
-            lnCommentView.setVisibility(View.VISIBLE);
-        } else {
+    private void setCommentList(final CommentListEntity data) {
+        if (data == null || data.getComments() == null) {
             lnCommentView.setVisibility(View.GONE);
+            return;
         }
-        commentAdapter.notifyDataSetChanged();
+        if (data.getComments().size() > 3)
+            btn_more.setVisibility(View.VISIBLE);
+        else btn_more.setVisibility(View.GONE);
+        tvComments.setText("评论(" + data.getComments().size() + "条)");
+        lnCommentView.setVisibility(View.VISIBLE);
+        final List<CommentEntity> list = data.getComments();
+        CommentAdapter adapter = new CommentAdapter(getContext(), list);
+        adapter.setLimited(true);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),
+                LinearLayoutManager.VERTICAL, false) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+        recyclerViewComment.setLayoutManager(linearLayoutManager);
+
+        adapter.setListener(new CommentInterfaces() {
+            @Override
+            public void OnItemClick(int position) {
+                startActivity(new Intent(getContext(), AddBookCommentAct.class)
+                        .putExtra("tag", 1).putExtra("bookId", bookId)
+                        .putExtra("commentedId", list.get(position).getCommentId())
+                        .putExtra("replyName", list.get(position).getInitiatorNike()));
+            }
+
+            @Override
+            public void OnAnswer(int id, String name) {
+//                showInputDialog(id, name);
+                startActivity(new Intent(getContext(), AddBookCommentAct.class)
+                        .putExtra("tag", 1).putExtra("bookId", bookId)
+                        .putExtra("commentedId", id)
+                        .putExtra("replyName", name));
+            }
+        });
+        adapter.setClickLike(new MeItemInterface() {
+            @Override
+            public void OnItemClick(int position) {
+                clickLike(position);
+            }
+
+            @Override
+            public void OnDelClick(int position) {
+
+            }
+        }, bookId);
+        recyclerViewComment.setAdapter(adapter);
+        recyclerViewComment.setNestedScrollingEnabled(false);
     }
+
+    private void clickLike(int position) {
+        //TODO 点赞
+    }
+
+
+//    private void getComment() {
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("orderId", bookId);
+//        map.put("accessToken", MApplication.getAccessToken());
+//        NRClient.getBookCommentList(map, new ResultCallback<Result<BookCommentData>>() {
+//            @Override
+//            public void onFailure(Throwable throwable) {
+//                LoadDialog.dismiss(getContext());
+//                Utils.showErrorToast(getContext(), throwable);
+//            }
+//
+//            @Override
+//            public void onSuccess(Result<BookCommentData> result) {
+//                LoadDialog.dismiss(getContext());
+//                setBookComment(result.getData());
+//            }
+//        });
+//    }
+//
+//    private void setBookComment(BookCommentData data) {
+//        listComment.clear();
+//        if (data != null && data.getComments() != null && data.getComments().size() > 0) {
+//            listComment.addAll(data.getComments());
+//            lnCommentView.setVisibility(View.VISIBLE);
+//        } else {
+//            lnCommentView.setVisibility(View.GONE);
+//        }
+//        commentAdapter.notifyDataSetChanged();
+//    }
 
     private void setView() {
         GridLayoutManager linearLayout = new GridLayoutManager(getContext(), 5);
@@ -352,14 +445,13 @@ public class BookDetailAct extends BaseActivity {
         LinearLayoutManager lm_latest = new LinearLayoutManager(getContext());
         lm_latest.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewComment.setLayoutManager(lm_latest);
-        commentAdapter = new BookCommentAdapter(getContext(), listComment);
-        recyclerViewComment.setAdapter(commentAdapter);
 
         recAdapter = new BookListAdapter(getContext(), listRec);
         GridLayoutManager linearLayoutRec = new GridLayoutManager(getContext(), 3);
         linearLayoutRec.setOrientation(GridLayoutManager.VERTICAL);
         recyclerViewRec.setLayoutManager(linearLayoutRec);
         recyclerViewRec.setAdapter(recAdapter);
+        recyclerViewRec.setNestedScrollingEnabled(false);
         recAdapter.setListener(new MeItemInterface() {
             @Override
             public void OnItemClick(int position) {
@@ -396,9 +488,12 @@ public class BookDetailAct extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.iv_lend_card, R.id.iv_donater, R.id.tv_donater, R.id.tv_shuping, R.id.iv_watcher, R.id.tv_watcher, R.id.tv_distance, R.id.ln_collect, R.id.ln_comment, R.id.ln_like, R.id.ln_hot_switch, R.id.btn_operate})
+    @OnClick({R.id.iv_lend_card, R.id.iv_donater, R.id.tv_donater, R.id.tv_shuping, R.id.iv_watcher, R.id.tv_watcher, R.id.tv_distance, R.id.ln_collect, R.id.ln_comment, R.id.ln_like, R.id.ln_hot_switch, R.id.btn_operate, R.id.btn_more, R.id.tv_desc})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.tv_desc:
+                showDesc();
+                break;
             case R.id.iv_lend_card:
                 startActivity(new Intent(getContext(), BookLendCardAct.class));
                 break;
@@ -407,7 +502,7 @@ public class BookDetailAct extends BaseActivity {
             case R.id.tv_donater:
                 break;
             case R.id.tv_shuping:
-                startActivity(new Intent(getContext(), BookCommentAct.class)
+                startActivity(new Intent(getContext(), BookReviewAct.class)
                         .putExtra("bookId", bookId));
                 break;
             case R.id.iv_watcher:
@@ -419,8 +514,11 @@ public class BookDetailAct extends BaseActivity {
             case R.id.ln_collect:
                 addCollect();
                 break;
+            case R.id.btn_more:
+                startActivity(new Intent(getContext(), MoreCommentAct.class).putExtra("bookId", bookId));
+                break;
             case R.id.ln_comment:
-                addComment();
+                addComment("", 0);
                 break;
             case R.id.ln_like:
                 break;
@@ -434,13 +532,88 @@ public class BookDetailAct extends BaseActivity {
                 }
                 break;
             case R.id.btn_operate:
-                startActivity(new Intent(getContext(), OrderBookAct.class));
+                if (orderStatus.equals("INITIAL") || orderStatus.equals("WAITING"))
+                    startActivity(new Intent(getContext(), OrderBookAct.class).putExtra("bookId", bookId)
+                            .putExtra("data", mData));
+                else
+                    iWantOrder();
                 break;
         }
     }
 
-    private void addComment() {
+    private void iWantOrder() {
+        LoadDialog.show(getContext(), "预约中...");
+        Map<String, Object> map = new HashMap<>();
+        map.put("orderId", mData.getOrderId());
+        map.put("accessToken", MApplication.getAccessToken());
+        NRClient.wantSee(map, new ResultCallback<Result<Void>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
 
+            @Override
+            public void onSuccess(Result<Void> result) {
+                LoadDialog.dismiss(getContext());
+                showOrderPop(btnOperate);
+            }
+        });
+    }
+
+    PopupWindow mOrderPop;
+
+    private void showOrderPop(View view) {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View v = inflater.inflate(R.layout.normal_pop, null);
+
+        if (mOrderPop == null) {
+            mOrderPop = new PopupWindow(v, LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            mOrderPop.setFocusable(true);
+            mOrderPop.setOutsideTouchable(true);
+            mOrderPop.setBackgroundDrawable(new BitmapDrawable());
+            TextView tv_content = v.findViewById(R.id.dial);
+            LinearLayout ln_function = v.findViewById(R.id.ln_function);
+            ln_function.setVisibility(View.GONE);
+            tv_content.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
+            tv_content.setTextColor(getResources().getColor(R.color.color_333333));
+            tv_content.setText("预约成功， 可借阅时会通知您哦~");
+        }
+        if (mOrderPop != null && !mOrderPop.isShowing())
+            mOrderPop.showAtLocation(view, Gravity.CENTER, 0, 0);
+    }
+
+    PopupWindow mDescPop;
+
+    private void showDesc() {
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View v = inflater.inflate(R.layout.pop_desc, null);
+
+        if (mDescPop == null) {
+            mDescPop = new PopupWindow(v, LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            mDescPop.setFocusable(true);
+            mDescPop.setOutsideTouchable(true);
+            mDescPop.setBackgroundDrawable(new BitmapDrawable());
+            TextView tv_content = v.findViewById(R.id.tv_remark);
+            tv_content.setText(desc);
+            v.findViewById(R.id.view).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mDescPop.dismiss();
+                }
+            });
+        }
+        if (mDescPop != null && !mDescPop.isShowing())
+            mDescPop.showAtLocation(tvDesc, Gravity.CENTER, 0, 0);
+    }
+
+    private void addComment(String replyName, int commentId) {
+        startActivity(new Intent(getContext(), AddBookCommentAct.class)
+                .putExtra("replyName", replyName).putExtra("tag", 1)
+                .putExtra("commentId", commentId).putExtra("bookId", bookId));
     }
 
     private void addCollect() {
@@ -508,7 +681,9 @@ public class BookDetailAct extends BaseActivity {
                 @Override
                 public void onClick(View arg0) {
 //                    showInputDialog(0, "");
-                    //TODO
+                    startActivity(new Intent(getContext(), AddBookCommentAct.class)
+                            .putExtra("replyName", "").putExtra("tag", 1)
+                            .putExtra("commentId", "").putExtra("bookId", bookId));
                 }
             });
         }

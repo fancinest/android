@@ -2,6 +2,7 @@ package com.narancommunity.app.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,13 +68,21 @@ public class CommentSonAdapter extends EasyRecyclerAdapter<Comments> {
             return;
         if (item.getRecipientNike() != null && !item.getRecipientNike().equals("")) {
             hold.tvName.setText(Utils.getValue(item.getInitiatorNike()) + " 回复 " + Utils.getValue(item.getRecipientNike()));
-        }
+        } else
+            hold.tvName.setText(Utils.getValue(item.getInitiatorNike()));
+        String url = Utils.getValue(item.getInitiatorImg());
+        if (!url.equals("")) {
+            Utils.setImgF(mContext, url, hold.ivIcon);
+        } else
+            Utils.setImgF(mContext, R.mipmap.zw_morentouxiang, hold.ivIcon);
+
         hold.tvContent.setText(Utils.getValue(item.getCommentContent()) + "");
         hold.lnComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Integer id = getList().get(position).getCommentId();
-                String name = getList().get(position).getInitiatorNike();
+                Integer id = item.getCommentId();
+                String name = item.getInitiatorNike();
+                Log.i("fancy", "子 id = " + id + "  name = " + name);
                 meItemInterface.OnAnswer(id, name);
             }
         });
@@ -81,12 +90,12 @@ public class CommentSonAdapter extends EasyRecyclerAdapter<Comments> {
 
     @Override
     public int getItemCount() {
-        if (getList().size() >= 3)
-            return 3;
-        else if (getList().size() < 3)
-            return getList().size();
-        else
-            return getList().size();
+        if (isLimited) {
+            if (getList().size() >= 3)
+                return 3;
+            else
+                return getList().size();
+        } else return getList().size();
     }
 
 

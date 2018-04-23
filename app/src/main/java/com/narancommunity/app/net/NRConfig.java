@@ -81,13 +81,26 @@ public class NRConfig {
     public static final String URL_BASE = ""/*"http://" + IP*/;
 
     /**
-     * 图书书评列表
+     * 借阅图书
      */
-    public static final String URL_BOOKCOMMENT_ADD_COMMENT = "/api/book/review/add";
+    public static final String URL_BOOK_LEND = "/api/book/apply/get";
+    /**
+     * 想要看
+     */
+    public static final String URL_BOOK_WANT_SEE = "/api/book/apply/want";
+
+    /**
+     * 评论详情
+     */
+    public static final String URL_COMMENT_DETAIL = "api/record/comment/detail/page";
+    /**
+     * 图书书评添加
+     */
+    public static final String URL_BOOKREVIEW_ADD_COMMENT = "/api/book/review/add";
     /**
      * 图书书评列表
      */
-    public static final String URL_BOOKCOMMENT_LIST = "/api/book/review/page";
+    public static final String URL_BOOKREVIEW_LIST = "/api/book/review/page";
     /**
      * 图书相关书籍推荐(三个那个)
      */
@@ -96,10 +109,6 @@ public class NRConfig {
      * 图书借书卡
      */
     public static final String URL_BOOK_LEND_CARD = "/api/book/apply/page";
-    /**
-     * 图书评论列表
-     */
-    public static final String URL_BOOK_COMMENT_LIST = "/api/record/comment/order/page";
     /**
      * 图书想要看的人
      */
@@ -215,7 +224,7 @@ public class NRConfig {
      */
     public static final String URL_I_WANT = "/api/order/apply/donation";
     /**
-     * 获取评论列表
+     * 获取评论列表/图书评论列表
      */
     public static final String URL_GET_COMMENT_LIST = "/api/record/comment/order/page";
     /**

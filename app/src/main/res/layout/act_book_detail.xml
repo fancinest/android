@@ -50,13 +50,13 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="162dp"
+                            android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
                             <ImageView
                                 android:id="@+id/iv_img"
-                                android:layout_width="100dp"
-                                android:layout_height="150dp"
+                                android:layout_width="80dp"
+                                android:layout_height="120dp"
                                 android:scaleType="centerCrop"
                                 android:src="@mipmap/bg" />
 
@@ -74,20 +74,9 @@
                                     android:ellipsize="end"
                                     android:maxLines="1"
                                     android:text="书名"
+                                    android:maxEms="6"
                                     android:textColor="@color/color_333333"
-                                    android:textSize="17sp" />
-
-                                <TextView
-                                    android:id="@+id/tv_writer"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_below="@id/tv_name"
-                                    android:layout_marginTop="4dp"
-                                    android:ellipsize="end"
-                                    android:maxLines="1"
-                                    android:text="作者:"
-                                    android:textColor="@color/color_999999"
-                                    android:textSize="12sp" />
+                                    android:textSize="14sp" />
 
                                 <ImageView
                                     android:id="@+id/iv_lend_card"
@@ -96,6 +85,19 @@
                                     android:layout_alignParentRight="true"
                                     android:clickable="true"
                                     android:src="@mipmap/jieshuka" />
+
+                                <TextView
+                                    android:id="@+id/tv_writer"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@id/iv_lend_card"
+                                    android:layout_marginTop="4dp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:text="作者:"
+                                    android:maxEms="8"
+                                    android:textColor="@color/color_999999"
+                                    android:textSize="11sp" />
 
                                 <LinearLayout
                                     android:id="@+id/ln_donate"
@@ -113,7 +115,7 @@
                                         android:maxLines="2"
                                         android:text="捐赠者："
                                         android:textColor="@color/color_333333"
-                                        android:textSize="14sp" />
+                                        android:textSize="12sp" />
 
                                     <com.joooonho.SelectableRoundedImageView
                                         android:id="@+id/iv_donater"
@@ -130,7 +132,7 @@
                                         android:layout_weight="1"
                                         android:text="sssfd"
                                         android:textColor="@color/color_999999"
-                                        android:textSize="14sp" />
+                                        android:textSize="12sp" />
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -223,7 +225,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="8dp"
                                 android:layout_weight="1"
-                                android:text="sssfdsfffsfasfdfasfdfa"
                                 android:textColor="@color/appBlue"
                                 android:textSize="14sp" />
 
@@ -258,6 +259,8 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginTop="12dp"
+                    android:ellipsize="end"
+                    android:maxLines="3"
                     android:text="《红楼梦》，中国古典四大名著之首，清代作家曹雪芹创作的章回体长篇小说 ，又名《石头记》《金玉缘》。此书分为120回“程本”和80回“脂本”两种版本系统."
                     android:textColor="@color/color_666666"
                     android:textSize="14sp" />
@@ -405,10 +408,15 @@
                     android:id="@+id/recyclerView_comment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="24dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="12dp"
                     android:layout_marginTop="12dp" />
+
+                <Button
+                    android:id="@+id/btn_more"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@color/transparent"
+                    android:text="查看更多"
+                    android:textColor="@color/appBlue" />
 
                 <View
                     android:layout_width="match_parent"

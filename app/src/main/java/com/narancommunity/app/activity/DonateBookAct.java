@@ -168,6 +168,7 @@ public class DonateBookAct extends BaseActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
         } else if (item.getItemId() == R.id.action_scan) {
+            checkCamera(null,true);
             startCaptureActivityForResult();
         }
         return super.onOptionsItemSelected(item);
@@ -582,7 +583,7 @@ public class DonateBookAct extends BaseActivity {
 
             @Override
             public void onClick(View arg0) { // 相机
-                checkCamera(dialog);
+                checkCamera(dialog,false);
             }
         });
         localLl.setOnClickListener(new View.OnClickListener() {
@@ -622,7 +623,7 @@ public class DonateBookAct extends BaseActivity {
         }
     }
 
-    private void checkCamera(Dialog dialog) {
+    private void checkCamera(Dialog dialog,boolean isScan) {
         //第二个参数是需要申请的权限
         //权限已经被授予，在这里直接写要执行的相应方法即可
         if (checkPermissions()) {
@@ -631,10 +632,14 @@ public class DonateBookAct extends BaseActivity {
                 StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
                 StrictMode.setVmPolicy(builder.build());
             }
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(SDCardUtils.getTempFile()));
-            startActivityForResult(intent, GET_IMAGE_VIA_CAMERA);
-            dialog.dismiss();
+            if(isScan){
+                startCaptureActivityForResult();
+            }else {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(SDCardUtils.getTempFile()));
+                startActivityForResult(intent, GET_IMAGE_VIA_CAMERA);
+                dialog.dismiss();
+            }
         }
     }
 
