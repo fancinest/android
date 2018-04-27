@@ -1,6 +1,7 @@
 package com.narancommunity.app.net;
 
 import com.narancommunity.app.entity.Address;
+import com.narancommunity.app.entity.AnswerComment;
 import com.narancommunity.app.entity.ApplyDetailEntity;
 import com.narancommunity.app.entity.AskPapers;
 import com.narancommunity.app.entity.AssistantEntity;
@@ -17,9 +18,7 @@ import com.narancommunity.app.entity.CommentListEntity;
 import com.narancommunity.app.entity.DonateDetailData;
 import com.narancommunity.app.entity.NewsData;
 import com.narancommunity.app.entity.OrderData;
-import com.narancommunity.app.entity.OrderEntity;
 import com.narancommunity.app.entity.RecData;
-import com.narancommunity.app.entity.RecEntity;
 import com.narancommunity.app.entity.WallListData;
 import com.narancommunity.app.entity.Stationery;
 import com.narancommunity.app.entity.UpdateFilesEntity;
@@ -28,6 +27,8 @@ import com.narancommunity.app.entity.WantListEntity;
 import com.narancommunity.app.entity.WeekEntity;
 import com.narancommunity.app.entity.WishDetailEntity;
 import com.narancommunity.app.entity.WishDonateEntity;
+import com.narancommunity.app.entity.YSHYData;
+import com.narancommunity.app.entity.Zan;
 
 import java.util.HashMap;
 import java.util.List;
@@ -150,6 +151,78 @@ public interface NRService {
     Call<Result<BannerData>> getBannerList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取banner列表
 
     @FormUrlEncoded
+    @POST(NRConfig.URL_GET_BOOK_BY_SORT)
+    Call<Result<RecData>> getBookBySortList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取图书分类列表(爱心书屋里)
+
+    //
+    @FormUrlEncoded
+    @POST(NRConfig.URL_ESSAY_LIKE)
+    Call<Result<Void>> likeEssay(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//文章点赞
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_COMMENT_LIKE)
+    Call<Result<Void>> likeComment(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//评论点赞
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_BOOKREVIEW_LIKE)
+    Call<Result<Void>> likeBookReview(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//书评点赞
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_BOOK_LIKE)
+    Call<Result<Void>> likeBook(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//书点赞
+    //
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_DONT_LIKE)
+    Call<Result<Void>> dontLike(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//取消点赞
+
+    //
+    @FormUrlEncoded
+    @POST(NRConfig.URL_BOOK_IS_LIKE)
+    Call<Result<Zan>> isLikeBook(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//书籍
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_COMMENT_IS_LIKE)
+    Call<Result<Zan>> isLikeComment(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//评论
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_BOOKREVIEW_IS_LIKE)
+    Call<Result<Zan>> isLikeBookReview(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//书评
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_ESSAY_IS_LIKE)
+    Call<Result<Zan>> isLikeEssay(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//文章
+    //
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_ESSAY_ADD_COMMENT)
+    Call<Result<Void>> addEssayComment(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//文章评论
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_ESSAY_COMMENT_LIST)
+    Call<Result<CommentListEntity>> getEssayCommentList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//文章评论列表
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_BOOKREVIEW_ADD_COMMENT)
+    Call<Result<Void>> addBookReviewComment(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//添加书评评论
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_YSHY_LIST)
+    Call<Result<YSHYData>> getYSHYList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//以书会友-列表
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_SHHZ_LIST)
+    Call<Result<YSHYData>> getSHHZList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//以书会友-列表
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_ADD_SHHZ)
+    Call<Result<Void>> addSHHZ(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//书荒互助新增
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_ADD_YSHY)
+    Call<Result<Void>> addYSHY(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//以书会友新增
+
+    @FormUrlEncoded
     @POST(NRConfig.URL_BOOK_LEND)
     Call<Result<Void>> lendBook(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//借阅本书
 
@@ -163,19 +236,19 @@ public interface NRService {
 
     @FormUrlEncoded
     @POST(NRConfig.URL_BOOKREVIEW_LIST)
-    Call<Result<BookCommentData>> getBookCommentCommentList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取书评列表
+    Call<Result<BookCommentData>> getBookReviewList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取书评列表
 
     @FormUrlEncoded
-    @POST(NRConfig.URL_BOOKREVIEW_ADD_COMMENT)
+    @POST(NRConfig.URL_BOOKREVIEW_ADD)
     Call<Result<Void>> addBookCommentComment(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//添加书评
 
     @FormUrlEncoded
     @POST(NRConfig.URL_BOOK_RELATIVE_REC)
     Call<Result<BookRelativeRecData>> getBookRelativeRecList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取图书相关推荐列表
 
-//    @FormUrlEncoded
-//    @POST(NRConfig.URL_BOOK_COMMENT_LIST)
-//    Call<Result<BookCommentData>> getBookCommentList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取图书评论列表
+    @FormUrlEncoded
+    @POST(NRConfig.URL_BOOKREVIEW_COMMENT_LIST)
+    Call<Result<AnswerComment>> getBookReviewCommentList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取书评评论列表
 
     @FormUrlEncoded
     @POST(NRConfig.URL_BOOK_LEND_CARD)

@@ -58,6 +58,8 @@ public class CommentAdapter extends EasyRecyclerAdapter<CommentEntity> {
         final MyViewHolder hold = (MyViewHolder) (holder);
 
         final CommentEntity item = getList().get(position);
+        if (item == null)
+            return;
         hold.tvComment.setText(Utils.getValue(item.getCommentContent()) + "");
         hold.tvName.setText(Utils.getValue(item.getInitiatorNike()) + "");
         hold.tvTimes.setText(Utils.dateDiff(Utils.stringTimeToMillion(item.getCreateTime())) + "");
@@ -109,6 +111,13 @@ public class CommentAdapter extends EasyRecyclerAdapter<CommentEntity> {
         });
         int likeCount = Utils.getValue(item.getLikeTimes());
         hold.tvLike.setText(likeCount == 0 ? "0" : (likeCount + ""));
+        int isLike = item.getLikeTag();
+        if (isLike == 0) {
+            hold.tvLike.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.list_btn_zan)
+                    , null, null, null);
+        } else
+            hold.tvLike.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(R.mipmap.list_btn_zan_pre)
+                    , null, null, null);
     }
 
     private void setSonComment(RecyclerView recyclerView, final AnswerComment records) {

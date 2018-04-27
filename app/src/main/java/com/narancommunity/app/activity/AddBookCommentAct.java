@@ -37,9 +37,10 @@ public class AddBookCommentAct extends BaseActivity {
     @BindView(R.id.et_content)
     EditText etContent;
 
-    int bookId;
-    int tag = 0;//2是添加书评  1是普通书籍评论 0是以书会友中添加以书会友
-    int commentId;
+    int bookId;//正常是书的ID，书荒互助的时候是contentId
+    int tag = 0;//2是添加书评  1是普通书籍评论 0是以书会友中添加以书会友 3,评论书评  ,4书荒互助
+    int commentId;//这个其实是commentedId
+    int reviewId;
     String replyName = "";//仅在tag=1时有，回复的评论人名
 
     @Override
@@ -52,8 +53,15 @@ public class AddBookCommentAct extends BaseActivity {
         tag = getIntent().getIntExtra("tag", 0);
         bookId = getIntent().getIntExtra("bookId", 0);
         if (tag == 0) {
-            toolbar.setTitle("以书会友");
+            commentId = getIntent().getIntExtra("commentedId", 0);
+            replyName = getIntent().getStringExtra("replyName");
             etContent.setHint("请输入回复");
+            if (replyName.equals("")) {
+                etContent.setHint("请输入评论");
+            } else {
+                etContent.setHint("回复：" + replyName);
+            }
+            toolbar.setTitle("回复");
         } else if (tag == 1) {
             commentId = getIntent().getIntExtra("commentedId", 0);
             replyName = getIntent().getStringExtra("replyName");
@@ -65,6 +73,12 @@ public class AddBookCommentAct extends BaseActivity {
         } else if (tag == 2) {
             toolbar.setTitle("填写书评");
             etContent.setHint("说点什么吧");
+        } else if (tag == 3) {
+            reviewId = getIntent().getIntExtra("reviewId", 0);
+            toolbar.setTitle("填写评论");
+            etContent.setHint("说点什么吧");
+        } else if (tag == 4) {
+
         }
 
     }
@@ -79,8 +93,59 @@ public class AddBookCommentAct extends BaseActivity {
                 addComment();
             else if (tag == 1)
                 addNormalComment();
+            else if (tag == 3)
+                addBookReviewComment();
+            else if (tag == 0)
+                addYSHYComment();
         }
-        finish();
+    }
+
+    private void addYSHYComment() {
+        LoadDialog.show(getContext(), "正在发布");
+        Map<String, Object> map = new HashMap<>();
+        map.put("commentContent", etContent.getText().toString());
+        map.put("contentId", bookId);
+        map.put("commentedId", commentId);
+        map.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", "addParams = " + map.toString());
+        NRClient.addEssayComment(map, new ResultCallback<Result<Void>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<Void> result) {
+                LoadDialog.dismiss(getContext());
+                Toaster.toast(getContext(), "发布成功!");
+//                finish();
+            }
+        });
+    }
+
+    private void addBookReviewComment() {
+        LoadDialog.show(getContext(), "正在发布");
+        Map<String, Object> map = new HashMap<>();
+        map.put("commentContent", etContent.getText().toString());
+        map.put("reviewId", reviewId);
+        map.put("commentedId", "");
+        map.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", "addParams = " + map.toString());
+        NRClient.addBookReviewComment(map, new ResultCallback<Result<Void>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<Void> result) {
+                LoadDialog.dismiss(getContext());
+                Toaster.toast(getContext(), "发布成功!");
+//                finish();
+            }
+        });
     }
 
     private void addNormalComment() {
@@ -109,7 +174,7 @@ public class AddBookCommentAct extends BaseActivity {
 
 
     private void addComment() {
-        LoadDialog.show(getContext(), "正在发布书评");
+        LoadDialog.show(getContext(), "正在发布");
         Map<String, Object> map = new HashMap<>();
         map.put("content", etContent.getText().toString());
         map.put("orderId", bookId);

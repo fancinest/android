@@ -5,6 +5,7 @@ import android.util.Pair;
 
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.entity.Address;
+import com.narancommunity.app.entity.AnswerComment;
 import com.narancommunity.app.entity.ApplyDetailEntity;
 import com.narancommunity.app.entity.AskPapers;
 import com.narancommunity.app.entity.AssistantEntity;
@@ -30,6 +31,8 @@ import com.narancommunity.app.entity.WantListEntity;
 import com.narancommunity.app.entity.WeekEntity;
 import com.narancommunity.app.entity.WishDetailEntity;
 import com.narancommunity.app.entity.WishDonateEntity;
+import com.narancommunity.app.entity.YSHYData;
+import com.narancommunity.app.entity.Zan;
 
 import java.io.File;
 import java.util.HashMap;
@@ -136,13 +139,608 @@ public class NRClient {
     //TODO 以此为基础
 
     /**
+     * 获取分类列表（爱心书屋）
+     *
+     * @param callback
+     * @return
+     */
+    public static Call getBookBySortList(Map<String, Object> baseData,
+                                        final ResultCallback<Result<RecData>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<RecData>> call = mService.getBookBySortList(header, baseData);
+        Callback<Result<RecData>> cbk = new Callback<Result<RecData>>() {
+
+            @Override
+            public void onResponse(Call<Result<RecData>> call,
+                                   Response<Result<RecData>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<RecData>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
+
+    /**
+     * 书评
+     *
+     * @param callback
+     * @return
+     */
+    public static Call isLikeBookReview(Map<String, Object> baseData,
+                                      final ResultCallback<Result<Zan>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<Zan>> call = mService.isLikeBookReview(header, baseData);
+        Callback<Result<Zan>> cbk = new Callback<Result<Zan>>() {
+
+            @Override
+            public void onResponse(Call<Result<Zan>> call,
+                                   Response<Result<Zan>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<Zan>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
+
+    /**
+     * 文章
+     *
+     * @param callback
+     * @return
+     */
+    public static Call isLikeEssay(Map<String, Object> baseData,
+                                 final ResultCallback<Result<Zan>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<Zan>> call = mService.isLikeEssay(header, baseData);
+        Callback<Result<Zan>> cbk = new Callback<Result<Zan>>() {
+
+            @Override
+            public void onResponse(Call<Result<Zan>> call,
+                                   Response<Result<Zan>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<Zan>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
+
+    /**
+     * 评论like
+     *
+     * @param callback
+     * @return
+     */
+    public static Call isLikeComment(Map<String, Object> baseData,
+                                   final ResultCallback<Result<Zan>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<Zan>> call = mService.isLikeComment(header, baseData);
+        Callback<Result<Zan>> cbk = new Callback<Result<Zan>>() {
+
+            @Override
+            public void onResponse(Call<Result<Zan>> call,
+                                   Response<Result<Zan>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<Zan>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
+
+    /**
+     * 书籍
+     *
+     * @param callback
+     * @return
+     */
+    public static Call isLikeBook(Map<String, Object> baseData,
+                                final ResultCallback<Result<Zan>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<Zan>> call = mService.isLikeBook(header, baseData);
+        Callback<Result<Zan>> cbk = new Callback<Result<Zan>>() {
+
+            @Override
+            public void onResponse(Call<Result<Zan>> call,
+                                   Response<Result<Zan>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<Zan>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
+
+
+    /**
+     * 取消点赞
+     *
+     * @param callback
+     * @return
+     */
+    public static Call dontLike(Map<String, Object> baseData,
+                                      final ResultCallback<Result<Void>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<Void>> call = mService.dontLike(header, baseData);
+        Callback<Result<Void>> cbk = new Callback<Result<Void>>() {
+
+            @Override
+            public void onResponse(Call<Result<Void>> call,
+                                   Response<Result<Void>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<Void>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
+
+    /**
+     * 书评点赞
+     *
+     * @param callback
+     * @return
+     */
+    public static Call likeBookReview(Map<String, Object> baseData,
+                                       final ResultCallback<Result<Void>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<Void>> call = mService.likeBookReview(header, baseData);
+        Callback<Result<Void>> cbk = new Callback<Result<Void>>() {
+
+            @Override
+            public void onResponse(Call<Result<Void>> call,
+                                   Response<Result<Void>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<Void>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
+
+    /**
+     * 文章点赞
+     *
+     * @param callback
+     * @return
+     */
+    public static Call likeEssay(Map<String, Object> baseData,
+                                       final ResultCallback<Result<Void>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<Void>> call = mService.likeEssay(header, baseData);
+        Callback<Result<Void>> cbk = new Callback<Result<Void>>() {
+
+            @Override
+            public void onResponse(Call<Result<Void>> call,
+                                   Response<Result<Void>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<Void>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
+
+    /**
+     * 评论like
+     *
+     * @param callback
+     * @return
+     */
+    public static Call likeComment(Map<String, Object> baseData,
+                                       final ResultCallback<Result<Void>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<Void>> call = mService.likeComment(header, baseData);
+        Callback<Result<Void>> cbk = new Callback<Result<Void>>() {
+
+            @Override
+            public void onResponse(Call<Result<Void>> call,
+                                   Response<Result<Void>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<Void>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
+
+    /**
+     * 书籍like
+     *
+     * @param callback
+     * @return
+     */
+    public static Call likeBook(Map<String, Object> baseData,
+                                       final ResultCallback<Result<Void>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<Void>> call = mService.likeBook(header, baseData);
+        Callback<Result<Void>> cbk = new Callback<Result<Void>>() {
+
+            @Override
+            public void onResponse(Call<Result<Void>> call,
+                                   Response<Result<Void>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<Void>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
+
+    /**
+     * YSHY add
+     *
+     * @param callback
+     * @return
+     */
+    public static Call addEssayComment(Map<String, Object> baseData,
+                                           final ResultCallback<Result<Void>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<Void>> call = mService.addEssayComment(header, baseData);
+        Callback<Result<Void>> cbk = new Callback<Result<Void>>() {
+
+            @Override
+            public void onResponse(Call<Result<Void>> call,
+                                   Response<Result<Void>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<Void>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
+    /**
+     * YSHY add
+     *
+     * @param callback
+     * @return
+     */
+    public static Call getEssayCommentList(Map<String, Object> baseData,
+                                           final ResultCallback<Result<CommentListEntity>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<CommentListEntity>> call = mService.getEssayCommentList(header, baseData);
+        Callback<Result<CommentListEntity>> cbk = new Callback<Result<CommentListEntity>>() {
+
+            @Override
+            public void onResponse(Call<Result<CommentListEntity>> call,
+                                   Response<Result<CommentListEntity>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<CommentListEntity>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
+
+    /**
+     * YSHY add
+     *
+     * @param callback
+     * @return
+     */
+    public static Call addYSHY(Map<String, Object> baseData,
+                               final ResultCallback<Result<Void>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<Void>> call = mService.addYSHY(header, baseData);
+        Callback<Result<Void>> cbk = new Callback<Result<Void>>() {
+
+            @Override
+            public void onResponse(Call<Result<Void>> call,
+                                   Response<Result<Void>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<Void>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
+
+
+    /**
+     * SHHZ add
+     *
+     * @param callback
+     * @return
+     */
+    public static Call addSHHZ(Map<String, Object> baseData,
+                               final ResultCallback<Result<Void>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<Void>> call = mService.addSHHZ(header, baseData);
+        Callback<Result<Void>> cbk = new Callback<Result<Void>>() {
+
+            @Override
+            public void onResponse(Call<Result<Void>> call,
+                                   Response<Result<Void>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<Void>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
+
+    /**
+     * SHHZ列表
+     *
+     * @param callback
+     * @return
+     */
+    public static Call getSHHZList(Map<String, Object> baseData,
+                                   final ResultCallback<Result<YSHYData>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<YSHYData>> call = mService.getSHHZList(header, baseData);
+        Callback<Result<YSHYData>> cbk = new Callback<Result<YSHYData>>() {
+
+            @Override
+            public void onResponse(Call<Result<YSHYData>> call,
+                                   Response<Result<YSHYData>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<YSHYData>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
+
+    /**
+     * YSHY列表
+     *
+     * @param callback
+     * @return
+     */
+    public static Call getYSHYList(Map<String, Object> baseData,
+                                   final ResultCallback<Result<YSHYData>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<YSHYData>> call = mService.getYSHYList(header, baseData);
+        Callback<Result<YSHYData>> cbk = new Callback<Result<YSHYData>>() {
+
+            @Override
+            public void onResponse(Call<Result<YSHYData>> call,
+                                   Response<Result<YSHYData>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<YSHYData>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
+
+    /**
+     * 书评评论列表
+     *
+     * @param callback
+     * @return
+     */
+    public static Call addBookReviewComment(Map<String, Object> baseData,
+                                            final ResultCallback<Result<Void>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<Void>> call = mService.addBookReviewComment(header, baseData);
+        Callback<Result<Void>> cbk = new Callback<Result<Void>>() {
+
+            @Override
+            public void onResponse(Call<Result<Void>> call,
+                                   Response<Result<Void>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<Void>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
+
+    /**
+     * 书评评论列表
+     *
+     * @param callback
+     * @return
+     */
+    public static Call getBookReviewCommentList(Map<String, Object> baseData,
+                                                final ResultCallback<Result<AnswerComment>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<AnswerComment>> call = mService.getBookReviewCommentList(header, baseData);
+        Callback<Result<AnswerComment>> cbk = new Callback<Result<AnswerComment>>() {
+
+            @Override
+            public void onResponse(Call<Result<AnswerComment>> call,
+                                   Response<Result<AnswerComment>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<AnswerComment>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
+
+    /**
      * 预约想看
      *
      * @param callback
      * @return
      */
     public static Call lendBook(Map<String, Object> baseData,
-                               final ResultCallback<Result<Void>> callback) {
+                                final ResultCallback<Result<Void>> callback) {
 
         if (callback == null) throw new NullPointerException("callback == null");
         NRService mService = ServiceFactory.createNewService(NRService.class);
@@ -175,7 +773,7 @@ public class NRClient {
      * @return
      */
     public static Call wantSee(Map<String, Object> baseData,
-                                        final ResultCallback<Result<Void>> callback) {
+                               final ResultCallback<Result<Void>> callback) {
 
         if (callback == null) throw new NullPointerException("callback == null");
         NRService mService = ServiceFactory.createNewService(NRService.class);
@@ -273,15 +871,15 @@ public class NRClient {
      * @param callback
      * @return
      */
-    public static Call getBookCommentCommentList(Map<String, Object> baseData,
-                                                 final ResultCallback<Result<BookCommentData>> callback) {
+    public static Call getBookReviewList(Map<String, Object> baseData,
+                                         final ResultCallback<Result<BookCommentData>> callback) {
 
         if (callback == null) throw new NullPointerException("callback == null");
         NRService mService = ServiceFactory.createNewService(NRService.class);
         HashMap<String, Object> header = new HashMap<>();
         header.put("accessToken", MApplication.getAccessToken());
         Log.i("fancy", header.get("accessToken") + "");
-        Call<Result<BookCommentData>> call = mService.getBookCommentCommentList(header, baseData);
+        Call<Result<BookCommentData>> call = mService.getBookReviewList(header, baseData);
         Callback<Result<BookCommentData>> cbk = new Callback<Result<BookCommentData>>() {
 
             @Override

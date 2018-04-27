@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
@@ -82,7 +83,6 @@
                         android:id="@+id/tv_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="恍恍惚惚好"
                         android:textColor="@color/color_666666"
                         android:textSize="14sp" />
 
@@ -123,7 +123,7 @@
                 <ImageView
                     android:id="@+id/iv_one_pic"
                     android:layout_width="match_parent"
-                    android:layout_height="148dp"
+                    android:layout_height="212dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:scaleType="centerCrop"
@@ -141,7 +141,6 @@
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="冬日暖心华为初代nova手机壳（灰色）"
                 android:textColor="@color/color_666666"
                 android:textSize="17sp" />
 
@@ -154,7 +153,6 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="12dp"
-                android:text="华为刚出nova时，随手机附赠的手机壳，摸上去手感很好，尤其是冬天，带上TA手机拿在手里会觉得很温暖。官方正品，与黑色和白色手机搭配更适合。大冬天，给你暖一暖！华为刚出nova时，随手机附赠的手机壳，摸上去手感很好，尤其是冬天，带上TA手机拿在手里会觉得很温暖。"
                 android:textColor="@color/color_666666"
                 android:textSize="15sp" />
 
@@ -164,7 +162,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="12dp"
-                android:text="少于一分钟"
                 android:textColor="@color/color_999999"
                 android:textSize="11sp" />
 
@@ -244,7 +241,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:clickable="false"
-                            android:drawableLeft="@mipmap/list_btn_fengxiang_org"
+                            android:drawableLeft="@mipmap/list_btn_zan_s_gre"
                             android:drawablePadding="8dp"
                             android:text="30"
                             android:textColor="@color/color_666666"
@@ -389,6 +386,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp" />
+
+            <Button
+                android:id="@+id/btn_more"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@color/transparent"
+                android:text="查看更多"
+                android:textColor="@color/appBlue" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

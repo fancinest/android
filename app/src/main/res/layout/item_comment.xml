@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:clickable="false"
-            android:drawableLeft="@mipmap/list_btn_zan_s_gre"
+            android:drawableLeft="@mipmap/list_btn_zan"
             android:drawablePadding="8dp"
             android:textColor="@color/appRed"
             android:textSize="12sp" />

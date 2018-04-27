@@ -6,8 +6,6 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <!--既是书评item布局又是普通评论的item-->
-
     <View
         android:id="@+id/view_top"
         android:layout_width="match_parent"
@@ -54,25 +52,6 @@
         android:paddingTop="16dp"
         android:textColor="@color/color_333333"
         android:textSize="15sp" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="12dp" />
-
-    <TextView
-        android:id="@+id/tv_more"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="12dp"
-        android:gravity="right"
-        android:text="查看全部9条回复"
-        android:textColor="@color/blue_tag" />
 
     <View
         android:layout_width="match_parent"

@@ -14,16 +14,25 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.narancommunity.app.MApplication;
+import com.narancommunity.app.MainActivity;
 import com.narancommunity.app.R;
+import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.net.AppConstants;
 import com.narancommunity.app.common.DBHelper;
+import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.NRConfig;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.UserInfo;
+import com.narancommunity.app.net.Result;
+import com.narancommunity.app.net.ResultCallback;
 import com.narancommunity.app.net.ServiceFactory;
 import com.snappydb.DB;
 import com.snappydb.SnappydbException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -176,27 +185,27 @@ public class ForgetAct extends AppCompatActivity {
     }
 
     private void doLogin(String phone, String psd) {
-//        LoadDialog.show(this, "正在为您登录...");
-//        String pass = Utils.MD5(psd);
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("username", phone);
-//        map.put("password", pass);
-//        NRClient.login(map, new ResultCallback<Result<UserInfo>>() {
-//            @Override
-//            public void onSuccess(Result<UserInfo> result) {
-//                LoadDialog.dismiss(ForgetAct.this);
-//                Toaster.toast(ForgetAct.this, "登录成功！");
-//                saveUserInfo(result.getData());
-//                startActivity(new Intent(ForgetAct.this, MainActivity.class));
-//                finish();
-//            }
-//
-//            @Override
-//            public void onFailure(Throwable throwable) {
-//                LoadDialog.dismiss(ForgetAct.this);
-//                Utils.showErrorToast(getContext(), throwable);
-//            }
-//        });
+        LoadDialog.show(this, "正在为您登录...");
+        String pass = Utils.MD5(psd);
+        Map<String, Object> map = new HashMap<>();
+        map.put("username", phone);
+        map.put("password", pass);
+        NRClient.login(map, new ResultCallback<Result<UserInfo>>() {
+            @Override
+            public void onSuccess(Result<UserInfo> result) {
+                LoadDialog.dismiss(ForgetAct.this);
+                Toaster.toast(ForgetAct.this, "登录成功！");
+                saveUserInfo(result.getData());
+                startActivity(new Intent(ForgetAct.this, MainActivity.class));
+                finish();
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(ForgetAct.this);
+                Utils.showErrorToast(getContext(), throwable);
+            }
+        });
     }
 
     /**
@@ -216,53 +225,53 @@ public class ForgetAct extends AppCompatActivity {
     }
 
     private void doForgetPsd() {
-//        LoadDialog.show(this);
-//        final String phone = etPhone.getText().toString();
-//        final String psd = etPsd.getText().toString();
-//        String pass = Utils.MD5(psd);
-//        String code = etVerifyCode.getText().toString();
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("userPhone", phone);
-//        map.put("password", pass);
-//        map.put("code", code);
-//        NRClient.forgetPsd(map, new ResultCallback<Result<String>>() {
-//            @Override
-//            public void onSuccess(Result<String> result) {
-//                LoadDialog.dismiss(getContext());
-//                Toaster.toast(getContext(), "操作成功！");
-//                doLogin(phone, psd);
-//            }
-//
-//            @Override
-//            public void onFailure(Throwable throwable) {
-//                LoadDialog.dismiss(getContext());
-//                Utils.showErrorToast(getContext(), throwable);
-//            }
-//        });
+        LoadDialog.show(this);
+        final String phone = etPhone.getText().toString();
+        final String psd = etPsd.getText().toString();
+        String pass = Utils.MD5(psd);
+        String code = etVerifyCode.getText().toString();
+        Map<String, Object> map = new HashMap<>();
+        map.put("userPhone", phone);
+        map.put("password", pass);
+        map.put("code", code);
+        NRClient.forgetPsd(map, new ResultCallback<Result<String>>() {
+            @Override
+            public void onSuccess(Result<String> result) {
+                LoadDialog.dismiss(getContext());
+                Toaster.toast(getContext(), "操作成功！");
+                doLogin(phone, psd);
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+        });
     }
 
     private void doGetCode(String phone) {
-//        LoadDialog.show(this);
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("phone", phone);
-//        map.put("exist", "forgetpw");
-//        map.put("doSendSMS", NRApplication.isRelease);
-//        NRClient.getVerifyCode(map, new ResultCallback<Result<String>>() {
-//            @Override
-//            public void onSuccess(Result<String> result) {
-//                LoadDialog.dismiss(ForgetAct.this);
-//                mSendVerificationCodeCountDownTimer.start();
-//                if (!NRApplication.isRelease)
-//                    etVerifyCode.setText(result.getData());
-//                Toaster.toast(ForgetAct.this, "请注意查收！");
-//            }
-//
-//            @Override
-//            public void onFailure(Throwable throwable) {
-//                LoadDialog.dismiss(getContext());
-//                Utils.showErrorToast(getContext(), throwable);
-//            }
-//        });
+        LoadDialog.show(this);
+        Map<String, Object> map = new HashMap<>();
+        map.put("phone", phone);
+        map.put("exist", "forgetpw");
+        map.put("doSendSMS", MApplication.isRelease);
+        NRClient.getVerifyCode(map, new ResultCallback<Result<Object>>() {
+            @Override
+            public void onSuccess(Result<Object> result) {
+                LoadDialog.dismiss(ForgetAct.this);
+                mSendVerificationCodeCountDownTimer.start();
+                if (!MApplication.isRelease)
+                    etVerifyCode.setText(result.getData() + "");
+                Toaster.toast(ForgetAct.this, "请注意查收！");
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+        });
     }
 
     private CountDownTimer mSendVerificationCodeCountDownTimer = new CountDownTimer(60000, 1000) {

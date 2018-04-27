@@ -184,7 +184,7 @@
             android:name=".activity.BookLendCardAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.BookReviewAct"
+            android:name=".activity.BookReviewListAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.AddBookCommentAct"

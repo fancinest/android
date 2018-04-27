@@ -16,22 +16,22 @@ import com.narancommunity.app.activity.BookHelpDetailAct;
 import com.narancommunity.app.activity.BookYSHYDetailAct;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.common.adapter.EasyRecyclerAdapter;
-import com.narancommunity.app.entity.BookCommunityEntity;
+import com.narancommunity.app.entity.YSHYEntity;
 
 import java.util.List;
 
 /**
  * Writer：fancy on 2017/5/9 10:59
  * Email：120760202@qq.com
- * FileName : 书评 item
+ * FileName : 以书会友和书荒互动适配器
  */
 
-public class CommunityYSHYAdapter extends EasyRecyclerAdapter<BookCommunityEntity> {
+public class CommunityYSHYAdapter extends EasyRecyclerAdapter<YSHYEntity> {
     boolean isLimited = false;
     MeItemInterface meItemInterface;
     boolean isYSHY = true;
 
-    public CommunityYSHYAdapter(Context context, List<BookCommunityEntity> list) {
+    public CommunityYSHYAdapter(Context context, List<YSHYEntity> list) {
         super(context, list);
     }
 
@@ -45,32 +45,38 @@ public class CommunityYSHYAdapter extends EasyRecyclerAdapter<BookCommunityEntit
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_bookcommunity_son, parent, false);
-        return new MyViewHolder(view);
+        View convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_bookcommunity_son, parent, false);
+        return new MyViewHolder(convertView);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final MyViewHolder hold = (MyViewHolder) (holder);
 
-        final BookCommunityEntity item = getList().get(position);
-        String url = item.getUrl();
+        final YSHYEntity item = getList().get(position);
+        String url = Utils.getValue(item.getAccountImg());
         if (!"".equals(url)) {
             Utils.setImgF(mContext, url, hold.ivIcon);
-        } else {
+        } else
             Utils.setImgF(mContext, R.mipmap.zw_morentouxiang, hold.ivIcon);
-        }
-        String pic = item.getPic();
+
+        String pic = Utils.getValue(item.getContentImg());
+
         if (!"".equals(pic)) {
+            if (pic.contains(",")) {
+                pic = pic.split(",", -1)[0];
+            }
             Utils.setImgF(mContext, pic, hold.ivImg);
-        } else {
+            hold.ivImg.setVisibility(View.VISIBLE);
+        } else if ("".equals(pic)) {
+            hold.ivImg.setVisibility(View.GONE);
             Utils.setImgF(mContext, R.mipmap.zw_morentouxiang, hold.ivImg);
         }
-        hold.tvName.setText(Utils.getValue(item.getName()));
-        hold.tvContent.setText(Utils.getValue(item.getContent()));
+        hold.tvName.setText(Utils.getValue(item.getAccountNike()));
+        hold.tvContent.setText(Utils.getValue(item.getContentBody()));
         hold.tvTimes.setText(Utils.dateDiff(Utils.stringTimeToMillion(item.getCreateTime())) + "");
-        hold.tvComment.setText(Utils.getValue(item.getCount()) + "");
-        hold.tvLike.setText(Utils.getValue(item.getLikes()) + "");
+        hold.tvComment.setText(Utils.getValue(item.getCommentTimes()) + "");
+        hold.tvLike.setText(Utils.getValue(item.getLikeTimes()) + "");
         hold.tvComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,18 +93,22 @@ public class CommunityYSHYAdapter extends EasyRecyclerAdapter<BookCommunityEntit
             @Override
             public void onClick(View v) {
                 if (isYSHY)
-                    mContext.startActivity(new Intent(mContext, BookYSHYDetailAct.class));
+                    mContext.startActivity(new Intent(mContext, BookYSHYDetailAct.class)
+                            .putExtra("data", item));
                 else
-                    mContext.startActivity(new Intent(mContext, BookHelpDetailAct.class));
+                    mContext.startActivity(new Intent(mContext, BookHelpDetailAct.class)
+                            .putExtra("data", item));
             }
         });
         hold.ivImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isYSHY)
-                    mContext.startActivity(new Intent(mContext, BookYSHYDetailAct.class));
+                    mContext.startActivity(new Intent(mContext, BookYSHYDetailAct.class)
+                            .putExtra("data", item));
                 else
-                    mContext.startActivity(new Intent(mContext, BookHelpDetailAct.class));
+                    mContext.startActivity(new Intent(mContext, BookHelpDetailAct.class)
+                            .putExtra("data", item));
 
             }
         });
@@ -129,6 +139,7 @@ public class CommunityYSHYAdapter extends EasyRecyclerAdapter<BookCommunityEntit
             tvComment = itemView.findViewById(R.id.tv_comment);
             tvLike = itemView.findViewById(R.id.tv_like);
             ivImg = itemView.findViewById(R.id.iv_img);
+            itemView.setTag(this);
         }
     }
 }

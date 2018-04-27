@@ -12,18 +12,14 @@ import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.common.adapter.EasyRecyclerAdapter;
-import com.narancommunity.app.entity.BookEntity;
-import com.narancommunity.app.entity.MeFunctionEntity;
 import com.narancommunity.app.entity.RecEntity;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
 /**
  * Writer：fancy on 2017/5/9 10:59
  * Email：120760202@qq.com
- * FileName : 公益活动
+ * FileName : 书籍分类适配器(爱心书屋)
  */
 
 public class BookListAdapter extends EasyRecyclerAdapter<RecEntity> {
@@ -55,9 +51,8 @@ public class BookListAdapter extends EasyRecyclerAdapter<RecEntity> {
         } else {
             Utils.setImgF(getContext(), "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523510281803&di=d1eaf4c7d74e69730bf5889169cae5e7&imgtype=jpg&src=http%3A%2F%2Fimg3.imgtn.bdimg.com%2Fit%2Fu%3D3994969733%2C336727888%26fm%3D214%26gp%3D0.jpg", hold.ivPic);
         }
-        hold.tvName.setText(Utils.getValue(item.getOrderTitle()));
+        hold.tvName.setText(Utils.getValue(item.getOrderTitle()) + "");
 
-//        hold.iv_pic.setImageResource(url);
         hold.ivPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

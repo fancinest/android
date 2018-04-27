@@ -10,8 +10,8 @@ import java.io.Serializable;
 
 public class Comments implements Serializable {
     String commentContent, createTime, initiatorImg, initiatorNike, recipientNike;
-    Integer commentId, initiatorId, recipientId;
-//
+    Integer commentId, initiatorId, recipientId, likeTimes;
+
     @Override
     public String toString() {
         return "Comments{" +
@@ -23,7 +23,16 @@ public class Comments implements Serializable {
                 ", commentId=" + commentId +
                 ", initiatorId=" + initiatorId +
                 ", recipientId=" + recipientId +
+                ", likeTimes=" + likeTimes +
                 '}';
+    }
+
+    public Integer getLikeTimes() {
+        return likeTimes;
+    }
+
+    public void setLikeTimes(Integer likeTimes) {
+        this.likeTimes = likeTimes;
     }
 
     public String getCommentContent() {

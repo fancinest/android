@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class CommentEntity implements Serializable {
     //    {"commentContent":"不错不错","commentId":1,"createTime":"2018-01-16 15:54:54","initiatorId":5,"initiatorNike":"156****7367"}
     String commentContent, createTime, initiatorNike, initiatorImg, recipientNike;// : "http://orkypu4y4.bkt.clouddn.com/home1.jpg-60";
-    Integer commentId, initiatorId, likeTimes, recipientId;
+    Integer commentId, initiatorId, likeTimes, recipientId, likeTag = 0;
     AnswerComment records;
 
     @Override
@@ -28,6 +28,14 @@ public class CommentEntity implements Serializable {
                 ", recipientId=" + recipientId +
                 ", records=" + records +
                 '}';
+    }
+
+    public Integer getLikeTag() {
+        return likeTag;
+    }
+
+    public void setLikeTag(Integer likeTag) {
+        this.likeTag = likeTag;
     }
 
     public String getRecipientNike() {

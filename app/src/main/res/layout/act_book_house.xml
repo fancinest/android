@@ -83,7 +83,7 @@
                                 android:drawablePadding="4dp"
                                 android:drawableTop="@mipmap/paihangbnag"
                                 android:gravity="center"
-                                android:text="书虫榜"
+                                android:text="书屋榜"
                                 android:textColor="@color/color_666666"
                                 android:textSize="12sp" />
 

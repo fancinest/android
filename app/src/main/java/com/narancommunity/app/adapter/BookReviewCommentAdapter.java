@@ -9,11 +9,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.joooonho.SelectableRoundedImageView;
+import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.common.adapter.EasyRecyclerAdapter;
 import com.narancommunity.app.entity.BookComment;
+import com.narancommunity.app.entity.Comments;
 
 import java.util.List;
 
@@ -23,11 +25,11 @@ import java.util.List;
  * FileName : 书评 item
  */
 
-public class BookCommentCommentAdapter extends EasyRecyclerAdapter<BookComment> {
+public class BookReviewCommentAdapter extends EasyRecyclerAdapter<Comments> {
     boolean isLimited = false;
     MeItemInterface meItemInterface;
 
-    public BookCommentCommentAdapter(Context context, List<BookComment> list) {
+    public BookReviewCommentAdapter(Context context, List<Comments> list) {
         super(context, list);
     }
 
@@ -37,7 +39,7 @@ public class BookCommentCommentAdapter extends EasyRecyclerAdapter<BookComment> 
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.item_bookcomment_comment, parent, false);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.item_bookreview_comment, parent, false);
         return new MyViewHolder(view);
     }
 
@@ -45,24 +47,26 @@ public class BookCommentCommentAdapter extends EasyRecyclerAdapter<BookComment> 
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final MyViewHolder hold = (MyViewHolder) (holder);
 
-        final BookComment item = getList().get(position);
-        String url = item.getAuthorImg();
+        final Comments item = getList().get(position);
+        String url = item.getInitiatorImg();
         if (!"".equals(url)) {
             Utils.setImgF(mContext, url, hold.ivIcon);
         } else {
             Utils.setImgF(mContext, R.mipmap.zw_morentouxiang, hold.ivIcon);
         }
-        hold.tvName.setText(Utils.getValue(item.getAuthor()));
-        hold.tvComment.setText(Utils.getValue(item.getContent()));
+        hold.tvName.setText(Utils.getValue(item.getInitiatorNike()));
+        hold.tvComment.setText(Utils.getValue(item.getCommentContent()));
 //        hold.tvTimes.setText(Utils.dateDiff(Utils.stringTimeToMillion(item.getCreateTime())) + "");
-//        hold.tvLikes.setText(Utils.getValue(item.getLikes()) + "");
+        hold.tvLikes.setText(Utils.getValue(item.getLikeTimes()) + "");
         hold.tvLikes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 meItemInterface.OnItemClick(position);
             }
         });
-        if (position == 0) {
+        int accountId = MApplication.getAccountId(getContext());
+        int id = item.getInitiatorId();
+        if (accountId == id) {
             hold.tvDel.setVisibility(View.VISIBLE);
         } else hold.tvDel.setVisibility(View.GONE);
         hold.tvDel.setOnClickListener(new View.OnClickListener() {

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.narancommunity.app.BaseActivity;
@@ -54,6 +55,7 @@ public class MoreCommentAct extends BaseActivity {
     int pageSize = 5;
     int pageNum = 1;
     private int TOTAL_PAGE = 1;
+    int tag ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,10 +65,15 @@ public class MoreCommentAct extends BaseActivity {
         toolbar.setTitle("更多评论");
 
         bookId = getIntent().getIntExtra("bookId", 0);
+        tag = getIntent().getIntExtra("tag", 0);
         setBar(toolbar);
 
         setView();
-        getData();
+        if (tag == 0) {
+            getData();
+        } else if (tag == 1) {
+            getEssayData();
+        }
     }
 
     @Override
@@ -81,6 +88,27 @@ public class MoreCommentAct extends BaseActivity {
         map.put("pageNum", pageNum);
         map.put("accessToken", MApplication.getAccessToken());
         NRClient.getCommentList(map, new ResultCallback<Result<CommentListEntity>>() {
+            @Override
+            public void onSuccess(Result<CommentListEntity> result) {
+                LoadDialog.dismiss(getContext());
+                setData(result.getData());
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+        });
+    }
+
+    private void getEssayData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("contentId", bookId);
+        map.put("pageSize", pageSize);
+        map.put("pageNum", pageNum);
+        map.put("accessToken", MApplication.getAccessToken());
+        NRClient.getEssayCommentList(map, new ResultCallback<Result<CommentListEntity>>() {
             @Override
             public void onSuccess(Result<CommentListEntity> result) {
                 LoadDialog.dismiss(getContext());
@@ -154,9 +182,14 @@ public class MoreCommentAct extends BaseActivity {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     int lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
+                    Log.i("fancy", "最后的可见位置:" + lastVisibleItemPosition);
                     if (lastVisibleItemPosition + 1 == adapter.getItemCount()) {
                         if (pageNum <= TOTAL_PAGE) {
-                            getData();
+                            if (tag == 0) {
+                                getData();
+                            } else if (tag == 1) {
+                                getEssayData();
+                            }
                         } else
                             Toaster.toast(getContext(), "已无更多数据");
                     }
@@ -173,7 +206,11 @@ public class MoreCommentAct extends BaseActivity {
                     @Override
                     public void run() {
                         pageNum = 1;
-                        getData();
+                        if (tag == 0) {
+                            getData();
+                        } else if (tag == 1) {
+                            getEssayData();
+                        }
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 });

@@ -117,6 +117,7 @@ public class DonateBookAct extends BaseActivity {
     String[] bookCondition = new String[]{"全新", "九成新 ", "七成新", "六成新以下"};
     String[] bookType = new String[]{"教育教科", "文学小说", "人文社科", "童书绘本", "成功励志", "生活艺术", "金融经管", "其他书籍"};
     String[] realType = new String[]{"BOOK_EDUCATION", "BOOK_NOVEL", "BOOK_HUMANITY", "BOOK_CHILD", "BOOK_SUCCESS", "BOOK_LIFE", "BOOK_FINANCE", "BOOK_OTHER"};
+    int contentId;//表示书荒互助的文章ID,普通的时候是0
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -126,6 +127,7 @@ public class DonateBookAct extends BaseActivity {
         setBar(toolbar);
         toolbar.setTitle("赠书");
 
+        contentId = getIntent().getIntExtra("contentId", 0);
         setView();
     }
 
@@ -168,8 +170,8 @@ public class DonateBookAct extends BaseActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
         } else if (item.getItemId() == R.id.action_scan) {
-            checkCamera(null,true);
-            startCaptureActivityForResult();
+            checkCamera(null, true);
+//            startCaptureActivityForResult();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -248,6 +250,7 @@ public class DonateBookAct extends BaseActivity {
                 map.put("agingDegree", condition);
                 map.put("bookReview", memo);
                 map.put("summary", desc);
+                map.put("contentId", contentId == 0 ? "" : contentId);
                 Log.i("fancy", "data :" + map.toString());
                 donateBook(map);
                 break;
@@ -531,12 +534,6 @@ public class DonateBookAct extends BaseActivity {
         });
     }
 
-    public static RequestBody toRequestBody(String value) {
-        RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), value);
-        return requestBody;
-    }
-
-
     public void onResume() {
         super.onResume();
 //        MobclickAgent.onResume(this);
@@ -583,7 +580,7 @@ public class DonateBookAct extends BaseActivity {
 
             @Override
             public void onClick(View arg0) { // 相机
-                checkCamera(dialog,false);
+                checkCamera(dialog, false);
             }
         });
         localLl.setOnClickListener(new View.OnClickListener() {
@@ -623,7 +620,7 @@ public class DonateBookAct extends BaseActivity {
         }
     }
 
-    private void checkCamera(Dialog dialog,boolean isScan) {
+    private void checkCamera(Dialog dialog, boolean isScan) {
         //第二个参数是需要申请的权限
         //权限已经被授予，在这里直接写要执行的相应方法即可
         if (checkPermissions()) {
@@ -632,9 +629,9 @@ public class DonateBookAct extends BaseActivity {
                 StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
                 StrictMode.setVmPolicy(builder.build());
             }
-            if(isScan){
+            if (isScan) {
                 startCaptureActivityForResult();
-            }else {
+            } else {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(SDCardUtils.getTempFile()));
                 startActivityForResult(intent, GET_IMAGE_VIA_CAMERA);

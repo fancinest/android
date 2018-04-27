@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.adapter.PicUploadAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
@@ -37,8 +38,11 @@ import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.SDCardUtils;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
+import com.narancommunity.app.entity.UpdateFilesEntity;
 import com.narancommunity.app.net.AppConstants;
 import com.narancommunity.app.net.NRClient;
+import com.narancommunity.app.net.Result;
+import com.narancommunity.app.net.ResultCallback;
 
 import java.io.File;
 import java.io.IOException;
@@ -78,6 +82,7 @@ public class NeedBookAct extends BaseActivity {
 
     PicUploadAdapter mAdapter;
     int tag = 0;
+    String fileName = "";//上传图片的地址
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,7 +98,7 @@ public class NeedBookAct extends BaseActivity {
             toolbar.setTitle("发布心愿");
         } else if (tag == 1) {
             toolbar.setTitle("书荒互助");
-        } else {
+        } else if (tag == 2) {
             toolbar.setTitle("以书会友");
         }
 
@@ -106,15 +111,21 @@ public class NeedBookAct extends BaseActivity {
 
     @OnClick(R.id.btn_complete)
     public void onViewClicked() {
+        String title = etTitle.getText().toString();
+        if ("".equals(title)) {
+            Toaster.toast(getContext(), "请填写标题！");
+            return;
+        }
+        String content = etContent.getText().toString();
+        if ("".equals(content)) {
+            Toaster.toast(getContext(), "请填写内容！");
+            return;
+        }
+
         if (isUploaded)
             releaseTopic();
         else {
-            String pic_url = getPics();
-            if (pic_url.equals("")) {
-                Toaster.toast(getContext(), "请至少添加一张图片！");
-                return;
-            } else
-                Toaster.toast(getContext(), "图片上传中，请稍后！");
+            Toaster.toast(getContext(), "图片上传中，请稍后！");
         }
     }
 
@@ -297,130 +308,22 @@ public class NeedBookAct extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (Activity.RESULT_OK == resultCode) {
             switch (requestCode) {
-//                case GET_IMAGE_VIA_SDCARD: // 相册
-//                    List<String> mSelectPath = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
-//                    List<File> listFiles = new ArrayList<>();
-//                    for (int i = 0; i < mSelectPath.size(); i++) {
-//                        File file = new File(mSelectPath.get(i));
-//                        listFiles.add(file);
-//                        Uri uri = Uri.fromFile(file);
-//                        startCropActivity(uri);
-//                    }
-//                    break;
-//                case GET_IMAGE_VIA_CAMERA: // 相机
-//                    // 拍完照片直接返回，不用截图
-//                    File picture = SDCardUtils.getTempFile();
-//                    dealWithCamPic(picture);
-//                    break;
-//                case CROP_IMAGE:
-//                    break;
-//                case UCrop.REQUEST_CROP://处理裁剪图
-//                    handleCropResult(data);
-//                    break;
-//                case GET_IMAGE_VIA_SDCARD: // 相册
-//                    List<String> mSelectPath = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
-//                    List<File> listFiles = new ArrayList<>();
-//                    for (int i = 0; i < mSelectPath.size(); i++) {
-//                        File file = new File(mSelectPath.get(i));
-//                        listFiles.add(file);
-//                    }
-//                    dealWithMapPic(listFiles);
-//                    break;
-//                case GET_IMAGE_VIA_CAMERA: // 相机
-//                    // 拍完照片直接返回，不用截图
-//                    File picture = SDCardUtils.getTempFile();
-//                    dealWithCamPic(picture);
-//                    break;
-                case GET_IMAGE_VIA_CAMERA:   // 调用相机拍照
+                case GET_IMAGE_VIA_CAMERA: // 相机
                     // 拍完照片直接返回，不用截图
                     File picture = SDCardUtils.getTempFile();
-                    startCropActivity(Uri.fromFile(picture));
+                    dealWithCamPic(picture);
                     break;
-                case GET_IMAGE_VIA_SDCARD:  // 直接从相册获取
+                case GET_IMAGE_VIA_SDCARD: // 相册
                     List<String> mSelectPath = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
                     List<File> listFiles = new ArrayList<>();
                     for (int i = 0; i < mSelectPath.size(); i++) {
                         File file = new File(mSelectPath.get(i));
                         listFiles.add(file);
-                        Uri uri = Uri.fromFile(file);
-                        startCropActivity(uri);
                     }
+                    dealWithMapPic(listFiles);
                     break;
-//                case UCrop.REQUEST_CROP:    // 裁剪图片结果
-//                    scaleType = data.getStringExtra(UCrop.EXTRA_OUTPUT_CROP_ASPECT_RATIO);
-//                    handleCropResult(data);
-//                    break;
-//                case UCrop.RESULT_ERROR:    // 裁剪图片错误
-//                    handleCropError(data);
-//                    break;
             }
         }
-    }
-
-//    private void handleCropResult(Intent result) {
-//        deleteTempPhotoFile();
-//        final Uri resultUri = UCrop.getOutput(result);
-//        if (null != resultUri) {
-//            Bitmap bitmap = null;
-//            try {
-//                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
-//            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            mOnPictureSelectedListener.onPictureSelected(resultUri, bitmap);
-//        } else {
-//            Toast.makeText(getContext(), "无法剪切选择图片", Toast.LENGTH_SHORT).show();
-//        }
-//    }
-
-    /**
-     * 处理剪切成功的返回值
-     *
-     * @param result
-     */
-    private void handleCropResult(Intent result) {
-//        final Uri resultUri = UCrop.getOutput(result);
-//        if (resultUri != null) {
-//            String path = Utils.getRealFilePath(getContext(), resultUri);
-//            File file = new File(path);
-//            List<File> listFiles = new ArrayList<>();
-//            listFiles.add(file);
-//            dealWithMapPic(listFiles);
-//        } else {
-//            Toast.makeText(ReleaseTopicAct.this, "图片保存失败", Toast.LENGTH_SHORT).show();
-//        }
-    }
-
-
-    /**
-     * 处理剪切失败的返回值
-     *
-     * @param result
-     */
-    private void handleCropError(Intent result) {
-//        final Throwable cropError = UCrop.getError(result);
-//        if (cropError != null) {
-//            Log.e("fancy", "handleCropError: ", cropError);
-//            Toast.makeText(getContext(), cropError.getMessage(), Toast.LENGTH_LONG).show();
-//        } else {
-//            Toast.makeText(getContext(), "无法剪切选择图片", Toast.LENGTH_SHORT).show();
-//        }
-    }
-
-
-    /**
-     * 裁剪图片方法实现
-     *
-     * @param uri
-     */
-    public void startCropActivity(Uri uri) {
-//        UCrop.of(uri, getNewPath())
-//                .withAspectRatio(3, 4)
-////                .withMaxResultSize(512, 512)
-//                .withTargetActivity(CropActivity.class)
-//                .start(ReleaseTopicAct.this);
     }
 
     private Uri getNewPath() {
@@ -455,6 +358,7 @@ public class NeedBookAct extends BaseActivity {
                     tempFile = picture;
                 if (tempFile != null) {
                     mAdapter.add(picture.getAbsolutePath());
+//                    Utils.setImgF(getContext(), picture, ivCover);
                     updateFiles(tempFile);
                 }
                 isUploaded = true;
@@ -462,24 +366,6 @@ public class NeedBookAct extends BaseActivity {
         }, 100);
     }
 
-//    private void startCropActivity(@NonNull Uri uri) {
-//        if (uri == null){
-//            Toaster.toast(getContext(),"出了点问题！");
-//            return;
-//        }
-//        String destinationFileName = "nrCrop" + ".png";
-//        UCrop uCrop = UCrop.of(uri, Uri.fromFile(new File(getCacheDir(), destinationFileName)));
-//        uCrop = advancedConfig(uCrop);
-//
-//        uCrop.start(ReleaseTopicAct.this);
-//    }
-//
-//    private UCrop advancedConfig(@NonNull UCrop uCrop) {
-//        UCrop.Options options = new UCrop.Options();
-//        options.setCompressionFormat(Bitmap.CompressFormat.PNG);
-//        options.setFreeStyleCropEnabled(true);
-//        return uCrop.withOptions(options);
-//    }
 
     boolean isUploaded = false;
 
@@ -517,44 +403,29 @@ public class NeedBookAct extends BaseActivity {
     StringBuffer sb = new StringBuffer();
 
     private void updateFiles(final File file) {
-        Log.i("fancy", "宽高比例 ：" + scaleType);
-        Map<String, RequestBody> bodyMap = new HashMap<>();
-        bodyMap.put("type", toRequestBody(scaleType));
+        NRClient.uploadOneFile(file, new ResultCallback<Result<UpdateFilesEntity>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
 
-//        NRClient.updateOneFile(bodyMap, file, new ResultCallback<Result<UpdateFilesEntity>>() {
-//            @Override
-//            public void onFailure(Throwable throwable) {
-//                LoadDialog.dismiss(getContext());
-//                Utils.showErrorToast(getContext(), throwable);
-//            }
-//
-//            @Override
-//            public void onSuccess(Result<UpdateFilesEntity> result) {
-//                LoadDialog.dismiss(getContext());
-//                if (result.getData() != null && result.getData().getData() != null) {
-//                    if (result.getData().getData().size() > 0) {
-//                        sb.append(result.getData().getData().get(0) + ",");
-////                        deleteTempFile();
-//                    }
-//                } else {
-//                    Toaster.toast(getContext(), "数据为空！");
-//                }
-//            }
-//        });
+            @Override
+            public void onSuccess(Result<UpdateFilesEntity> result) {
+                LoadDialog.dismiss(getContext());
+                if (result.getData() != null && result.getData().getData() != null) {
+                    if (result.getData().getData().size() > 0) {
+                        sb.append(result.getData().getData().get(0) + ",");
+                        fileName = result.getData().getData().get(0) + "";
+                        Log.i("fancy", "filename = " + fileName);
+//                        deleteTempFile();
+                    }
+                } else {
+                    Toaster.toast(getContext(), "数据为空！");
+                }
+            }
+        });
     }
-
-    public static RequestBody toRequestBody(String value) {
-        RequestBody requestBody = RequestBody.create(MediaType.parse("text/plain"), value);
-        return requestBody;
-    }
-
-    private void deleteTempFile() {
-//        File tempFile = new File(tempPath);
-//        if (tempFile.exists() && tempFile.isFile()) {
-//            tempFile.delete();
-//        }
-    }
-
 
     public void onResume() {
         super.onResume();
@@ -568,28 +439,49 @@ public class NeedBookAct extends BaseActivity {
     }
 
     private void releaseTopic() {
-        LoadDialog.show(getContext());
         String pic_url = getPics();
+        LoadDialog.show(getContext());
         Map<String, Object> map = new HashMap<>();
-//        map.put("channelId", channelId);
-        map.put("title", etTitle.getText().toString());
-        map.put("coverPath", pic_url);
-        map.put("body", etContent.getText().toString());
-//        NRClient.releaseTopic(map, new ResultCallback<Result<String>>() {
-//            @Override
-//            public void onFailure(Throwable throwable) {
-//                LoadDialog.dismiss(getContext());
-//                Utils.showErrorToast(getContext(), throwable);
-//            }
-//
-//            @Override
-//            public void onSuccess(Result<String> result) {
-//                Toaster.toast(getContext(), "发布成功!");
-//                LoadDialog.dismiss(getContext());
-//                setResult(2001, null);
-//                finish();
-//            }
-//        });
+        map.put("accessToken", MApplication.getAccessToken());
+        map.put("contentTitle", etTitle.getText().toString());
+        map.put("contentBody", etContent.getText().toString());
+        map.put("contentImg", pic_url);
+        if (tag == 1) {
+            //shhz
+            NRClient.addSHHZ(map, new ResultCallback<Result<Void>>() {
+                @Override
+                public void onFailure(Throwable throwable) {
+                    LoadDialog.dismiss(getContext());
+                    Utils.showErrorToast(getContext(), throwable);
+                }
+
+                @Override
+                public void onSuccess(Result<Void> result) {
+                    Toaster.toast(getContext(), "发布成功!");
+                    LoadDialog.dismiss(getContext());
+//                    setResult(2001, null);
+//                    finish();
+                }
+            });
+        } else if (tag == 2) {
+            //YSHY
+            NRClient.addYSHY(map, new ResultCallback<Result<Void>>() {
+                @Override
+                public void onFailure(Throwable throwable) {
+                    LoadDialog.dismiss(getContext());
+                    Utils.showErrorToast(getContext(), throwable);
+                }
+
+                @Override
+                public void onSuccess(Result<Void> result) {
+                    Toaster.toast(getContext(), "发布成功!");
+                    LoadDialog.dismiss(getContext());
+//                    setResult(2001, null);
+//                    finish();
+                }
+            });
+        }
+
     }
 
     private String getPics() {

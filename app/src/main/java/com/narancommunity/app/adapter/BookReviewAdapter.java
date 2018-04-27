@@ -13,6 +13,7 @@ import com.joooonho.SelectableRoundedImageView;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
 import com.narancommunity.app.activity.AddBookCommentAct;
+import com.narancommunity.app.activity.BookReviewDetailAct;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.common.adapter.EasyRecyclerAdapter;
 import com.narancommunity.app.entity.BookComment;
@@ -77,14 +78,12 @@ public class BookReviewAdapter extends EasyRecyclerAdapter<BookComment> {
 //        if (position == 0) {
 //            hold.tvDel.setVisibility(View.VISIBLE);
 //        } else hold.tvDel.setVisibility(View.GONE);
-//        hold.tvDel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                meItemInterface.OnDelClick(position);
-//            }
-//        });
-        hold.recyclerView.setVisibility(View.GONE);
-        hold.tvMore.setVisibility(View.GONE);
+        hold.tvContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                meItemInterface.OnDelClick(position);
+            }
+        });
     }
 
     @Override
@@ -98,8 +97,6 @@ public class BookReviewAdapter extends EasyRecyclerAdapter<BookComment> {
         SelectableRoundedImageView ivIcon;
         TextView tvName;
         TextView tvContent;
-        RecyclerView recyclerView;
-        TextView tvMore;
         TextView tvDate;
         LinearLayout lnDate;
         TextView tvComment;
@@ -114,8 +111,6 @@ public class BookReviewAdapter extends EasyRecyclerAdapter<BookComment> {
             ivIcon = itemView.findViewById(R.id.iv_icon);
             tvName = itemView.findViewById(R.id.tv_name);
             tvContent = itemView.findViewById(R.id.tv_content);
-            recyclerView = itemView.findViewById(R.id.recyclerView);
-            tvMore = itemView.findViewById(R.id.tv_more);
             tvDate = itemView.findViewById(R.id.tv_date);
             lnDate = itemView.findViewById(R.id.ln_date);
 

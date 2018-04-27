@@ -15,10 +15,9 @@ import android.widget.ImageView;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.narancommunity.app.BaseActivity;
-import com.narancommunity.app.activity.fragment.FindBookSonFragment;
+import com.narancommunity.app.activity.fragment.BookSortSonFragment;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.CenteredToolbar;
-import com.narancommunity.app.common.Toaster;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,6 +42,7 @@ public class AixinBookAct extends BaseActivity implements OnTabSelectListener {
     ImageView ivRelease;
 
     private String[] mTitles = {"全部书籍", "教育教科", "文学小说", "人文社科", "童书绘本", "成功励志", "生活艺术", "金融经管", "其他书籍"};
+    String[] realType = new String[]{"", "BOOK_EDUCATION", "BOOK_NOVEL", "BOOK_HUMANITY", "BOOK_CHILD", "BOOK_SUCCESS", "BOOK_LIFE", "BOOK_FINANCE", "BOOK_OTHER"};
     private ArrayList<Fragment> mFragments = new ArrayList<>();
 
     @Override
@@ -53,24 +53,24 @@ public class AixinBookAct extends BaseActivity implements OnTabSelectListener {
         setBar(toolbar);
         toolbar.setTitle("爱心书架");
 
-        FindBookSonFragment all = FindBookSonFragment.newInstance();
-        all.setType(0);
-        FindBookSonFragment tech = FindBookSonFragment.newInstance();
-        tech.setType(1);
-        FindBookSonFragment novel = FindBookSonFragment.newInstance();
-        novel.setType(2);
-        FindBookSonFragment humanity = FindBookSonFragment.newInstance();
-        humanity.setType(3);
-        FindBookSonFragment graphic = FindBookSonFragment.newInstance();
-        graphic.setType(4);
-        FindBookSonFragment success = FindBookSonFragment.newInstance();
-        success.setType(5);
-        FindBookSonFragment art = FindBookSonFragment.newInstance();
-        art.setType(6);
-        FindBookSonFragment financial = FindBookSonFragment.newInstance();
-        financial.setType(7);
-        FindBookSonFragment others = FindBookSonFragment.newInstance();
-        others.setType(8);
+        BookSortSonFragment all = BookSortSonFragment.newInstance();
+        all.setType(0, realType[0]);
+        BookSortSonFragment tech = BookSortSonFragment.newInstance();
+        tech.setType(1, realType[1]);
+        BookSortSonFragment novel = BookSortSonFragment.newInstance();
+        novel.setType(2, realType[2]);
+        BookSortSonFragment humanity = BookSortSonFragment.newInstance();
+        humanity.setType(3, realType[3]);
+        BookSortSonFragment graphic = BookSortSonFragment.newInstance();
+        graphic.setType(4, realType[4]);
+        BookSortSonFragment success = BookSortSonFragment.newInstance();
+        success.setType(5, realType[5]);
+        BookSortSonFragment art = BookSortSonFragment.newInstance();
+        art.setType(6, realType[6]);
+        BookSortSonFragment financial = BookSortSonFragment.newInstance();
+        financial.setType(7, realType[7]);
+        BookSortSonFragment others = BookSortSonFragment.newInstance();
+        others.setType(8, realType[8]);
         Collections.addAll(mFragments, all, tech, novel, humanity, graphic
                 , success, art, financial, others);
 

@@ -41,6 +41,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.narancommunity.app.R;
 import com.narancommunity.app.interfaces.PicLoadCallBack;
 
 import java.io.File;
@@ -478,7 +479,7 @@ public class Utils {
                         .asBitmap()
                         .centerCrop()
                         .dontAnimate()
-//                        .placeholder(R.drawable.img_loading_f)
+                        .placeholder(R.mipmap.zw_morentouxiang)
                         .into(imageView);
             } catch (Exception e) {
                 e.printStackTrace();

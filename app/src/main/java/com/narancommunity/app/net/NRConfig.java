@@ -81,6 +81,79 @@ public class NRConfig {
     public static final String URL_BASE = ""/*"http://" + IP*/;
 
     /**
+     * 图书列表/分类查询
+     */
+    public static final String URL_GET_BOOK_BY_SORT = "/api/book/order/page";
+    /**
+     * 取消点赞
+     */
+    public static final String URL_DONT_LIKE = "/api/record/like/delete";
+    /**
+     * 书籍-是否点赞
+     */
+    public static final String URL_BOOK_IS_LIKE = "/api/record/like/order/with/me";
+    /**
+     * 书评-是否点赞
+     */
+    public static final String URL_BOOKREVIEW_IS_LIKE = "/api/record/like/book/review/with/me";
+    /**
+     * 文章-是否点赞
+     */
+    public static final String URL_ESSAY_IS_LIKE = "/api/record/like/content/with/me";
+    /**
+     * 评论-是否点赞
+     */
+    public static final String URL_COMMENT_IS_LIKE = "/api/record/like/comment/with/me";
+    /**
+     * 文章-点赞
+     */
+    public static final String URL_ESSAY_LIKE = "/api/record/like/content";
+    /**
+     * 书评-点赞
+     */
+    public static final String URL_BOOKREVIEW_LIKE = "/api/record/like/book/review";
+    /**
+     * 订单-点赞
+     */
+    public static final String URL_BOOK_LIKE = "/api/record/like/order";
+    /**
+     * 评论-点赞
+     */
+    public static final String URL_COMMENT_LIKE = "/api/record/like/comment";
+    /**
+     * 文章评论(书荒，以书会友之类)
+     */
+    public static final String URL_ESSAY_ADD_COMMENT = "/api/record/comment/content";
+
+    /**
+     * 文章评论列表（书荒，互助之类的）
+     */
+    public static final String URL_ESSAY_COMMENT_LIST = "/api/record/comment/content/page";
+    /**
+     * 书荒互助新增
+     */
+    public static final String URL_ADD_SHHZ = "/api/content/book/assist/add";
+    /**
+     * 以书会友新增
+     */
+    public static final String URL_ADD_YSHY = "/api/content/book/friends/add";
+    /**
+     * 书荒互助-列表
+     */
+    public static final String URL_SHHZ_LIST = "/api/content/book/assist/page";
+    /**
+     * 以书会友-列表
+     */
+    public static final String URL_YSHY_LIST = "/api/content/book/friends/page";
+    /**
+     * 书评-评论
+     */
+    public static final String URL_BOOKREVIEW_ADD_COMMENT = "/api/record/comment/book/review";
+    /**
+     * 书评评论列表
+     */
+    public static final String URL_BOOKREVIEW_COMMENT_LIST = "/api/record/comment/book/review/page";
+    /**
      * 借阅图书
      */
     public static final String URL_BOOK_LEND = "/api/book/apply/get";
@@ -96,7 +169,7 @@ public class NRConfig {
     /**
      * 图书书评添加
      */
-    public static final String URL_BOOKREVIEW_ADD_COMMENT = "/api/book/review/add";
+    public static final String URL_BOOKREVIEW_ADD = "/api/book/review/add";
     /**
      * 图书书评列表
      */

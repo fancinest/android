@@ -44,6 +44,7 @@ import com.narancommunity.app.entity.CommentListEntity;
 import com.narancommunity.app.entity.OrderData;
 import com.narancommunity.app.entity.OrderEntity;
 import com.narancommunity.app.entity.RecEntity;
+import com.narancommunity.app.entity.Zan;
 import com.narancommunity.app.interfaces.CommentInterfaces;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
@@ -150,6 +151,7 @@ public class BookDetailAct extends BaseActivity {
     List<RecEntity> listRec = new ArrayList<>();
     Integer bookId = 0;
     String desc;
+    boolean isLike = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -172,8 +174,34 @@ public class BookDetailAct extends BaseActivity {
         getRec();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getLikeState();
+    }
+
     int pageNumRec = 1;
     int totalPageRec = 1;
+
+    private void getLikeState() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("orderId", bookId);
+        map.put("accessToken", MApplication.getAccessToken());
+        NRClient.isLikeBook(map, new ResultCallback<Result<Zan>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<Zan> result) {
+                LoadDialog.dismiss(getContext());
+                isLike = result.getData().isMe();
+                setBookLike();
+            }
+        });
+    }
 
     private void getRec() {
         Map<String, Object> map = new HashMap<>();
@@ -325,6 +353,9 @@ public class BookDetailAct extends BaseActivity {
         });
     }
 
+    List<CommentEntity> listComment = new ArrayList<>();
+    CommentAdapter adapterComment;
+
     private void setCommentList(final CommentListEntity data) {
         if (data == null || data.getComments() == null) {
             lnCommentView.setVisibility(View.GONE);
@@ -335,9 +366,9 @@ public class BookDetailAct extends BaseActivity {
         else btn_more.setVisibility(View.GONE);
         tvComments.setText("评论(" + data.getComments().size() + "条)");
         lnCommentView.setVisibility(View.VISIBLE);
-        final List<CommentEntity> list = data.getComments();
-        CommentAdapter adapter = new CommentAdapter(getContext(), list);
-        adapter.setLimited(true);
+        listComment = data.getComments();
+        adapterComment = new CommentAdapter(getContext(), listComment);
+        adapterComment.setLimited(true);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false) {
@@ -348,13 +379,13 @@ public class BookDetailAct extends BaseActivity {
         };
         recyclerViewComment.setLayoutManager(linearLayoutManager);
 
-        adapter.setListener(new CommentInterfaces() {
+        adapterComment.setListener(new CommentInterfaces() {
             @Override
             public void OnItemClick(int position) {
                 startActivity(new Intent(getContext(), AddBookCommentAct.class)
                         .putExtra("tag", 1).putExtra("bookId", bookId)
-                        .putExtra("commentedId", list.get(position).getCommentId())
-                        .putExtra("replyName", list.get(position).getInitiatorNike()));
+                        .putExtra("commentedId", listComment.get(position).getCommentId())
+                        .putExtra("replyName", listComment.get(position).getInitiatorNike()));
             }
 
             @Override
@@ -366,7 +397,7 @@ public class BookDetailAct extends BaseActivity {
                         .putExtra("replyName", name));
             }
         });
-        adapter.setClickLike(new MeItemInterface() {
+        adapterComment.setClickLike(new MeItemInterface() {
             @Override
             public void OnItemClick(int position) {
                 clickLike(position);
@@ -377,12 +408,84 @@ public class BookDetailAct extends BaseActivity {
 
             }
         }, bookId);
-        recyclerViewComment.setAdapter(adapter);
+        recyclerViewComment.setAdapter(adapterComment);
         recyclerViewComment.setNestedScrollingEnabled(false);
     }
 
-    private void clickLike(int position) {
-        //TODO 点赞
+    private void clickLike(final int position) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("commentId", listComment.get(position).getCommentId());
+        map.put("accessToken", MApplication.getAccessToken());
+        NRClient.likeBook(map, new ResultCallback<Result<Void>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<Void> result) {
+                LoadDialog.dismiss(getContext());
+                setCommentLike(position);
+            }
+        });
+    }
+
+    private void setCommentLike(int position) {
+        if (listComment.get(position).getLikeTag() == 0)
+            listComment.get(position).setLikeTag(1);
+        else
+            listComment.get(position).setLikeTag(0);
+        adapterComment.notifyItemChanged(position);
+    }
+
+    private void likeBook() {
+        LoadDialog.show(getContext());
+        Map<String, Object> map = new HashMap<>();
+        map.put("orderId", bookId);
+        map.put("accessToken", MApplication.getAccessToken());
+        NRClient.likeBook(map, new ResultCallback<Result<Void>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<Void> result) {
+                LoadDialog.dismiss(getContext());
+                isLike = true;
+                setBookLike();
+            }
+        });
+    }
+
+//    void dontLike(int likeId) {
+//        LoadDialog.show(getContext());
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("likeId", likeId);
+//        map.put("accessToken", MApplication.getAccessToken());
+//        NRClient.dontLike(map, new ResultCallback<Result<Void>>() {
+//            @Override
+//            public void onFailure(Throwable throwable) {
+//                LoadDialog.dismiss(getContext());
+//                Utils.showErrorToast(getContext(), throwable);
+//            }
+//
+//            @Override
+//            public void onSuccess(Result<Void> result) {
+//                LoadDialog.dismiss(getContext());
+//                isLike = true;
+//                setBookLike();
+//            }
+//        });
+//    }
+
+    private void setBookLike() {
+        if (isLike)
+            tvWishLike.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.mipmap.list_btn_zan_pre), null, null, null);
+        else
+            tvWishLike.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.mipmap.list_btn_zan), null, null, null);
     }
 
 
@@ -502,7 +605,7 @@ public class BookDetailAct extends BaseActivity {
             case R.id.tv_donater:
                 break;
             case R.id.tv_shuping:
-                startActivity(new Intent(getContext(), BookReviewAct.class)
+                startActivity(new Intent(getContext(), BookReviewListAct.class)
                         .putExtra("bookId", bookId));
                 break;
             case R.id.iv_watcher:
@@ -521,6 +624,7 @@ public class BookDetailAct extends BaseActivity {
                 addComment("", 0);
                 break;
             case R.id.ln_like:
+                likeBook();
                 break;
             case R.id.ln_hot_switch:
                 pageNumRec++;
@@ -665,7 +769,7 @@ public class BookDetailAct extends BaseActivity {
 
                 @Override
                 public void onClick(View arg0) {
-                    Toaster.toast(getContext(), "点击赞");
+                    likeBook();
                 }
             });
             v.findViewById(R.id.iv_collect).setOnClickListener(new View.OnClickListener() {
