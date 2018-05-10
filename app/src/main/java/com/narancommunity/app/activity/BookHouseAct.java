@@ -6,13 +6,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.R;
@@ -24,8 +22,6 @@ import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.BannerData;
-import com.narancommunity.app.entity.BannerItem;
-import com.narancommunity.app.entity.BookEntity;
 import com.narancommunity.app.entity.NewsData;
 import com.narancommunity.app.entity.Publicitys;
 import com.narancommunity.app.entity.RecData;
@@ -40,7 +36,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -342,6 +337,7 @@ public class BookHouseAct extends BaseActivity {
                 startActivity(new Intent(getContext(), BookCommunityAct.class));
                 break;
             case R.id.ln_summary:
+                startActivity(new Intent(getContext(), ShuzhaiAct.class));
                 break;
             case R.id.ln_hot_switch:
                 pageNumHot++;

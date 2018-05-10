@@ -14,16 +14,17 @@ import com.narancommunity.app.activity.BookDetailAct;
 import com.narancommunity.app.adapter.base.ListBaseAdapter;
 import com.narancommunity.app.adapter.base.SuperViewHolder;
 import com.narancommunity.app.common.Utils;
-import com.narancommunity.app.entity.BookListEntity;
+import com.narancommunity.app.entity.RecEntity;
 
 /**
  * Writer：fancy on 2017/8/30 17:17
  * Email：120760202@qq.com
  * FileName :
  */
-public class FindLatestAdapter extends ListBaseAdapter<BookListEntity> {
+public class FindLatestAdapter extends ListBaseAdapter<RecEntity> {
     OnItemClickListener listener;
     boolean isSearch = false;
+    boolean isCollect;
 
     public FindLatestAdapter(Context context) {
         super(context);
@@ -36,6 +37,10 @@ public class FindLatestAdapter extends ListBaseAdapter<BookListEntity> {
 
     public void isSearch(boolean isSearch) {
         this.isSearch = isSearch;
+    }
+
+    public void isCollect(boolean isCollect) {
+        this.isCollect = isCollect;
     }
 
     @Override
@@ -55,13 +60,19 @@ public class FindLatestAdapter extends ListBaseAdapter<BookListEntity> {
     public void onBindItemHolder(SuperViewHolder holder, final int position) {
         if (mDataList.size() <= 0)
             return;
-        final BookListEntity entity = mDataList.get(position);
+        final RecEntity entity = mDataList.get(position);
         if (entity == null)
             return;
 
+
+        LinearLayout lnDontate = holder.getView(R.id.ln_dontate);
         LinearLayout lnScore = holder.getView(R.id.ln_score);
         CardView cardView = holder.getView(R.id.card_parent);
         ImageView ivImg = holder.getView(R.id.iv_img);
+
+        ImageView ivDonater = holder.getView(R.id.iv_donater);
+
+        TextView tvDonater = holder.getView(R.id.tv_donater);
         TextView tvName = holder.getView(R.id.tv_book_name);
         TextView tvWriter = holder.getView(R.id.tv_writer);
 //        RelativeLayout rlTop = holder.getView(R.id.rl_top);
@@ -88,6 +99,16 @@ public class FindLatestAdapter extends ListBaseAdapter<BookListEntity> {
         } else {
             tvScore.setText(Utils.getValue(entity.getAverage()) + "");
             rating.setRating(Float.parseFloat(Utils.getValue(entity.getAverage())) / 2);
+        }
+        if (isCollect) {
+            lnScore.setVisibility(View.GONE);
+            lnDontate.setVisibility(View.VISIBLE);
+            tvDistance.setVisibility(View.GONE);
+            tvDonater.setText("" + Utils.getValue(entity.getInitiatorNike()));
+            String donateUrl = Utils.getValue(entity.getInitiatorImg()) + "";
+            if (donateUrl.equals("")) {
+                Utils.setImgF(mContext, donateUrl, ivDonater);
+            } else Utils.setImgF(mContext, R.mipmap.zw_morentouxiang, ivDonater);
         }
 
         cardView.setOnClickListener(new View.OnClickListener() {

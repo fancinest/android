@@ -13,13 +13,18 @@ import android.view.ViewGroup;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.adapter.CollectEssayAdapter;
+import com.narancommunity.app.adapter.FindLatestAdapter;
 import com.narancommunity.app.common.ItemDecoration.GridItemDecoration;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Utils;
+import com.narancommunity.app.entity.BookRelativeRecData;
 import com.narancommunity.app.entity.CollectDonateItem;
 import com.narancommunity.app.entity.CollectEssayItem;
+import com.narancommunity.app.entity.CollectTieziItem;
 import com.narancommunity.app.entity.CollectTopicItem;
 import com.narancommunity.app.entity.CollectWishItem;
+import com.narancommunity.app.entity.RecEntity;
+import com.narancommunity.app.net.NRClient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,15 +34,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Wirter：fancy on 2017/3/1 13:33
+ * Wirter：fancy on 2018/5/2 13:33
  * Mail：120760202@qq.com
  * FileName：我的收藏
  */
 public class MyCollectionSonFragment extends Fragment {
     ArrayList<CollectEssayItem> listEssayData = new ArrayList<>();
-    ArrayList<CollectDonateItem> listDonateData = new ArrayList<>();
-    ArrayList<CollectWishItem> listWishData = new ArrayList<>();
-    ArrayList<CollectTopicItem> listTopicData = new ArrayList<>();
+    ArrayList<RecEntity> listDonateData = new ArrayList<>();
+    ArrayList<CollectTieziItem> listTieziData = new ArrayList<>();
     @BindView(R.id.recyclerView)
     RecyclerView recycleView;
     int type = 0;
@@ -56,7 +60,7 @@ public class MyCollectionSonFragment extends Fragment {
     }
 
     CollectEssayAdapter essayAdapter;
-//    CollectTopicAdapter topicAdapter;
+    FindLatestAdapter donateAdapter;
 //    CollectNewsAdapter newsAdapter;
 //    LRecyclerViewAdapter adapter;
 
@@ -73,28 +77,17 @@ public class MyCollectionSonFragment extends Fragment {
                 case 0:
                     essayAdapter = new CollectEssayAdapter(getContext(), listEssayData);
                     essayAdapter.setList(listEssayData);
-                    //根据需要选择使用GridItemDecoration还是SpacesItemDecoration
-                    GridItemDecoration divider = new GridItemDecoration.Builder(getContext())
-                            .setHorizontal(R.dimen.default_divider_padding)
-                            .setVertical(R.dimen.default_divider_padding)
-                            .setColorResource(R.color.transparent)
-                            .build();
-                    GridLayoutManager gridlayout = new GridLayoutManager(getContext(), 2, LinearLayoutManager.VERTICAL, false);
-                    recycleView.setLayoutManager(gridlayout);
-                    recycleView.setPadding(Utils.dip2px(getContext(), 10),
-                            Utils.dip2px(getContext(), 10),
-                            Utils.dip2px(getContext(), 10),
-                            Utils.dip2px(getContext(), 10));
-                    recycleView.addItemDecoration(divider);
+                    LinearLayoutManager linearLayout1 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+                    recycleView.setLayoutManager(linearLayout1);
                     recycleView.setAdapter(essayAdapter);
                     break;
-//                case 1:
-//                    topicAdapter = new CollectTopicAdapter(getContext());
-//                    topicAdapter.setDataList(listDonateData);
-//                    LinearLayoutManager linearLayout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-//                    recycleView.setLayoutManager(linearLayout);
-//                    adapter = new LRecyclerViewAdapter(topicAdapter);
-//                    break;
+                case 1:
+                    donateAdapter = new FindLatestAdapter(getContext());
+                    donateAdapter.setDataList(listDonateData);
+                    LinearLayoutManager linearLayout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+                    recycleView.setLayoutManager(linearLayout);
+                    recycleView.setAdapter(donateAdapter);
+                    break;
 //                case 2:
 //                    newsAdapter = new CollectNewsAdapter(getContext());
 //                    newsAdapter.setDataList(listTopicData);
@@ -250,10 +243,36 @@ public class MyCollectionSonFragment extends Fragment {
         if (type == 0) {
             getEssayData();
         } else if (type == 1) {
-//            getTopicData();
+            getDonateData();
         } else if (type == 2) {
             getNewsData();
         }
+    }
+
+    private void getDonateData() {
+        LoadDialog.show(getContext());
+        Map<String, Object> map = new HashMap<>();
+        map.put("userId", MApplication.getAccessToken());
+        map.put("contentType", "NEWS");
+        map.put("page", pageNum);
+        map.put("row", M_PAGE_SIZE);
+//        NRClient.getCollectDonateList(map, new ResultCallback<Result<NRNewsData>>() {
+//            @Override
+//            public void onFailure(Throwable throwable) {
+//                LoadDialog.dismiss(getContext());
+//                Utils.showErrorToast(getContext(), throwable);
+//                setViewNewsData(null);
+//            }
+//
+//            @Override
+//            public void onSuccess(Result<NRNewsData> result) {
+//                LoadDialog.dismiss(getContext());
+//                if (result != null && result.getData() != null
+//                        && result.getData().getDataPage() != null)
+//                    totalPage = result.getData().getDataPage().getMaxPage();
+//                setViewNewsData(result.getData().getDataPage());
+//            }
+//        });
     }
 
     private void getNewsData() {

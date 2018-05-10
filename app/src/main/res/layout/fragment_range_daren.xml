@@ -11,11 +11,11 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="6dp"
         android:layout_marginTop="12dp"
-        android:visibility="gone"
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingLeft="60dp"
-        android:paddingRight="60dp">
+        android:paddingRight="60dp"
+        android:visibility="gone">
 
         <RadioButton
             android:id="@+id/rb_day"
@@ -30,7 +30,9 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="2dp"
-            android:text="日榜" />
+            android:text="日榜"
+            android:textColor="@color/color_666666"
+            android:textSize="12sp" />
 
         <RadioButton
             android:layout_width="0dp"
@@ -44,7 +46,9 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="2dp"
-            android:text="周榜" />
+            android:text="周榜"
+            android:textColor="@color/color_666666"
+            android:textSize="12sp" />
 
         <RadioButton
             android:layout_width="0dp"
@@ -58,7 +62,9 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="2dp"
-            android:text="月榜" />
+            android:text="月榜"
+            android:textColor="@color/color_666666"
+            android:textSize="12sp" />
 
         <RadioButton
             android:layout_width="0dp"
@@ -71,7 +77,9 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="2dp"
-            android:text="总榜" />
+            android:text="总榜"
+            android:textColor="@color/color_666666"
+            android:textSize="12sp" />
     </RadioGroup>
 
     <RelativeLayout
@@ -100,11 +108,22 @@
 
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <include layout="@layout/include_range_me" />
 </LinearLayout>

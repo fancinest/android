@@ -14,7 +14,7 @@ public class BookListData {
     Integer pageSize;// 3
     Integer pageNum;// 3
 
-    List<BookListEntity> orders;
+    List<RecEntity> orders;
 
     @Override
     public String toString() {
@@ -59,11 +59,11 @@ public class BookListData {
         this.pageNum = pageNum;
     }
 
-    public List<BookListEntity> getOrders() {
+    public List<RecEntity> getOrders() {
         return orders;
     }
 
-    public void setOrders(List<BookListEntity> orders) {
+    public void setOrders(List<RecEntity> orders) {
         this.orders = orders;
     }
 }

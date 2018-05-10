@@ -7,13 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.joooonho.SelectableRoundedImageView;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
+import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.common.adapter.EasyRecyclerAdapter;
 import com.narancommunity.app.entity.MeFunctionEntity;
+import com.narancommunity.app.entity.RankEntity;
 
 import java.util.List;
 
@@ -22,16 +25,15 @@ import butterknife.BindView;
 /**
  * Writer：fancy on 2017/12/26 15:15
  * Email：120760202@qq.com
- * FileName :
+ * FileName : 三者公用此适配器
  */
-
-public class RangeListRangeAdapter extends EasyRecyclerAdapter<MeFunctionEntity> {
+public class RangeListRangeAdapter extends EasyRecyclerAdapter<RankEntity> {
     int tag;
     MeItemInterface meItemInterface;
 
-    public RangeListRangeAdapter(Context context, List<MeFunctionEntity> list, int tag) {
+    public RangeListRangeAdapter(Context context, List<RankEntity> list, int tag) {
         super(context, list);
-        this.tag = tag;
+        this.tag = tag;//0-2是同一个样式，1是另外一个样式
     }
 
     public void setListener(MeItemInterface meItemInterface) {
@@ -40,56 +42,50 @@ public class RangeListRangeAdapter extends EasyRecyclerAdapter<MeFunctionEntity>
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(getContext()).inflate(getLayout(), parent, false);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.item_rangelist_rank, parent, false);
         return new MyViewHolder(view);
-    }
-
-    private int getLayout() {
-        switch (tag) {
-            case 0:
-                return R.layout.item_rangelist_daren;
-//            case 1:
-//                return R.layout.item_assistant_mission;
-//            case 2:
-//                return R.layout.item_special_report;
-            default:
-                return 0;
-        }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final MyViewHolder hold = (MyViewHolder) (holder);
 
-//        final MeFunctionEntity item = getList().get(position);
-//        hold.tv_name.setText(Utils.getValue(item.getName()) + "");
-//        int url = item.getId();
-//        hold.iv_pic.setImageResource(url);
-//        Utils.setImgF(mContext, url, hold.iv_pic);
-        if (tag == 0) {
-            if (position < 3) {
-                if (position == 0)
-                    hold.ivLevel.setImageResource(R.mipmap.gyb_jinpai);
-                else if (position == 1)
-                    hold.ivLevel.setImageResource(R.mipmap.gyb_yinpai);
-                else if (position == 2)
-                    hold.ivLevel.setImageResource(R.mipmap.gyb_tongpai);
-                hold.tvLevel.setVisibility(View.INVISIBLE);
-                hold.ivLevel.setVisibility(View.VISIBLE);
-            } else {
-                hold.ivLevel.setVisibility(View.INVISIBLE);
-                hold.tvLevel.setVisibility(View.VISIBLE);
-                hold.tvLevel.setText("" + (position + 1));
-            }
+        final RankEntity item = getList().get(position);
+        hold.tvName.setText(Utils.getValue(item.getAccountName()) + "");
+        String url = Utils.getValue(item.getAccountImg());
+        if (!"".equals(url))
+            Utils.setImgF(mContext, url, hold.ivIcon);
+        else Utils.setImgF(mContext, R.mipmap.zw_morentouxiang, hold.ivIcon);
+        String remark = Utils.getValue(item.getAccountRemark());
+        if (!remark.equals(""))
+            hold.tvDesc.setText(remark + "");
+        else hold.tvDesc.setText("这个人很懒，什么都没留下");
+        if (position < 3) {
+            if (position == 0)
+                hold.ivLevel.setImageResource(R.mipmap.gyb_jinpai);
+            else if (position == 1)
+                hold.ivLevel.setImageResource(R.mipmap.gyb_yinpai);
+            else if (position == 2)
+                hold.ivLevel.setImageResource(R.mipmap.gyb_tongpai);
+            hold.tvLevel.setVisibility(View.INVISIBLE);
+            hold.ivLevel.setVisibility(View.VISIBLE);
+        } else {
+            hold.ivLevel.setVisibility(View.INVISIBLE);
+            hold.tvLevel.setVisibility(View.VISIBLE);
+            hold.tvLevel.setText("" + (position + 1));
         }
-//        hold.lnParent.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                mContext.startActivity(new Intent(mContext, SortSearchAct.class)
-////                        .putExtra("type", Utils.getValue(item.getClassifyName())));
-//                meItemInterface.OnItemClick(position);
-//            }
-//        });
+        if (tag == 0 || tag == 2) {
+            hold.tvTimes.setText("" + Utils.getValue(item.getRankScore()));
+            hold.tvTimes.setVisibility(View.VISIBLE);
+            hold.tvGrades.setVisibility(View.GONE);
+            hold.rbStar.setVisibility(View.GONE);
+        } else {
+            hold.tvTimes.setVisibility(View.GONE);
+            hold.tvGrades.setVisibility(View.VISIBLE);
+            hold.rbStar.setVisibility(View.VISIBLE);
+            hold.tvGrades.setText("" + Utils.getValue(item.getRankName()));
+            hold.rbStar.setRating(Utils.getValue(item.getRankScore()) / 2);
+        }
     }
 
     @Override
@@ -104,6 +100,9 @@ public class RangeListRangeAdapter extends EasyRecyclerAdapter<MeFunctionEntity>
         SelectableRoundedImageView ivIcon;
         TextView tvName;
         TextView tvTimes;
+        TextView tvDesc;
+        TextView tvGrades;
+        RatingBar rbStar;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -112,6 +111,9 @@ public class RangeListRangeAdapter extends EasyRecyclerAdapter<MeFunctionEntity>
             ivIcon = itemView.findViewById(R.id.iv_icon);
             tvName = itemView.findViewById(R.id.tv_name);
             tvTimes = itemView.findViewById(R.id.tv_times);
+            tvDesc = itemView.findViewById(R.id.tv_desc);
+            tvGrades = itemView.findViewById(R.id.tv_grades);
+            rbStar = itemView.findViewById(R.id.rb_star);
         }
     }
 }

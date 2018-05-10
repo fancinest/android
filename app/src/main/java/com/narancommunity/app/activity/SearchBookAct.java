@@ -29,7 +29,7 @@ import com.narancommunity.app.common.DBHelper;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.BookEntity;
-import com.narancommunity.app.entity.BookListEntity;
+import com.narancommunity.app.entity.RecEntity;
 import com.narancommunity.app.entity.SearchHistoryEntity;
 import com.narancommunity.app.net.AppConstants;
 import com.snappydb.DB;
@@ -259,13 +259,13 @@ public class SearchBookAct extends BaseActivity {
     }
 
     FindLatestAdapter adapter;
-    List<BookListEntity> listResult = new ArrayList<>();
+    List<RecEntity> listResult = new ArrayList<>();
 
     private void setDataToView() {
-        BookListEntity book;
+        RecEntity book;
         listResult.clear();
         for (int i = 0; i < 10; i++) {
-            book = new BookListEntity();
+            book = new RecEntity();
             book.setOrderContent("《红楼梦》，中国古典四大名著之首，清代作家曹雪芹创作的章回体长篇小说");
             book.setOrderAuthor("曹雪芹");
             book.setOrderTitle("红楼梦");

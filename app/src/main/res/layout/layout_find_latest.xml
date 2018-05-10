@@ -42,10 +42,10 @@
                     android:id="@+id/tv_book_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="书名"
-                    android:maxLines="1"
-                    android:maxEms="6"
                     android:ellipsize="end"
+                    android:maxEms="6"
+                    android:maxLines="1"
+                    android:text="书名"
                     android:textColor="@color/color_333333"
                     android:textSize="14sp" />
 
@@ -54,10 +54,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_book_name"
-                    android:text="作者"
-                    android:maxLines="1"
-                    android:maxEms="8"
                     android:ellipsize="end"
+                    android:maxEms="8"
+                    android:maxLines="1"
+                    android:text="作者"
                     android:textColor="@color/color_999999"
                     android:textSize="12sp" />
 
@@ -102,13 +102,13 @@
 
                     <RatingBar
                         android:id="@+id/rating"
-                        style="@style/Base.Widget.AppCompat.RatingBar.Small"
+                        style="@style/Custom_Ratingbar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:theme="@style/RatingBar"
                         android:layout_below="@id/tv_score"
-                        android:numStars="5" />
+                        android:numStars="5"
+                        android:theme="@style/RatingBar" />
                 </LinearLayout>
 
 
@@ -137,6 +137,43 @@
                 android:text="2km"
                 android:textColor="@color/color_999999"
                 android:textSize="12sp" />
+
+            <LinearLayout
+                android:id="@+id/ln_dontate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:drawableLeft="@mipmap/list_icon_weizhi"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/rl_top"
+                    android:layout_marginTop="8dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textColor="@color/color_333333"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/iv_donater"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tv_donater"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/rl_top"
+                    android:layout_marginTop="8dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textColor="@color/color_999999"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

@@ -199,6 +199,7 @@ public class MApplication extends Application {
             snappyDb.close();
         } catch (SnappydbException e) {
             e.printStackTrace();
+            Log.e("fancy", e.getMessage());
         }
         return info;
     }

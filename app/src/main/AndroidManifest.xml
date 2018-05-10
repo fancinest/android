@@ -211,7 +211,7 @@
             android:name=".activity.BookYSHYDetailAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.BookHelpDetailAct"
+            android:name=".activity.BookSHHZAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.BookOrdererListAct"
@@ -222,6 +222,27 @@
 
         <activity
             android:name=".activity.SingleCommentDetailAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.ShuzhaiAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.MySignAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.MyAttendNewAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.RecommDetailAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.MyReleaseAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.MyWishAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.MyLoveAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity

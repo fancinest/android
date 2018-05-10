@@ -58,7 +58,7 @@
 
                 <RatingBar
                     android:id="@+id/rb_donate_star"
-                    style="@style/Base.Widget.AppCompat.RatingBar.Small"
+                    style="@style/Custom_Ratingbar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:rating="2.0" />

@@ -33,6 +33,8 @@ import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.CommentEntity;
 import com.narancommunity.app.entity.CommentListEntity;
+import com.narancommunity.app.entity.IsCollect;
+import com.narancommunity.app.entity.YSHYData;
 import com.narancommunity.app.entity.YSHYEntity;
 import com.narancommunity.app.interfaces.CommentInterfaces;
 import com.narancommunity.app.net.NRClient;
@@ -157,7 +159,7 @@ public class BookYSHYDetailAct extends BaseActivity {
             @Override
             public void OnItemClick(int position) {
                 startActivity(new Intent(getContext(), AddBookCommentAct.class)
-                        .putExtra("tag", 0).putExtra("bookId",  mData.getContentId())
+                        .putExtra("tag", 0).putExtra("bookId", mData.getContentId())
                         .putExtra("commentedId", list.get(position).getCommentId())
                         .putExtra("replyName", list.get(position).getInitiatorNike()));
             }

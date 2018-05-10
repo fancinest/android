@@ -10,13 +10,24 @@ import android.support.v4.view.ViewPager;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
+import com.narancommunity.app.activity.fragment.RangeChengjiuFragment;
 import com.narancommunity.app.activity.fragment.RangeDaRenFragment;
 import com.narancommunity.app.activity.fragment.RangeRangeFragment;
 import com.narancommunity.app.common.CenteredToolbar;
+import com.narancommunity.app.common.LoadDialog;
+import com.narancommunity.app.common.Utils;
+import com.narancommunity.app.entity.AssistantEntity;
+import com.narancommunity.app.entity.GradeData;
+import com.narancommunity.app.net.NRClient;
+import com.narancommunity.app.net.Result;
+import com.narancommunity.app.net.ResultCallback;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,8 +37,8 @@ import butterknife.ButterKnife;
  * Email：120760202@qq.com
  * FileName :
  */
-
 public class RangeAct extends BaseActivity implements OnTabSelectListener {
+
     @BindView(R.id.toolbar)
     CenteredToolbar toolbar;
     @BindView(R.id.slide_tab)
@@ -39,7 +50,7 @@ public class RangeAct extends BaseActivity implements OnTabSelectListener {
     private ArrayList<Fragment> mFragments = new ArrayList<>();
     RangeDaRenFragment firstFrag = RangeDaRenFragment.newInstance();
     RangeRangeFragment secondFrag = RangeRangeFragment.newInstance();
-    RangeRangeFragment thirdFrag = RangeRangeFragment.newInstance();
+    RangeChengjiuFragment thirdFrag = RangeChengjiuFragment.newInstance();
 
 
     @Override
@@ -49,7 +60,7 @@ public class RangeAct extends BaseActivity implements OnTabSelectListener {
         ButterKnife.bind(this);
 
         setBar(toolbar);
-        toolbar.setTitle("排行榜");
+        toolbar.setTitle("公益榜");
 
         mFragments.add(firstFrag);
         mFragments.add(secondFrag);
@@ -59,6 +70,7 @@ public class RangeAct extends BaseActivity implements OnTabSelectListener {
         vp.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
         slideTab.setOnTabSelectListener(this);
         slideTab.setViewPager(vp);
+
     }
 
     private class MyPagerAdapter extends FragmentPagerAdapter {

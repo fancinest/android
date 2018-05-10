@@ -8,10 +8,10 @@ import java.io.Serializable;
  */
 public class UserInfo implements Serializable {
     //    String userPhotoId;//  A045F40E2FBB4C8798F0E2B5F6B6E3BA
-//    String userResume;// 当你努力到无能为力的时候,上天就会为你打开一扇窗。
+    String remark;// 当你努力到无能为力的时候,上天就会为你打开一扇窗。
 //    String userScWeibo;// ,
-//    String userPhotoUrl;// "http://on7ih6qzl.bkt.clouddn.com/1490601021561_813.jpg";
-//    String userId;//: 21B3FB57729E44D5824DFF903A873F04 ,
+    String photo;// "http://on7ih6qzl.bkt.clouddn.com/1490601021561_813.jpg";
+    //    String userId;//: 21B3FB57729E44D5824DFF903A873F04 ,
 //    String username;// cncxm ,
 //    String password;// 8ddcff3a80f4189ca1c9d4d902c3c909
     String accessToken;// "naran-b25c0ad4-91ab-4d2a-b385-9ac604aa7ed2";
@@ -27,11 +27,14 @@ public class UserInfo implements Serializable {
 //"accessToken":"091980a35dfd4534b7b40593bd2b9b4b","accountId":5,"nickName":"156****7367","phone":"15669097367"
 //    "accessToken":"c552b7e726dc4e0591997ebdc15b8a04","accountId":1,"birthday":"1989-05-24","city":"杭州","location":"仓前","nickName":"zefeng.xu","phone":"18868732793","sex":"0"
 
+    public UserInfo() {
+    }
 
     @Override
     public String toString() {
         return "UserInfo{" +
-                "accessToken='" + accessToken + '\'' +
+                "photo='" + photo + '\'' +
+                ", accessToken='" + accessToken + '\'' +
                 ", accountId=" + accountId +
                 ", nickName='" + nickName + '\'' +
                 ", phone='" + phone + '\'' +
@@ -41,6 +44,22 @@ public class UserInfo implements Serializable {
                 ", city='" + city + '\'' +
                 ", certificationType='" + certificationType + '\'' +
                 '}';
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public String getCertificationType() {

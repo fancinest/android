@@ -41,6 +41,7 @@ import com.narancommunity.app.entity.BookInfo;
 import com.narancommunity.app.entity.BookRelativeRecData;
 import com.narancommunity.app.entity.CommentEntity;
 import com.narancommunity.app.entity.CommentListEntity;
+import com.narancommunity.app.entity.IsCollect;
 import com.narancommunity.app.entity.OrderData;
 import com.narancommunity.app.entity.OrderEntity;
 import com.narancommunity.app.entity.RecEntity;
@@ -152,6 +153,7 @@ public class BookDetailAct extends BaseActivity {
     Integer bookId = 0;
     String desc;
     boolean isLike = false;
+    boolean isCollect = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -172,6 +174,36 @@ public class BookDetailAct extends BaseActivity {
         getOrderData();
         getComment();
         getRec();
+        getCollect();
+    }
+
+    private void getCollect() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("orderId", bookId);
+        map.put("accessToken", MApplication.getAccessToken());
+        NRClient.isCollectDonateThings(map, new ResultCallback<Result<IsCollect>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<IsCollect> result) {
+                LoadDialog.dismiss(getContext());
+                isCollect = result.getData().isMe();
+                setBookCollect();
+            }
+        });
+    }
+
+    private void setBookCollect() {
+        if (isCollect)
+            tvWishCollect.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.mipmap.list_btn_shoucang_pre)
+                    , null, null, null);
+        else
+            tvWishCollect.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.mipmap.list_btn_shoucang_gre)
+                    , null, null, null);
     }
 
     @Override
@@ -615,7 +647,9 @@ public class BookDetailAct extends BaseActivity {
             case R.id.tv_distance:
                 break;
             case R.id.ln_collect:
-                addCollect();
+                if (!isCollect)
+                    addCollect();
+                else Toaster.toast(getContext(), "您已收藏！");
                 break;
             case R.id.btn_more:
                 startActivity(new Intent(getContext(), MoreCommentAct.class).putExtra("bookId", bookId));
@@ -721,7 +755,25 @@ public class BookDetailAct extends BaseActivity {
     }
 
     private void addCollect() {
+        LoadDialog.show(getContext(), "收藏中...");
+        Map<String, Object> map = new HashMap<>();
+        map.put("orderId", mData.getOrderId());
+        map.put("accessToken", MApplication.getAccessToken());
+        NRClient.collectDonateThings(map, new ResultCallback<Result<Void>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
 
+            @Override
+            public void onSuccess(Result<Void> result) {
+                LoadDialog.dismiss(getContext());
+                Toaster.toast(getContext(), "收藏成功");
+                isCollect = true;
+                setBookCollect();
+            }
+        });
     }
 
 

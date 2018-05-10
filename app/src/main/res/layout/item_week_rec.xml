@@ -80,6 +80,7 @@
             android:layout_height="wrap_content"
             android:maxLines="3"
             android:paddingBottom="12dp"
+            android:visibility="gone"
             android:text="查看全文"
             android:textColor="@color/color_999999"
             android:textSize="14sp" />

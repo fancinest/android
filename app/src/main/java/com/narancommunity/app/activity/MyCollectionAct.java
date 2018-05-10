@@ -35,7 +35,7 @@ public class MyCollectionAct extends BaseActivity implements OnTabSelectListener
     @BindView(R.id.toolbar)
     CenteredToolbar toolbar;
 
-    private String[] mTitles = {"文章", "捐赠", "心愿", "专题"};
+    private String[] mTitles = {"文章", "捐赠", "帖子"};
     private ArrayList<Fragment> mFragments = new ArrayList<>();
 
     @Override
@@ -56,11 +56,9 @@ public class MyCollectionAct extends BaseActivity implements OnTabSelectListener
         essay.setType(0);
         MyCollectionSonFragment donate = MyCollectionSonFragment.newInstance();
         donate.setType(1);
-        MyCollectionSonFragment wish = MyCollectionSonFragment.newInstance();
-        wish.setType(2);
-        MyCollectionSonFragment topic = MyCollectionSonFragment.newInstance();
-        topic.setType(3);
-        Collections.addAll(mFragments, essay, donate, wish, topic);
+        MyCollectionSonFragment tiezi = MyCollectionSonFragment.newInstance();
+        tiezi.setType(3);
+        Collections.addAll(mFragments, essay, donate, tiezi);
 
         vp.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
         slideTab.setOnTabSelectListener(this);

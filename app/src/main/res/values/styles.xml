@@ -20,6 +20,14 @@
         <item name="android:windowBackground">@color/white</item>
     </style>
 
+    <!--点评星星-->
+    <style name="Custom_Ratingbar">
+        <item name="android:progressDrawable">@drawable/ratingbar_layout</item>
+        <item name="android:minHeight">30px</item>
+        <item name="android:maxHeight">30px</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
+
 
     <style name="AppTheme.NoActionBar">
         <item name="colorPrimary">@color/colorAccentNoAlpha</item>

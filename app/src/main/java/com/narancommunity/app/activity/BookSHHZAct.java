@@ -37,6 +37,7 @@ import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.CommentEntity;
 import com.narancommunity.app.entity.CommentListEntity;
+import com.narancommunity.app.entity.IsCollect;
 import com.narancommunity.app.entity.YSHYEntity;
 import com.narancommunity.app.interfaces.CommentInterfaces;
 import com.narancommunity.app.net.NRClient;
@@ -57,7 +58,7 @@ import butterknife.OnClick;
  * Email：120760202@qq.com
  * FileName : 社区互助
  */
-public class BookHelpDetailAct extends BaseActivity {
+public class BookSHHZAct extends BaseActivity {
     @BindView(R.id.toolbar)
     CenteredToolbar toolbar;
     @BindView(R.id.iv_icon)
@@ -118,6 +119,7 @@ public class BookHelpDetailAct extends BaseActivity {
     YSHYEntity mData;
     EssayPicAdapter picAdapter;
     List<CommentEntity> list = new ArrayList<>();
+    private boolean isCollect = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -131,6 +133,7 @@ public class BookHelpDetailAct extends BaseActivity {
         setView();
         setPopView();
         getData();
+        getIsCollect();
     }
 
     private void setView() {
@@ -177,6 +180,35 @@ public class BookHelpDetailAct extends BaseActivity {
                 }
             });
         }
+    }
+
+    private void getIsCollect() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("contentId", mData.getContentId());
+        map.put("accessToken", MApplication.getAccessToken());
+        NRClient.isCollectEssayTiezi(map, new ResultCallback<Result<IsCollect>>() {
+            @Override
+            public void onSuccess(Result<IsCollect> result) {
+                LoadDialog.dismiss(getContext());
+                isCollect = result.getData().isMe();
+                setIsCollect();
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+        });
+    }
+
+    private void setIsCollect() {
+        if (isCollect)
+            tvCollect.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.mipmap.list_btn_shoucang_pre)
+                    , null, null, null);
+        else
+            tvCollect.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.mipmap.list_btn_shoucang_gre)
+                    , null, null, null);
     }
 
     private void setMultiImg(String[] arr) {
@@ -282,6 +314,9 @@ public class BookHelpDetailAct extends BaseActivity {
             case R.id.iv_one_pic:
                 break;
             case R.id.ln_collect:
+                if (!isCollect)
+                    addCollect();
+                else Toaster.toast(getContext(), "您已经收藏过了！");
                 break;
             case R.id.ln_comment:
                 startActivity(new Intent(getContext(), AddBookCommentAct.class)
@@ -300,6 +335,28 @@ public class BookHelpDetailAct extends BaseActivity {
                         .putExtra("tag", 1));
                 break;
         }
+    }
+
+    private void addCollect() {
+        LoadDialog.show(getContext());
+        Map<String, Object> map = new HashMap<>();
+        map.put("contentId", mData.getContentId());
+        map.put("accessToken", MApplication.getAccessToken());
+        NRClient.collectEssay(map, new ResultCallback<Result<Void>>() {
+            @Override
+            public void onSuccess(Result<Void> result) {
+                LoadDialog.dismiss(getContext());
+                isCollect = true;
+                Toaster.toast(getContext(), "收藏成功！");
+                setIsCollect();
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+        });
     }
 
     PopupWindow mPop;

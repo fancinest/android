@@ -11,6 +11,9 @@ import java.io.Serializable;
 public class RecEntity implements Serializable {
     String average, createTime, orderAuthor, orderContent, orderImgs, orderTitle, orderType, typeName, updateTime;
     Integer orderId;
+    private Integer initiatorId;
+    private String initiatorImg;
+    private String initiatorNike;
 
     @Override
     public String toString() {
@@ -25,7 +28,34 @@ public class RecEntity implements Serializable {
                 ", typeName='" + typeName + '\'' +
                 ", updateTime='" + updateTime + '\'' +
                 ", orderId=" + orderId +
+                ", initiatorId=" + initiatorId +
+                ", initiatorImg='" + initiatorImg + '\'' +
+                ", initiatorNike='" + initiatorNike + '\'' +
                 '}';
+    }
+
+    public Integer getInitiatorId() {
+        return initiatorId;
+    }
+
+    public void setInitiatorId(Integer initiatorId) {
+        this.initiatorId = initiatorId;
+    }
+
+    public String getInitiatorImg() {
+        return initiatorImg;
+    }
+
+    public void setInitiatorImg(String initiatorImg) {
+        this.initiatorImg = initiatorImg;
+    }
+
+    public String getInitiatorNike() {
+        return initiatorNike;
+    }
+
+    public void setInitiatorNike(String initiatorNike) {
+        this.initiatorNike = initiatorNike;
     }
 
     public String getAverage() {

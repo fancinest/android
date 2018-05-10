@@ -37,8 +37,8 @@ public class IndexFragment extends Fragment implements OnTabSelectListener {
     private String[] mTitles = {"发现", "公益活动", "信任社区"};
     private ArrayList<Fragment> mFragments = new ArrayList<>();
     IndexFindFragment firstFrag = IndexFindFragment.newInstance();
-    IndexActivityFragment secondFrag = IndexActivityFragment.newInstance();
-    IndexActivityFragment thirdFrag = IndexActivityFragment.newInstance();
+    MyParticipateFragment secondFrag = MyParticipateFragment.newInstance();
+    MyParticipateFragment thirdFrag = MyParticipateFragment.newInstance();
 
     public static IndexFragment newInstance() {
         IndexFragment fragment = new IndexFragment();

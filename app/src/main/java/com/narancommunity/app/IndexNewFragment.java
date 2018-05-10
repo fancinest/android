@@ -24,7 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.narancommunity.app.activity.BookHouseAct;
-import com.narancommunity.app.activity.DonateBookAct;
 import com.narancommunity.app.activity.FindFourAct;
 import com.narancommunity.app.activity.LoginAct;
 import com.narancommunity.app.activity.RangeAct;
@@ -40,9 +39,9 @@ import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.BannerData;
 import com.narancommunity.app.entity.BannerItem;
 import com.narancommunity.app.entity.BookListData;
-import com.narancommunity.app.entity.BookListEntity;
 import com.narancommunity.app.entity.NewsData;
 import com.narancommunity.app.entity.Publicitys;
+import com.narancommunity.app.entity.RecEntity;
 import com.narancommunity.app.entity.TopLines;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
@@ -104,7 +103,7 @@ public class IndexNewFragment extends Fragment {
     private static final int BANNER_CHG_PEROID = 3000;
 
     List<Publicitys> listBannerData = new ArrayList<>();
-    List<BookListEntity> listBookData = new ArrayList<>();
+    List<RecEntity> listBookData = new ArrayList<>();
 
     private Runnable mBannerChgRunnable = new Runnable() {
 

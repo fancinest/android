@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/color_eeeeee"
         android:focusableInTouchMode="true"
         android:orientation="vertical">
         <!--android:descendantFocusability="blocksDescendants"-->
@@ -19,9 +19,9 @@
             android:background="@color/color_eeeeee">
 
             <ImageView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scaleType="fitStart"
+                android:scaleType="centerCrop"
                 android:src="@mipmap/wode_bj" />
 
             <LinearLayout
@@ -109,7 +109,8 @@
                                 android:id="@+id/iv_icon"
                                 android:layout_width="56dp"
                                 android:layout_height="56dp"
-                                android:src="@mipmap/ic_launcher" />
+                                android:src="@mipmap/ic_launcher"
+                                app:sriv_oval="true" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -222,7 +223,7 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:src="@mipmap/wode_icon_aixinzhi" />
+                                android:src="@mipmap/wode_icon_dengji1" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -253,18 +254,61 @@
                             android:layout_marginLeft="24dp"
                             android:layout_marginRight="24dp" />
 
-                        <TextView
-                            android:id="@+id/tv_authorise"
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:layout_below="@id/pb_love"
+                            android:layout_marginTop="16dp"
+                            android:background="@color/color_eeeeee" />
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:layout_alignParentBottom="true"
-                            android:background="@color/color_999999"
-                            android:clickable="true"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="24dp"
-                            android:text="申请实名认证"
-                            android:textColor="@color/clickable_green_grey"
-                            android:textSize="12sp" />
+                            android:layout_marginRight="24dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                android:layout_weight="1"
+                                android:gravity="left">
+
+                                <TextView
+                                    android:id="@+id/tv_id"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="40dp"
+                                    android:clickable="true"
+                                    android:drawablePadding="6dp"
+                                    android:gravity="center_vertical"
+                                    android:paddingLeft="24dp"
+                                    android:text="心愿海ID：3525255"
+                                    android:textColor="@color/color_666666"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                android:layout_weight="1"
+                                android:gravity="right">
+
+                                <TextView
+                                    android:id="@+id/tv_authorise"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="40dp"
+                                    android:clickable="true"
+                                    android:drawableLeft="@mipmap/icon_weirenzheng"
+                                    android:drawablePadding="6dp"
+                                    android:gravity="center_vertical"
+                                    android:paddingLeft="24dp"
+                                    android:text="申请实名认证"
+                                    android:textColor="@color/color_999999"
+                                    android:textSize="12sp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
 
                     </RelativeLayout>
 
@@ -280,8 +324,8 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="332dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="40dp"
             android:background="@color/white" />
     </LinearLayout>
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>

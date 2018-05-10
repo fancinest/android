@@ -7,5 +7,5 @@ package com.narancommunity.app.entity;
  */
 
 public class CollectEssayItem {
-
+    
 }

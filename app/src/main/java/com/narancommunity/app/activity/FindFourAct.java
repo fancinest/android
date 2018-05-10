@@ -140,25 +140,32 @@ public class FindFourAct extends BaseActivity {
 
     private void setReportListData(WeekEntity data) {
         if (data != null && data.getContents().size() > 0) {
-            mWeekAdapter.setList(data.getContents());
-            mWeekAdapter.notifyDataSetChanged();
             TOTAL_PAGE = data.getTotalPageNum();
+            listRecData.addAll(data.getContents());
+            mWeekAdapter.setList(listRecData);
+            mWeekAdapter.notifyDataSetChanged();
         }
     }
 
     private void setRecListData(WeekEntity data) {
+        if (data == null)
+            return;
         if (data != null && data.getContents().size() > 0) {
-            mWeekAdapter.setList(data.getContents());
-            mWeekAdapter.notifyDataSetChanged();
             TOTAL_PAGE = data.getTotalPageNum();
+            listRecData.addAll(data.getContents());
+            mWeekAdapter.setList(listRecData);
+            mWeekAdapter.notifyDataSetChanged();
         }
     }
 
     private void setAssistantListData(AssistantEntity data) {
+        if (data == null)
+            return;
         if (data != null && data.getActivitys().size() > 0) {
-            mAssistantAdapter.setList(data.getActivitys());
-            mAssistantAdapter.notifyDataSetChanged();
             TOTAL_PAGE = data.getTotalPageNum();
+            listAssistantData.addAll(data.getActivitys());
+            mAssistantAdapter.setList(listAssistantData);
+            mAssistantAdapter.notifyDataSetChanged();
         }
     }
 
@@ -235,7 +242,8 @@ public class FindFourAct extends BaseActivity {
                 mWeekAdapter.setListener(new MeItemInterface() {
                     @Override
                     public void OnItemClick(int position) {
-                        Toaster.toast(getContext(), "准备跳转");
+                        startActivity(new Intent(getContext(), RecommDetailAct.class)
+                                .putExtra("data", listRecData.get(position)));
                     }
 
                     @Override

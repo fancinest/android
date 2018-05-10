@@ -74,7 +74,7 @@ public class CommentAdapter extends EasyRecyclerAdapter<CommentEntity> {
         } else if (item.getRecords() == null) {
             hold.tvMore.setVisibility(View.GONE);
         }
-        String url = item.getInitiatorImg();
+        String url = Utils.getValue(item.getInitiatorImg());
         if (!url.equals(""))
             Utils.setImgF(mContext, url, hold.ivIcon);
         hold.tvMore.setOnClickListener(new View.OnClickListener() {

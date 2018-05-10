@@ -16,9 +16,12 @@ import com.narancommunity.app.entity.CollectEssayItem;
 import com.narancommunity.app.entity.CommentDetail;
 import com.narancommunity.app.entity.CommentListEntity;
 import com.narancommunity.app.entity.DonateDetailData;
+import com.narancommunity.app.entity.GradeData;
+import com.narancommunity.app.entity.IsCollect;
 import com.narancommunity.app.entity.NewsData;
 import com.narancommunity.app.entity.OrderData;
 import com.narancommunity.app.entity.RecData;
+import com.narancommunity.app.entity.ShuzhaiData;
 import com.narancommunity.app.entity.WallListData;
 import com.narancommunity.app.entity.Stationery;
 import com.narancommunity.app.entity.UpdateFilesEntity;
@@ -149,6 +152,66 @@ public interface NRService {
     @FormUrlEncoded
     @POST(NRConfig.URL_BANNER_LIST)
     Call<Result<BannerData>> getBannerList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取banner列表
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_MY_QIUZHU_LIST)
+    Call<Result<YSHYData>> getQiuZhuList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_MY_FATIE_LIST)
+    Call<Result<YSHYData>> getFaTieList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_DAREN_DAY_LIST)
+    Call<Result<GradeData>> getDarenDayList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取榜
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_DAREN_WEEK_LIST)
+    Call<Result<GradeData>> getDarenWeekList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取榜
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_DAREN_MONTH_LIST)
+    Call<Result<GradeData>> getDarenMonthList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取榜
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_DAREN_ALL_LIST)
+    Call<Result<GradeData>> getDarenAllList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取榜
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_CHENGJIU_LIST)
+    Call<Result<GradeData>> getChengjiuList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取成就榜
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_RANK_LIST)
+    Call<Result<GradeData>> getRankList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取等级榜
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_MY_ATTEND_COMMONWEAL_LIST)
+    Call<Result<Void>> getMyAttendCommonWealList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//是否收藏捐赠什么的
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_IS_COLLECT_DONATE_THINGS)
+    Call<Result<IsCollect>> isCollectDonateThings(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//是否收藏捐赠什么的
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_IS_COLLECT_ESSAY_TIEZI)
+    Call<Result<IsCollect>> isCollectEssayTiezi(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//是否收藏文章帖子什么的
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_COLLECT_DONATE_THINGS)
+    Call<Result<Void>> collectDonateThings(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//收藏捐赠的东西
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_COLLECTION_DONATE_LIST)
+    Call<Result<ShuzhaiData>> getCollectDonateList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取我的收藏里的捐赠
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_COLLECT_ESSAY)
+    Call<Result<Void>> collectEssay(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//收藏文章-帖子
+
+    @FormUrlEncoded
+    @POST(NRConfig.URL_GET_SHUZHAI_LIST)
+    Call<Result<ShuzhaiData>> getShuzhaiList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取书摘列表(爱心书屋里)
 
     @FormUrlEncoded
     @POST(NRConfig.URL_GET_BOOK_BY_SORT)
@@ -307,6 +370,10 @@ public interface NRService {
     Call<Result<WeekEntity>> getWeekRecList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取每周推荐列表
 
     @FormUrlEncoded
+    @POST(NRConfig.URL_MY_ATTEND_ASSISTANT_LIST)
+    Call<Result<AssistantEntity>> getMyAttendAssistantList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取我参与援助列表
+
+    @FormUrlEncoded
     @POST(NRConfig.URL_GET_ASSISTANT_LIST)
     Call<Result<AssistantEntity>> getAssistantList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取援助列表
 
@@ -382,51 +449,9 @@ public interface NRService {
     @POST(NRConfig.URL_RESET + "{oldpwd}" + "/" + "{newpwd}")
     Call<Result<String>> modifyPsd(@HeaderMap Map<String, Object> header, @Path("oldpwd") String oldpwd, @Path("newpwd") String newpwd);
 
-    //    @FormUrlEncoded
-//    @POST(NRConfig.INDEX_INDEX)
-//    Call<Result<IndexEntityNew>> getIndex(@HeaderMap Map<String, Object> header);//首页
-//
-//    @FormUrlEncoded
-//    @POST(NRConfig.INDEX_FARM_LIST)
-//    Call<Result<NRFarm>> getIndexFarmList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//首页
-//
-//    @POST(NRConfig.INDEX_ACTIVITY_LIST + "/{classify}/{time}/{keyword}/{page}")
-//    Call<Result<IndexActivityList>> getIndexActivityList(@HeaderMap Map<String, Object> header, @Path("classify") String classify
-//            , @Path("time") String time, @Path("keyword") String keyword, @Path("page") String page);//首页公社活动
-//
-////    @POST(NRConfig.INDEX_NEWS + "/{classify}/{page}/{row}")  旧版资讯获取方式
-////    Call<Result<IndexNews>> getIndexNews(@HeaderMap Map<String, Object> header, @Path("classify") String classify
-////            , @Path("page") String page, @Path("row") String row);
-//
-//    @FormUrlEncoded
-//    @POST(NRConfig.INDEX_NEWS)
-//    Call<Result<IndexNews>> getIndexNews(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-//
-//    @FormUrlEncoded
-//    @POST(NRConfig.INDEX_INDEX_WILLFARM_MORE)
-//    Call<Result<IndexWillMoreList>> getIndexWillFarmMore(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-
     @FormUrlEncoded
     @POST(NRConfig.INDEX_INDEX_WILLFARM_COUNT)
     Call<Result<Integer>> getIndexWillFarmCount(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-
-//    @POST(NRConfig.INDEX_FARM_DETAIL + "/{farmId}")
-//    Call<Result<IndexFarmDetail>> getIndexFarmDetail(@HeaderMap Map<String, Object> header, @Path("farmId") String farmId);
-//
-//    @POST(NRConfig.INDEX_FARM_PRODUCT + "/{farmId}/{page}")
-//    Call<Result<NRFarmProduct>> getFarmProductByID(@HeaderMap Map<String, Object> header, @Path("farmId") String farmId
-//            , @Path("page") String page);
-//
-//    @POST(NRConfig.INDEX_FARM_NOTICE + "/{farmId}/{type}/{page}")
-//    Call<Result<NRFarmNotices>> getFarmNoticeByID(@HeaderMap Map<String, Object> header, @Path("farmId") String farmId
-//            , @Path("type") String type, @Path("page") String page);
-//
-//    @POST(NRConfig.INDEX_FARM_DYNAMIC + "/{farmId}/{page}")
-//    Call<Result<NRFarmDynamic>> getFarmDynamicByID(@HeaderMap Map<String, Object> header, @Path("farmId") String farmId
-//            , @Path("page") String page);
-//
-//    @POST(NRConfig.CHECK_CONTENT_RELATION + "/{id}")
-//    Call<Result<Map<String, NRRelation>>> checkContentRelation(@HeaderMap Map<String, Object> header, @Path("id") String id);
 
     @FormUrlEncoded
     @POST(NRConfig.INDEX_FARM_ADD_ATTENTION)
@@ -452,93 +477,13 @@ public interface NRService {
     @POST(NRConfig.SELECT_DEL_ATTENTION_LIST)
     Call<Result<String>> delSelectAttentionList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
 
-//    @POST(NRConfig.INDEX_FARM_PRODUCT_DETAIL + "/{id}")
-//    Call<Result<Map<String, NRFarmProductItem>>> getProductDetail(@HeaderMap Map<String, Object> header, @Path("id") String id);
-//
-//    @POST(NRConfig.FARM_HOME + "/{keyword}")
-//    Call<Result<FarmEntity>> getFarmHome(@HeaderMap Map<String, Object> header, @Path("keyword") String id);
-//
-//    @POST(NRConfig.FARM_HOME_ALL_NOTICE + "/{farmId}/{type}/{page}")
-//    Call<Result<NRFarmNotices>> getFarmAllNotice(@HeaderMap Map<String, Object> header, @Path("farmId") String farmId
-//            , @Path("type") String type
-//            , @Path("page") String page);
-//
-//    @POST(NRConfig.FARM_HOME_ALL_FARM + "/{area}/{classify}/{page}/{row}")
-//    Call<Result<NRFarmHomeMoreFarm>> getFarmAllFarm(@HeaderMap Map<String, Object> header, @Path("area") String area
-//            , @Path("classify") String classify
-//            , @Path("page") String page, @Path("row") String row);
-//
-//    @FormUrlEncoded
-//    @POST(NRConfig.FARM_HOME_ALL_FARM)
-//    Call<Result<NRFarmHomeMoreFarm>> getFarmByKeyword(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-//
-//    @FormUrlEncoded
-//    @POST(NRConfig.SELECT_FARM_LIST)
-//    Call<Result<NRSelectFarmData>> getSelectFarmList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-//
-//    @FormUrlEncoded
-//    @POST(NRConfig.SELECT_FARM_LIST)
-//    Call<Result<NRFarmProduct>> getSelectProductList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-
     @FormUrlEncoded
     @POST(NRConfig.SELECT_DRAG_LIST)
     Call<Result<String>> setSelectListOrder(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
 
-//    @FormUrlEncoded
-//    @POST(NRConfig.SELECT_SEARCH_LIST)
-//    Call<Result<IndexWillMoreList>> getFarmList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-//
-//    @FormUrlEncoded
-//    @POST(NRConfig.COMMUNITY_TOPIC_OR_MEMBER_LIST)
-//    Call<Result<NRCommunityTopic>> getCommunityTopicList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-//
-//    @FormUrlEncoded
-//    @POST(NRConfig.MINE_LIST)
-//    Call<Result<NRMineData>> getMineList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-//
-//    @FormUrlEncoded
-//    @POST(NRConfig.MINE_LIST)
-//    Call<Result<MyJoinActList>> getMineActList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-
-    @FormUrlEncoded
-    @POST(NRConfig.RELEASE_TOPIC)
-    Call<Result<String>> releaseTopic(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-
-//    @FormUrlEncoded
-//    @POST(NRConfig.GET_CHANNEL_LIST_BY_CHANNEL)
-//    Call<Result<NRCommunityTopic>> getActByChannel(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-//
-//    @FormUrlEncoded
-//    @POST(NRConfig.GET_CHANNEL_LIST)
-//    Call<Result<CommunityChannel>> getChannelList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-
     @FormUrlEncoded
     @POST(NRConfig.FARM_JUBAO)
     Call<Result<String>> jubaoFarm(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-
-//    @FormUrlEncoded
-//    @POST(NRConfig.MINE_FOLLOW_LIST)
-//    Call<Result<NRMineFollows>> getFollowLIst(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-//
-//    @FormUrlEncoded
-//    @POST(NRConfig.MINE_COLLECT_LIST)
-//    Call<Result<NRFarmProduct>> getCollectProductList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-//
-//    @FormUrlEncoded
-//    @POST(NRConfig.MINE_COLLECT_LIST)
-//    Call<Result<NRMineTopic>> getCollectTopicList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-//
-//    @FormUrlEncoded
-//    @POST(NRConfig.MINE_COLLECT_LIST)
-//    Call<Result<NRNewsData>> getCollectNewsList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-//
-//    @FormUrlEncoded
-//    @POST(NRConfig.DYNAMIC_COMMENT_LIST)
-//    Call<Result<NRComment>> getDynamicCommentList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-
-//    @FormUrlEncoded
-//    @POST(NRConfig.FARM_PRODUCT_LIST)
-//    Call<Result<NRFarmProduct>> getProductListBySort(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
 
     @FormUrlEncoded
     @POST(NRConfig.DYNAMIC_ZAN)
@@ -564,29 +509,12 @@ public interface NRService {
     @POST(NRConfig.FEED_BACK)
     Call<Result<String>> addFeedback(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
 
-//    @FormUrlEncoded
-//    @POST(NRConfig.SEARCH)
-//    Call<Result<SearchEntity>> search(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-//
-//    @FormUrlEncoded
-//    @POST(NRConfig.GET_SEARCH_PRODUCT_HOT)
-//    Call<Result<Map<String, NRBaseData<SearchKeyWord>>>> getSearchHot(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-
     @FormUrlEncoded
     @POST(NRConfig.DEL_COMMENT)
     Call<Result<String>> delComment(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
 
     @GET
     Call<ResponseBody> downloadFileWithDynamicUrlSync(@Url String fileUrl);
-
-//    @FormUrlEncoded
-//    @POST(NRConfig.INDEX_SEARCH_FARM_OR_PRODUCT)
-//    Call<Result<Map<String, List<SearchFarmOrProduct>>>> searchFarmOrProduct(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-
-    //
-//    @FormUrlEncoded
-//    @POST(NRConfig.UPDATE)
-//    Call<Result<UpdateEntity>> update(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
 
     @POST(NRConfig.SHAREADDTIMES + "/{id}")
     Call<Result<String>> shareAddTimes(@HeaderMap Map<String, Object> header, @Path("id") String farmId);

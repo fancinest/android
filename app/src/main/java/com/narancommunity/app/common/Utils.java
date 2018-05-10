@@ -455,21 +455,27 @@ public class Utils {
 //        }
 //    }
 //
-//    public static void setImgL(Context context, Object imgUrl, ImageView imageView) {
-//        if (context != null && imgUrl != null && !imgUrl.equals("")) {
-//
-//            try {
-//                Glide.with(context)
-//                        .load(imgUrl)
-//                        .centerCrop()
-//                        .dontAnimate()
-//                        .placeholder(R.drawable.img_loading_l)
-//                        .into(imageView);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+
+    /**
+     * 书摘
+     * @param context
+     * @param imgUrl
+     * @param imageView
+     */
+    public static void setImgSZ(Context context, Object imgUrl, ImageView imageView) {
+        if (context != null && imgUrl != null && !imgUrl.equals("")) {
+
+            try {
+                Glide.with(context)
+                        .load(imgUrl)
+                        .centerCrop()
+                        .placeholder(R.mipmap.pic_shuzhai_zhanweitu)
+                        .into(imageView);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 //
     public static void setImgF(Context context, Object imgUrl, ImageView imageView) {
         if (context != null && imgUrl != null && !imgUrl.equals("")) {
@@ -479,7 +485,6 @@ public class Utils {
                         .asBitmap()
                         .centerCrop()
                         .dontAnimate()
-                        .placeholder(R.mipmap.zw_morentouxiang)
                         .into(imageView);
             } catch (Exception e) {
                 e.printStackTrace();
