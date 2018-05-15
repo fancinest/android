@@ -141,6 +141,39 @@ public class NRClient {
     }
 
     //TODO 以此为基础
+
+    /**
+     * 获取我的求助列表
+     *
+     * @param callback
+     * @return
+     */
+    public static Call modifyHead(Map<String, Object> baseData,
+                                     final ResultCallback<Result<UserInfo>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<UserInfo>> call = mService.modifyHead(header, baseData);
+        Callback<Result<UserInfo>> cbk = new Callback<Result<UserInfo>>() {
+
+            @Override
+            public void onResponse(Call<Result<UserInfo>> call,
+                                   Response<Result<UserInfo>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<UserInfo>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
     /**
      * 获取我的求助列表
      *

@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.SoundEffectConstants;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,7 +13,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.narancommunity.app.activity.ReleaseAct;
+import com.narancommunity.app.activity.index.ReleaseAct;
+import com.narancommunity.app.activity.love.LoveFragment;
+import com.narancommunity.app.activity.mine.MeFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 慈善家片段
      */
-    private PhilanthropistFragment mPhilFragment = PhilanthropistFragment.newInstance();
+    private LoveFragment mPhilFragment = LoveFragment.newInstance();
     /**
      * 我的片段
      */

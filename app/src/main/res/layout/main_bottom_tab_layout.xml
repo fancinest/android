@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="bottom"
+    android:layout_height="66dp"
+    android:background="@color/transparent"
+    android:gravity="bottom"
     android:orientation="vertical">
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#ffd9d9d9" />
+        android:layout_height="49dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white" />
 
     <RadioGroup
         android:id="@+id/tab_rdo_grp"
         android:layout_width="match_parent"
-        android:layout_height="49dp"
-        android:background="@color/white"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="0dp">
+        android:layout_height="44dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/transparent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/home_tab"
@@ -36,30 +38,17 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableTop="@drawable/selector_plants"
-            android:text="@string/plants"
+            android:text="@string/pet"
             android:textColor="@color/main_bottom_tab_btn_text_color"
             android:textSize="@dimen/textsize_10" />
 
         <ImageView
-            android:id="@+id/iv_release"
             style="@style/MainBottomTabBtn"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@mipmap/nav_fabu"
+            android:src="@mipmap/tab_fabu"
             android:textColor="@color/main_bottom_tab_btn_text_color"
-            android:textSize="@dimen/textsize_10" />
-
-        <!--<RadioButton-->
-        <!--style="@style/MainBottomTabBtn"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginLeft="16dp"-->
-        <!--android:layout_marginRight="16dp"-->
-        <!--android:button="@mipmap/nav_fabu"-->
-        <!--android:gravity="center"-->
-        <!--android:textColor="@color/main_bottom_tab_btn_text_color"-->
-        <!--android:textSize="@dimen/textsize_10" />-->
+            android:visibility="invisible" />
 
         <RadioButton
             style="@style/MainBottomTabBtn"
@@ -67,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableTop="@drawable/selector_philanthropist"
-            android:text="@string/philanthropist"
+            android:text="@string/love"
             android:textColor="@color/main_bottom_tab_btn_text_color"
             android:textSize="@dimen/textsize_10" />
 
@@ -83,4 +72,19 @@
 
     </RadioGroup>
 
-</LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@id/tab_rdo_grp"
+        android:background="@color/color_eeeeee" />
+
+    <ImageView
+        android:id="@+id/iv_release"
+        style="@style/MainBottomTabBtn"
+        android:layout_width="62dp"
+        android:layout_height="62dp"
+        android:layout_centerInParent="true"
+        android:src="@mipmap/tab_fabu"
+        android:textColor="@color/main_bottom_tab_btn_text_color" />
+
+</RelativeLayout>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+    <!--<View-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="1px"-->
+    <!--android:background="#dfdfdf"></View>-->
+
+    <LinearLayout
+        android:id="@+id/ln_normal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/et_content"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/round_corner_grey_line_grey_content"
+            android:gravity="center_vertical"
+            android:paddingLeft="18dp"
+            android:textColor="@color/color_323232"
+            android:textSize="@dimen/textsize_14" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ln_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/et_sign"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="@drawable/round_corner_grey_line_grey_content"
+            android:gravity="top|left"
+            android:hint="在此输入您的个性签名"
+            android:padding="10dp"
+            android:textColorHint="@color/color_999999"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/round_corner_green"
+        android:text="确定"
+        android:textColor="@color/white"
+        android:textSize="17sp" />
+
+</LinearLayout>

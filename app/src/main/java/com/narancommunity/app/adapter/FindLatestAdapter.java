@@ -10,7 +10,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.BookDetailAct;
+import com.narancommunity.app.activity.index.BookDetailAct;
 import com.narancommunity.app.adapter.base.ListBaseAdapter;
 import com.narancommunity.app.adapter.base.SuperViewHolder;
 import com.narancommunity.app.common.Utils;

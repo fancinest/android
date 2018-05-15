@@ -90,6 +90,10 @@ public interface NRService {
     Call<Result<Void>> setDefaultAddress(/*@HeaderMap Map<String, Object> header,*/ @FieldMap Map<String, Object> map);//地址设置常用
 
     @FormUrlEncoded
+    @POST(NRConfig.USER_MODIFY_HEAD)
+    Call<Result<UserInfo>> modifyHead(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//修改头像
+
+    @FormUrlEncoded
     @POST(NRConfig.URL_ADD_PHOTO)
     Call<Result<String>> updateFiles(/*@HeaderMap Map<String, Object> header,*/ @FieldMap Map<String, Object> map);//上传图片
 
@@ -450,42 +454,6 @@ public interface NRService {
     Call<Result<String>> modifyPsd(@HeaderMap Map<String, Object> header, @Path("oldpwd") String oldpwd, @Path("newpwd") String newpwd);
 
     @FormUrlEncoded
-    @POST(NRConfig.INDEX_INDEX_WILLFARM_COUNT)
-    Call<Result<Integer>> getIndexWillFarmCount(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-
-    @FormUrlEncoded
-    @POST(NRConfig.INDEX_FARM_ADD_ATTENTION)
-    Call<Result<Object>> addAttention(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-
-    @FormUrlEncoded
-    @POST(NRConfig.INDEX_FARM_DEL_ATTENTION)
-    Call<Result<Object>> delAttention(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-
-    @FormUrlEncoded
-    @POST(NRConfig.PRODUCT_ADD_ATTENTION)
-    Call<Result<String>> addProductAttention(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-
-    @FormUrlEncoded
-    @POST(NRConfig.PRODUCT_DEL_ATTENTION)
-    Call<Result<String>> delProductAttention(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-
-    @FormUrlEncoded
-    @POST(NRConfig.SELECT_ADD_ATTENTION)
-    Call<Result<String>> addSelectAttention(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-
-    @FormUrlEncoded
-    @POST(NRConfig.SELECT_DEL_ATTENTION_LIST)
-    Call<Result<String>> delSelectAttentionList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-
-    @FormUrlEncoded
-    @POST(NRConfig.SELECT_DRAG_LIST)
-    Call<Result<String>> setSelectListOrder(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-
-    @FormUrlEncoded
-    @POST(NRConfig.FARM_JUBAO)
-    Call<Result<String>> jubaoFarm(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
-
-    @FormUrlEncoded
     @POST(NRConfig.DYNAMIC_ZAN)
     Call<Result<String>> zanDynamic(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
 
@@ -502,7 +470,7 @@ public interface NRService {
     Call<Result<String>> zanCancelComment(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
 
     @FormUrlEncoded
-    @POST(NRConfig.USER_SAVE_INFO)
+    @POST(NRConfig.USER_MODIFY_MY_INFO)
     Call<Result<UserInfo>> saveUserInfo(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);
 
     @FormUrlEncoded

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -10,9 +10,101 @@
     <FrameLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
+        android:background="@color/color_333333"
+        android:layout_marginBottom="49dp"
         android:layout_weight="1"></FrameLayout>
 
-    <include layout="@layout/main_bottom_tab_layout" />
+    <!--<include layout="@layout/main_bottom_tab_layout" />-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/transparent"
+        android:gravity="bottom"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/white" />
+
+        <RadioGroup
+            android:id="@+id/tab_rdo_grp"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/transparent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/home_tab"
+                style="@style/MainBottomTabBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/selector_home"
+                android:text="@string/index"
+                android:textColor="@color/main_bottom_tab_btn_text_color"
+                android:textSize="@dimen/textsize_10" />
+
+            <RadioButton
+                style="@style/MainBottomTabBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/selector_plants"
+                android:text="@string/pet"
+                android:textColor="@color/main_bottom_tab_btn_text_color"
+                android:textSize="@dimen/textsize_10" />
+
+            <ImageView
+                style="@style/MainBottomTabBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/tab_fabu"
+                android:textColor="@color/main_bottom_tab_btn_text_color"
+                android:visibility="invisible" />
+
+            <RadioButton
+                style="@style/MainBottomTabBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/selector_philanthropist"
+                android:text="@string/love"
+                android:textColor="@color/main_bottom_tab_btn_text_color"
+                android:textSize="@dimen/textsize_10" />
+
+            <RadioButton
+                style="@style/MainBottomTabBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/selector_mine"
+                android:text="@string/mine"
+                android:textColor="@color/main_bottom_tab_btn_text_color"
+                android:textSize="@dimen/textsize_10" />
+
+        </RadioGroup>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_above="@id/tab_rdo_grp"
+            android:background="@color/color_eeeeee" />
+
+        <ImageView
+            android:id="@+id/iv_release"
+            style="@style/MainBottomTabBtn"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/tab_fabu"
+            android:textColor="@color/main_bottom_tab_btn_text_color" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

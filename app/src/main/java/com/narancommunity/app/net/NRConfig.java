@@ -11,6 +11,16 @@ public class NRConfig {
     public static final String URL_BASE = "http://47.98.218.205:8082";
     public static final String URL_RECORD = "http://47.98.218.205:8083";//记录用到的
 
+
+    /**
+     * 修改个人信息
+     */
+    public static final String USER_MODIFY_MY_INFO = URL_BASE + "/api/account/update/my";
+    /**
+     * 修改头像
+     */
+    public static final String USER_MODIFY_HEAD = URL_BASE + "/api/account/update/my/photo";
+
     /**
      * 发布-发帖列表
      */
@@ -380,28 +390,13 @@ public class NRConfig {
     public static final String URL_PROTOCOL = URL_BASE
             + "/rest/credentials/protocol";
 
-    public static final String INDEX_INDEX_WILLFARM_COUNT = URL_BASE + "rest/farm/count";//首页即将入住数量
-    public static final String INDEX_FARM_ADD_ATTENTION = URL_BASE + "rest/farm/concern/add";//生产者详情中添加关注
-    public static final String INDEX_FARM_DEL_ATTENTION = URL_BASE + "rest/farm/concern/del";//生产者详情中取消关注
-    public static final String SELECT_DRAG_LIST = URL_BASE + "rest/optional/drag";//自选对象拖动
-    public static final String SELECT_ADD_ATTENTION = URL_BASE + "rest/optional/add";//自选生产者搜索列表
-    public static final String SELECT_DEL_ATTENTION_LIST = URL_BASE + "rest/optional/del/some";//自选删除（包括多选）
-
     public static final String LOGIN_LOGOUT = URL_BASE +  "/api/account/logout";//登出
-
-    public static final String RELEASE_TOPIC = URL_BASE + "rest/community/publish";//发布话题
-
-    public static final String FARM_JUBAO = URL_BASE + "rest/farm/report";//发布话题
-
-    public static final String PRODUCT_ADD_ATTENTION = URL_BASE + "rest/farm/product/concern/add";//产品详情中添加关注
-    public static final String PRODUCT_DEL_ATTENTION = URL_BASE + "rest/farm/product/concern/del";//产品详情中取消关注
 
     public static final String COMMENT_ZAN = URL_BASE + "rest/comment/concern/add";//给评论点赞
     public static final String COMMENT_CANCEL_ZAN = URL_BASE + "rest/comment/concern/del";//取消评论点赞
 
     public static final String DYNAMIC_ZAN = URL_BASE + "rest/usercenter/article/concern/add";//文章点赞
     public static final String DYNAMIC_CANCEL_ZAN = URL_BASE + "rest/usercenter/article/concern/del";//取消评论点赞
-    public static final String USER_SAVE_INFO = URL_BASE + "rest/usercenter/saveInfo";//保存用户信息
 
     public static final String FEED_BACK = URL_BASE + "rest/user/feedback/add";//反馈
 

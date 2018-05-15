@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.narancommunity.app.activity.AssistantDetailAct;
+import com.narancommunity.app.activity.index.AssistantDetailAct;
 import com.narancommunity.app.adapter.AssistantAdapter;
 import com.narancommunity.app.adapter.CommonwealActivityAdapter;
 import com.narancommunity.app.common.LoadDialog;

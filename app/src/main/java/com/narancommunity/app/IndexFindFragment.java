@@ -14,10 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.narancommunity.app.activity.FindFourAct;
-import com.narancommunity.app.activity.RangeAct;
-import com.narancommunity.app.activity.WallListAct;
-import com.narancommunity.app.activity.WishDetailAct;
+import com.narancommunity.app.activity.index.FindFourAct;
+import com.narancommunity.app.activity.index.RangeAct;
+import com.narancommunity.app.activity.index.WallListAct;
+import com.narancommunity.app.activity.index.WishDetailAct;
 import com.narancommunity.app.adapter.WallListAdapter;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.entity.Banner;

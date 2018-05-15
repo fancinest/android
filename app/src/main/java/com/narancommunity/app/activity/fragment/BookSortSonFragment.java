@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.BookDetailAct;
+import com.narancommunity.app.activity.index.BookDetailAct;
 import com.narancommunity.app.adapter.BookListAdapter;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;

@@ -123,6 +123,9 @@
                                     android:id="@+id/tv_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:maxEms="8"
+                                    android:maxLength="8"
                                     android:maxLines="1"
                                     android:text="哈哈"
                                     android:textColor="@color/color_666666"
@@ -132,10 +135,36 @@
                                     android:id="@+id/tv_intro"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="4dp"
                                     android:text="说一句介绍自己"
                                     android:textColor="@color/color_999999"
                                     android:textSize="12sp" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="4dp"
+                                        android:layout_marginRight="6dp"
+                                        android:background="@drawable/round_corner_greenline"
+                                        android:paddingLeft="4dp"
+                                        android:paddingRight="4dp"
+                                        android:text="那然小白"
+                                        android:textSize="10sp" />
+
+                                    <RatingBar
+                                        android:id="@+id/rating"
+                                        style="@style/Custom_Ratingbar"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:theme="@style/RatingBar" />
+                                </LinearLayout>
 
                             </LinearLayout>
                         </LinearLayout>
@@ -160,19 +189,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="4dp"
-                                android:text="LV.3"
+                                android:text="爱心值"
                                 android:textColor="@color/color_999999"
                                 android:textSize="11sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="4dp"
-                                android:background="@drawable/round_corner_greenline"
-                                android:paddingLeft="4dp"
-                                android:paddingRight="4dp"
-                                android:text="那然小白"
-                                android:textSize="10sp" />
 
                             <LinearLayout
                                 android:layout_width="0dp"
@@ -185,7 +204,7 @@
                                     android:id="@+id/tv_now"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="200"
+                                    android:text="0"
                                     android:textColor="#F7AF39"
                                     android:textSize="11sp" />
 
@@ -193,21 +212,35 @@
                                     android:id="@+id/tv_all"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="/300"
+                                    android:text="/0"
                                     android:textColor="#3f3f3f"
                                     android:textSize="11sp" />
                             </LinearLayout>
 
                         </LinearLayout>
 
+                        <!--<ProgressBar-->
+                        <!--android:id="@+id/pb_exp"-->
+                        <!--style="@style/StyleProgressBarMini"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_below="@id/ln_exp"-->
+                        <!--android:layout_marginLeft="24dp"-->
+                        <!--android:layout_marginRight="24dp" />-->
+
                         <ProgressBar
                             android:id="@+id/pb_exp"
-                            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                            style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="4dp"
                             android:layout_below="@id/ln_exp"
+                            android:layout_marginBottom="4dp"
                             android:layout_marginLeft="24dp"
-                            android:layout_marginRight="24dp" />
+                            android:layout_marginRight="24dp"
+                            android:layout_marginTop="4dp"
+                            android:max="100"
+                            android:progress="80"
+                            android:progressDrawable="@drawable/progress"/>
 
                         <LinearLayout
                             android:id="@+id/ln_love"
@@ -229,7 +262,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="4dp"
-                                android:text="爱心值"
+                                android:text="心愿贝"
                                 android:textColor="@color/color_999999"
                                 android:textSize="11sp" />
 
@@ -239,7 +272,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="right"
-                                android:text="200"
+                                android:text="0"
                                 android:textColor="#F67F9E"
                                 android:textSize="11sp" />
 
@@ -247,12 +280,17 @@
 
                         <ProgressBar
                             android:id="@+id/pb_love"
-                            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
                             android:layout_below="@id/ln_love"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="4dp"
+                            android:layout_marginBottom="4dp"
                             android:layout_marginLeft="24dp"
-                            android:layout_marginRight="24dp" />
+                            android:layout_marginRight="24dp"
+                            android:layout_marginTop="4dp"
+                            android:max="100"
+                            android:secondaryProgress="60"
+                            android:progressDrawable="@drawable/progress"/>
 
                         <View
                             android:layout_width="match_parent"

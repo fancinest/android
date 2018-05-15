@@ -1,37 +1,24 @@
 package com.narancommunity.app.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.EditAddressAct;
-import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.common.adapter.EasyRecyclerAdapter;
-import com.narancommunity.app.entity.AddressEntity;
 import com.narancommunity.app.entity.Questionnaires;
-import com.narancommunity.app.net.NRClient;
-import com.narancommunity.app.net.Result;
-import com.narancommunity.app.net.ResultCallback;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Writer：fancy on 2017/5/9 10:59

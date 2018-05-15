@@ -144,11 +144,13 @@ public class MApplication extends Application {
         try {
             DB snappyDb =
                     DBHelper.getDB(instance);
-            boolean isExists = snappyDb.exists(AppConstants.USER_INFO);
-            if (isExists)
-                info = snappyDb.get(AppConstants.USER_INFO, UserInfo.class);
-            else {
-                info.setAccessToken("");
+            synchronized (snappyDb) {
+                boolean isExists = snappyDb.exists(AppConstants.USER_INFO);
+                if (isExists)
+                    info = snappyDb.get(AppConstants.USER_INFO, UserInfo.class);
+                else {
+                    info.setAccessToken("");
+                }
             }
             snappyDb.close();
         } catch (SnappydbException e) {
@@ -181,6 +183,7 @@ public class MApplication extends Application {
         }
         return info.getAccessToken();
     }
+
 
     /**
      * 获取用户的基本信息

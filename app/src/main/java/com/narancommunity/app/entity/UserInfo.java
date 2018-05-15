@@ -6,44 +6,138 @@ import java.io.Serializable;
  * writer：fancy on 2017/2/16 17:04
  * classname : 用户信息
  */
-public class UserInfo implements Serializable {
-    //    String userPhotoId;//  A045F40E2FBB4C8798F0E2B5F6B6E3BA
-    String remark;// 当你努力到无能为力的时候,上天就会为你打开一扇窗。
-//    String userScWeibo;// ,
-    String photo;// "http://on7ih6qzl.bkt.clouddn.com/1490601021561_813.jpg";
-    //    String userId;//: 21B3FB57729E44D5824DFF903A873F04 ,
-//    String username;// cncxm ,
-//    String password;// 8ddcff3a80f4189ca1c9d4d902c3c909
-    String accessToken;// "naran-b25c0ad4-91ab-4d2a-b385-9ac604aa7ed2";
+public class UserInfo implements Serializable{
     Integer accountId;//
+    String birthday;// "1989-05-24";//
+    String certificationType;
+    String city;// "杭州"//;
+    String location;// "杭州仓前";
     String nickName;// 明天会更好
     String phone;// 13957046668
-
-    String birthday;// "1989-05-24";//
     String sex;// "男";
-    String location;// "杭州仓前";
-    String city;// "杭州"//;
-    String certificationType;
-//"accessToken":"091980a35dfd4534b7b40593bd2b9b4b","accountId":5,"nickName":"156****7367","phone":"15669097367"
-//    "accessToken":"c552b7e726dc4e0591997ebdc15b8a04","accountId":1,"birthday":"1989-05-24","city":"杭州","location":"仓前","nickName":"zefeng.xu","phone":"18868732793","sex":"0"
+    String remark;// 当你努力到无能为力的时候,上天就会为你打开一扇窗。
+    String photo;// "http://on7ih6qzl.bkt.clouddn.com/1490601021561_813.jpg";
+    String accessToken;// "naran-b25c0ad4-91ab-4d2a-b385-9ac604aa7ed2";
+    String identityCard;//身份证号
+    Integer nowExperience, nowLove, topExperience;
+
+    private String name;
+    private String cardTime;
+    private String province;// 省
+    private String county;// 县
+    private String cardPositive;// 身份证正面
+    private String cardOpposite;// 身份证反面
 
     public UserInfo() {
+    }
+
+    public void UserInfo() {
     }
 
     @Override
     public String toString() {
         return "UserInfo{" +
-                "photo='" + photo + '\'' +
-                ", accessToken='" + accessToken + '\'' +
-                ", accountId=" + accountId +
+                "accountId=" + accountId +
+                ", birthday='" + birthday + '\'' +
+                ", certificationType='" + certificationType + '\'' +
+                ", city='" + city + '\'' +
+                ", location='" + location + '\'' +
                 ", nickName='" + nickName + '\'' +
                 ", phone='" + phone + '\'' +
-                ", birthday='" + birthday + '\'' +
                 ", sex='" + sex + '\'' +
-                ", location='" + location + '\'' +
-                ", city='" + city + '\'' +
-                ", certificationType='" + certificationType + '\'' +
+                ", remark='" + remark + '\'' +
+                ", photo='" + photo + '\'' +
+                ", accessToken='" + accessToken + '\'' +
+                ", identityCard='" + identityCard + '\'' +
+                ", nowExperience=" + nowExperience +
+                ", nowLove=" + nowLove +
+                ", name='" + name + '\'' +
+                ", cardTime='" + cardTime + '\'' +
+                ", province='" + province + '\'' +
+                ", county='" + county + '\'' +
+                ", cardPositive='" + cardPositive + '\'' +
+                ", cardOpposite='" + cardOpposite + '\'' +
                 '}';
+    }
+
+    public Integer getTopExperience() {
+        return topExperience;
+    }
+
+    public void setTopExperience(Integer topExperience) {
+        this.topExperience = topExperience;
+    }
+
+    public String getIdentityCard() {
+        return identityCard;
+    }
+
+    public void setIdentityCard(String identityCard) {
+        this.identityCard = identityCard;
+    }
+
+    public Integer getNowExperience() {
+        return nowExperience;
+    }
+
+    public void setNowExperience(Integer nowExperience) {
+        this.nowExperience = nowExperience;
+    }
+
+    public Integer getNowLove() {
+        return nowLove;
+    }
+
+    public void setNowLove(Integer nowLove) {
+        this.nowLove = nowLove;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCardTime() {
+        return cardTime;
+    }
+
+    public void setCardTime(String cardTime) {
+        this.cardTime = cardTime;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
+    public void setCounty(String county) {
+        this.county = county;
+    }
+
+    public String getCardPositive() {
+        return cardPositive;
+    }
+
+    public void setCardPositive(String cardPositive) {
+        this.cardPositive = cardPositive;
+    }
+
+    public String getCardOpposite() {
+        return cardOpposite;
+    }
+
+    public void setCardOpposite(String cardOpposite) {
+        this.cardOpposite = cardOpposite;
     }
 
     public String getRemark() {

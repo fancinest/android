@@ -13,10 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.narancommunity.app.activity.ReportAct;
+import com.narancommunity.app.activity.index.ReportAct;
 import com.narancommunity.app.common.CenteredToolbar;
-
-import simplezxing.activity.CaptureActivity;
 
 /**
  * Writer：fancy on 2017/4/14 13:33

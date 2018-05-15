@@ -458,6 +458,7 @@ public class Utils {
 
     /**
      * 书摘
+     *
      * @param context
      * @param imgUrl
      * @param imageView
@@ -476,7 +477,8 @@ public class Utils {
             }
         }
     }
-//
+
+    //
     public static void setImgF(Context context, Object imgUrl, ImageView imageView) {
         if (context != null && imgUrl != null && !imgUrl.equals("")) {
             try {
@@ -614,7 +616,7 @@ public class Utils {
         return start + "";
     }
 
-//    /**
+    //    /**
 //     *
 //     *
 //     * @param startTime
@@ -662,6 +664,12 @@ public class Utils {
 //            return "刚刚";
 //        }
 //    }
+    // formatType格式为yyyy-MM-dd HH:mm:ss//yyyy年MM月dd日 HH时mm分ss秒
+    // data Date类型的时间
+    public static String dateToString(Date data, String formatType) {
+        return new SimpleDateFormat(formatType).format(data);
+    }
+
 
     //获得日期
     public static String getDate(String time, String format) {

@@ -45,68 +45,68 @@
         </activity>
 
         <activity
-            android:name=".activity.ReleaseAct"
+            android:name=".activity.index.ReleaseAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
-            android:name=".activity.MakeWishAct"
+            android:name=".activity.index.MakeWishAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
-            android:name=".activity.FindFourAct"
+            android:name=".activity.index.FindFourAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
-            android:name=".activity.RangeAct"
+            android:name=".activity.index.RangeAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
-            android:name=".activity.WallListAct"
+            android:name=".activity.index.WallListAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
-            android:name=".activity.SettingAct"
+            android:name=".activity.mine.SettingAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.AddressAct"
+            android:name=".activity.mine.AddressAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.EditAddressAct"
-            android:theme="@style/ImageTranslucentTheme"></activity>
-
-        <activity
-            android:name=".activity.AuthoriseFirstAct"
+            android:name=".activity.index.EditAddressAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
-            android:name=".activity.AuthoriseSecondAct"
+            android:name=".activity.general.AuthoriseFirstAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
-            android:name=".activity.MyInfoAct"
+            android:name=".activity.general.AuthoriseSecondAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
-            android:name=".activity.LoginAct"
+            android:name=".activity.mine.MyInfoAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
-            android:name=".activity.AgreementAct"
+            android:name=".activity.general.LoginAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
-            android:name=".activity.RegisterAct"
+            android:name=".activity.general.AgreementAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
-            android:name=".activity.ForgetAct"
+            android:name=".activity.general.RegisterAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
-            android:name=".activity.SplashAct"
+            android:name=".activity.general.ForgetAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+
+        <activity
+            android:name=".activity.general.SplashAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.ReleaseSelectAct"
+            android:name=".activity.index.ReleaseSelectAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <!--<activity-->
         <!--android:name=".activity.NameAndAddressAct"-->
@@ -115,134 +115,140 @@
             android:name=".activity.AskPaperAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.WishDetailAct"
+            android:name=".activity.index.WishDetailAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.HelpItAct"
+            android:name=".activity.index.HelpItAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.DonateDetailAct"
+            android:name=".activity.index.DonateDetailAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.MoreCommentAct"
+            android:name=".activity.index.MoreCommentAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.IWantAct"
+            android:name=".activity.index.IWantAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.DonateWishDetailAct"
+            android:name=".activity.index.DonateWishDetailAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.picbroswer.ImagePagerActivity"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.StartFahuoAct"
+            android:name=".activity.index.StartFahuoAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.ExpAct"
+            android:name=".activity.index.ExpAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.WishDonateDetailAct"
+            android:name=".activity.index.WishDonateDetailAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.WishFeedBackAct"
+            android:name=".activity.index.WishFeedBackAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.TransitAct"
+            android:name=".activity.index.TransitAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.JubaoAct"
+            android:name=".activity.index.JubaoAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.AppFeedbackAct"
+            android:name=".activity.general.AppFeedbackAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.AssistantDetailAct"
+            android:name=".activity.index.AssistantDetailAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.ModifyPsdAct"
+            android:name=".activity.general.ModifyPsdAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.MsgAct"
+            android:name=".activity.mine.MsgAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.MyCollectionAct"
+            android:name=".activity.mine.MyCollectionAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.BookHouseAct"
+            android:name=".activity.index.BookHouseAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.AixinBookAct"
+            android:name=".activity.index.AixinBookAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.DonateBookAct"
+            android:name=".activity.index.DonateBookAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.BookDetailAct"
+            android:name=".activity.index.BookDetailAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.BookLendCardAct"
+            android:name=".activity.index.BookLendCardAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.BookReviewListAct"
+            android:name=".activity.index.BookReviewListAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.AddBookCommentAct"
+            android:name=".activity.index.AddBookCommentAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.BookReviewDetailAct"
+            android:name=".activity.index.BookReviewDetailAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.ReportAct"
+            android:name=".activity.index.ReportAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.RangeBookAct"
+            android:name=".activity.index.RangeBookAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.SearchBookAct"
+            android:name=".activity.index.SearchBookAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.NeedBookAct"
+            android:name=".activity.index.NeedBookAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.BookCommunityAct"
+            android:name=".activity.index.BookCommunityAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.BookYSHYDetailAct"
+            android:name=".activity.index.BookYSHYDetailAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.BookSHHZAct"
+            android:name=".activity.index.BookSHHZAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.BookOrdererListAct"
+            android:name=".activity.index.BookOrdererListAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.OrderBookAct"
+            android:name=".activity.index.OrderBookAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
-            android:name=".activity.SingleCommentDetailAct"
+            android:name=".activity.index.SingleCommentDetailAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.ShuzhaiAct"
+            android:name=".activity.index.ShuzhaiAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.MySignAct"
+            android:name=".activity.mine.MySignAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.MyAttendNewAct"
+            android:name=".activity.mine.MyAttendNewAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.RecommDetailAct"
+            android:name=".activity.index.RecommDetailAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.MyReleaseAct"
+            android:name=".activity.mine.MyReleaseAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.MyWishAct"
+            android:name=".activity.mine.MyWishAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.MyLoveAct"
+            android:name=".activity.mine.MyLoveAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.mine.InfoEditAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.love.SettleDownAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
