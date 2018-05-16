@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
  * FileName : 爱心书架 {@link BookCommunityAct}
  */
 
-public class AixinBookAct extends BaseActivity implements OnTabSelectListener {
+public class AixinBookShelfAct extends BaseActivity implements OnTabSelectListener {
     @BindView(R.id.slide_tab)
     SlidingTabLayout slideTab;
     @BindView(R.id.vp)

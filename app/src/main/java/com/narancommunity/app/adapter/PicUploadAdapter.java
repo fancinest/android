@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.adapter.EasyAdapter;
 
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PicUploadAdapter extends EasyAdapter<String> {
+    MeItemInterface meItemInterface;
 
     public PicUploadAdapter(Activity context, List<String> list) {
         super(context, list);
@@ -37,6 +39,10 @@ public class PicUploadAdapter extends EasyAdapter<String> {
         }
     }
 
+    public void delItem(MeItemInterface meItemInterface) {
+        this.meItemInterface = meItemInterface;
+    }
+
     private boolean mShowDel = false;
 
     public boolean isShowDel() {
@@ -53,7 +59,6 @@ public class PicUploadAdapter extends EasyAdapter<String> {
             }
         }
     }
-
 
     @Override
     public int getCount() {
@@ -115,7 +120,7 @@ public class PicUploadAdapter extends EasyAdapter<String> {
             @Override
             public void onClick(View view) {
                 remove(position);
-
+                meItemInterface.OnDelClick(position);
             }
         });
         viewHolder.render((String) getItem(position));
@@ -181,8 +186,6 @@ public class PicUploadAdapter extends EasyAdapter<String> {
 
         void onItemClick(int position);
     }
-
-    ;
 
     MyOnClickListener myOnClickListener;
 

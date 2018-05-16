@@ -31,7 +31,9 @@ import com.codbking.widget.OnSureLisener;
 import com.codbking.widget.bean.DateType;
 import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.MApplication;
+import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
+import com.narancommunity.app.activity.mine.AddressAct;
 import com.narancommunity.app.adapter.PicUploadAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.ExpandableHeightGridView;
@@ -40,6 +42,7 @@ import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.SDCardUtils;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
+import com.narancommunity.app.entity.AddressEntity;
 import com.narancommunity.app.entity.UpdateFilesEntity;
 import com.narancommunity.app.net.AppConstants;
 import com.narancommunity.app.net.NRClient;
@@ -56,6 +59,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -98,9 +102,7 @@ public class SettleDownAct extends BaseActivity {
     TextView tvLogoPrompt;
 
     PicUploadAdapter mAdapter;
-    String fileName = "";//上传图片的地址
     String fileLogo = "";//logo的地址
-    CityPicker cityPicker;
     String[] sortArr = new String[]{"慈善机构", "慈善家", "爱心协会", "公益使者"};
     boolean isLogo = true;//默认点击是logo
 
@@ -114,12 +116,6 @@ public class SettleDownAct extends BaseActivity {
 
         setSort();
         setGrid();
-        cityPicker = new CityPicker(getContext(), new CityPickerListener() {
-            @Override
-            public void getCity(String name) {
-                tvAddress.setText(name);
-            }
-        });
     }
 
     private void setSort() {
@@ -141,9 +137,79 @@ public class SettleDownAct extends BaseActivity {
                 showCreateDay();
                 break;
             case R.id.tv_address:
-                cityPicker.show();
+                startActivityForResult(new Intent(getContext(), AddressAct.class).putExtra("isForResult", true), 2001);
                 break;
             case R.id.btn_do:
+                if ("".equals(fileLogo)) {
+                    Toaster.toast(getContext(), "请先上传机构logo");
+                    return;
+                }
+                if (listUpdate.size() <= 0) {
+                    Toaster.toast(getContext(), "请先上传等级证书");
+                    return;
+                }
+                String name = etName.getText().toString();
+                String man = etMan.getText().toString();
+                String tel = etTel.getText().toString();
+                String date = tvCreateTime.getText().toString();
+                String address = tvAddress.getText().toString();
+                String remark = etRemark.getText().toString();
+                String type = getSortType();
+                if ("".equals(name)) {
+                    Toaster.toast(getContext(), "请先填写机构名称");
+                    etName.requestFocus();
+                    return;
+                }
+                if ("".equals(man)) {
+                    Toaster.toast(getContext(), "请先填写负责人");
+                    etMan.requestFocus();
+                    return;
+                }
+                if ("".equals(tel)) {
+                    Toaster.toast(getContext(), "请先填写联系电话");
+                    etTel.requestFocus();
+                    return;
+                }
+                if ("".equals(date)) {
+                    Toaster.toast(getContext(), "请先选择成立日期");
+                    return;
+                }
+                if ("".equals(address)) {
+                    Toaster.toast(getContext(), "请先选择机构地址");
+                    return;
+                }
+                if ("".equals(type)) {
+                    Toaster.toast(getContext(), "请先上传等级证书");
+                    return;
+                }
+                if ("".equals(remark)) {
+                    Toaster.toast(getContext(), "请先填写简介");
+                    etRemark.requestFocus();
+                    return;
+                } else if (remark.length() < 20) {
+                    Toaster.toast(getContext(), "简介不得少于20个字且不能大于3000个字");
+                    etRemark.requestFocus();
+                    return;
+                }
+                Map<String, Object> map = new HashMap<>();
+                map.put("accessToken", MApplication.getAccessToken(getContext()));
+                map.put("companyId", "");
+                map.put("companyName", name);
+                map.put("charger", man);
+                map.put("establishTime", date);
+                map.put("phone", tel);
+                map.put("companyType", type);
+                map.put("companyImg", fileLogo);
+                map.put("companyContent", remark);
+                map.put("certificate", getPics());
+                map.put("province", mAddress.getProvince());
+                map.put("city", mAddress.getCity());
+                map.put("county", mAddress.getCounty());
+                map.put("address", mAddress.getProvince() + mAddress.getCity() + mAddress.getCounty());
+                map.put("ordinate", 0);
+                map.put("abscissa", 0);
+                doSettleDown(map);
+
                 break;
             case R.id.iv_cover:
                 isLogo = true;
@@ -152,13 +218,33 @@ public class SettleDownAct extends BaseActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        if (cityPicker.isShow()) {
-            cityPicker.close();
-            return;
+    private void doSettleDown(Map<String, Object> map) {
+        LoadDialog.show(this, "正在申请...");
+        NRClient.orgSettleDown(map, new ResultCallback<Result<Void>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<Void> result) {
+                LoadDialog.dismiss(getContext());
+                Toaster.toast(getContext(), "申请成功!");
+            }
+        });
+    }
+
+
+    private String getSortType() {
+        String condition = "";
+        Set<Integer> s = tagFlowType.getSelectedList();
+        if (s.size() == 0)
+            return "";
+        for (Integer position : s) {
+            condition = sortArr[position];
         }
-        super.onBackPressed();
+        return condition;
     }
 
     private void showCreateDay() {
@@ -187,11 +273,14 @@ public class SettleDownAct extends BaseActivity {
 
 
     private String getPics() {
-        String pics = sb.toString();
-        if (pics.endsWith(",")) {
-            pics = pics.substring(0, pics.length() - 1);
+        if (listUpdate.size() <= 0)
+            return "";
+        StringBuilder sb = new StringBuilder();
+        for (String pic : listUpdate) {
+            sb.append(pic);
+            sb.append(",");
         }
-        return pics;
+        return sb.toString().substring(0, sb.toString().length() - 1);
     }
 
     private void setGrid() {
@@ -199,6 +288,17 @@ public class SettleDownAct extends BaseActivity {
         mAdapter = new PicUploadAdapter(this, null);
         mAdapter.setMaxPicCount(9);
         gridview.setAdapter(mAdapter);
+        mAdapter.delItem(new MeItemInterface() {
+            @Override
+            public void OnItemClick(int position) {
+
+            }
+
+            @Override
+            public void OnDelClick(int position) {
+                listUpdate.remove(position);
+            }
+        });
         mAdapter.setMyOnClickListener(new PicUploadAdapter.MyOnClickListener() {
 
             @Override
@@ -268,7 +368,12 @@ public class SettleDownAct extends BaseActivity {
 //                // 是否显示拍摄图片
             intent.putExtra(MultiImageSelectorActivity.EXTRA_SHOW_CAMERA, false);
             // 最大可选择图片数量
-            intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, /*9 - (mAdapter.getCount() - 1)*/1);
+            if (isLogo)
+                intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, /*9 - (mAdapter.getCount() - 1)*/1);
+            else {
+                int have = mAdapter.getUploadPic().size();
+                intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, 9 - have);
+            }
             // 选择模式
             intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_MODE, MultiImageSelectorActivity.MODE_MULTI);
             startActivityForResult(intent, GET_IMAGE_VIA_SDCARD);
@@ -370,11 +475,16 @@ public class SettleDownAct extends BaseActivity {
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
     String scaleType;
+    AddressEntity mAddress;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (Activity.RESULT_OK == resultCode) {
+        if (requestCode == 2001 && data != null) {
+            AddressEntity address = (AddressEntity) data.getSerializableExtra("address");
+            mAddress = address;
+            setAddress(address);
+        } else if (Activity.RESULT_OK == resultCode) {
             switch (requestCode) {
                 case GET_IMAGE_VIA_CAMERA: // 相机
                     // 拍完照片直接返回，不用截图
@@ -394,6 +504,12 @@ public class SettleDownAct extends BaseActivity {
         }
     }
 
+    private void setAddress(AddressEntity address) {
+        tvAddress.setVisibility(View.VISIBLE);
+        tvAddress.setText(Utils.getValue(address.getProvince() + address.getCity() + address.getCounty()
+                + address.getMailAddress()) + "");
+    }
+
     private Uri getNewPath() {
         Uri mDestinationUri;
         String tempPath = "";
@@ -406,7 +522,7 @@ public class SettleDownAct extends BaseActivity {
     int updateCount = 0;//正在上传的图片的数量
 
     private void dealWithCamPic(final File picture) {
-        LoadDialog.show(getContext(), "图片上传中，请稍候！");
+        updateCount = 1;
         if (isLogo) {
             tvLogoPrompt.setText("图片上传中...");
             tvLogoPrompt.setVisibility(View.VISIBLE);
@@ -437,13 +553,9 @@ public class SettleDownAct extends BaseActivity {
                         mAdapter.add(tempFile.getAbsolutePath());
                     else
                         Utils.setImgF(getContext(), tempFile, ivCover);
+                    isUploaded = true;
                     updateFiles(tempFile);
                 }
-                if (!isLogo) {
-                    tvPrompt.setVisibility(View.VISIBLE);
-                    tvPrompt.setText("图片上传完成");
-                }
-                isUploaded = true;
             }
         }, 100);
     }
@@ -452,9 +564,14 @@ public class SettleDownAct extends BaseActivity {
     boolean isUploaded = false;
 
     private void dealWithMapPic(final List<File> listFiles) {
-        LoadDialog.show(getContext(), "图片上传中，请稍候！");
-        tvPrompt.setVisibility(View.VISIBLE);
-        tvPrompt.setText("图片上传中...");
+        updateCount = listFiles.size();
+        if (isLogo) {
+            tvLogoPrompt.setText("图片上传中...");
+            tvLogoPrompt.setVisibility(View.VISIBLE);
+        } else {
+            tvPrompt.setVisibility(View.VISIBLE);
+            tvPrompt.setText("图片上传中...");
+        }
         if (listFiles.size() > 0)
             isUploaded = false;
         mHandler.postDelayed(new Runnable() {
@@ -463,39 +580,41 @@ public class SettleDownAct extends BaseActivity {
                 for (File file : listFiles) {
                     String filename = System.currentTimeMillis() + "";
                     double size = Utils.getFileOrFilesSize(file.getAbsolutePath(), Utils.SIZETYPE_KB);
+                    File tempFile = file;
                     if (size > AppConstants.IMAGE_SIZE_LIMITED) {
                         try {
                             ImageUtils.compressAndGenImage(file.getAbsolutePath()
                                     , SDCardUtils.getDefineCompressFile(filename).getAbsolutePath()
                                     , AppConstants.IMAGE_SIZE_LIMITED
                                     , false);
-                            File newFile = SDCardUtils.getDefineCompressFile(filename);
+                            tempFile = SDCardUtils.getDefineCompressFile(filename);
                             if (!isLogo)
-                                mAdapter.add(newFile.getAbsolutePath());
-                            else Utils.setImgF(getContext(), newFile, ivCover);
+                                mAdapter.add(tempFile.getAbsolutePath());
+                            else Utils.setImgF(getContext(), tempFile, ivCover);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    } else {
-                        if (!isLogo)
-                            mAdapter.add(file.getAbsolutePath());
-                        else Utils.setImgF(getContext(), file.getAbsolutePath(), ivCover);
                     }
-                    updateFiles(file);
+                    if (tempFile != null) {
+                        if (!isLogo)
+                            mAdapter.add(tempFile.getAbsolutePath());
+                        else
+                            Utils.setImgF(getContext(), tempFile.getAbsolutePath(), ivCover);
+                        isUploaded = true;
+                        updateFiles(tempFile);
+                    }
                 }
-                tvPrompt.setVisibility(View.VISIBLE);
-                tvPrompt.setText("图片上传完成");
-                isUploaded = true;
             }
         }, 100);
     }
 
-    StringBuffer sb = new StringBuffer();
+    List<String> listUpdate = new ArrayList<>();
 
     private void updateFiles(final File file) {
         NRClient.uploadOneFile(file, new ResultCallback<Result<UpdateFilesEntity>>() {
             @Override
             public void onFailure(Throwable throwable) {
+                isUploaded = false;
                 LoadDialog.dismiss(getContext());
                 Utils.showErrorToast(getContext(), throwable);
             }
@@ -504,15 +623,34 @@ public class SettleDownAct extends BaseActivity {
             public void onSuccess(Result<UpdateFilesEntity> result) {
                 LoadDialog.dismiss(getContext());
                 if (result.getData() != null && result.getData().getData() != null) {
+                    updateCount--;
                     if (result.getData().getData().size() > 0) {
-                        sb.append(result.getData().getData().get(0) + ",");
-                        fileName = result.getData().getData().get(0) + "";
-                        Log.i("fancy", "filename = " + fileName);
-//                        deleteTempFile();
+                        if (isLogo)
+                            fileLogo = result.getData().getData().get(0);
+                        else {
+                            listUpdate.add(result.getData().getData().get(0));
+                        }
                     }
+                    if (updateCount <= 0) {
+                        if (isLogo) {
+                            tvLogoPrompt.setText("图片上传完成");
+                            tvLogoPrompt.setVisibility(View.VISIBLE);
+                        } else {
+                            tvPrompt.setVisibility(View.VISIBLE);
+                            tvPrompt.setText("图片上传完成");
+                        }
+                        isUploaded = false;
+                    } else isUploaded = true;
                 } else {
                     Toaster.toast(getContext(), "数据为空！");
                 }
+//                if (isLogo) {
+//                    tvLogoPrompt.setText("图片上传完成");
+//                    tvLogoPrompt.setVisibility(View.VISIBLE);
+//                } else {
+//                    tvPrompt.setVisibility(View.VISIBLE);
+//                    tvPrompt.setText("图片上传完成");
+//                }
             }
         });
     }

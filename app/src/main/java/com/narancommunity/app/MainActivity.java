@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 种树片段
      */
-    private PlantFragment mPlantFragment = PlantFragment.newInstance();
+    private PetFragment mPlantFragment = PetFragment.newInstance();
     /**
      * 慈善家片段
      */

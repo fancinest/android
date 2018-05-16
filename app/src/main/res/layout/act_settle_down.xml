@@ -45,7 +45,8 @@
                     android:drawablePadding="4dp"
                     android:text="图片上传中..."
                     android:textColor="@color/color_666666"
-                    android:textSize="11sp" />
+                    android:textSize="11sp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
@@ -98,7 +99,8 @@
                     android:drawablePadding="4dp"
                     android:text="图片上传中..."
                     android:textColor="@color/color_666666"
-                    android:textSize="11sp" />
+                    android:textSize="11sp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
@@ -332,6 +334,8 @@
                 <TextView
                     android:layout_width="76dp"
                     android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/input_icon_bitian"
+                    android:drawablePadding="4dp"
                     android:text="简介"
                     android:textColor="@color/color_333333"
                     android:textSize="15sp" />
@@ -344,6 +348,7 @@
                     android:background="@color/white"
                     android:gravity="top"
                     android:hint="请介绍一下自己的机构吧"
+                    android:maxLength="3000"
                     android:minHeight="80dp"
                     android:textColor="@color/color_333333"
                     android:textColorHint="@color/color_999999"

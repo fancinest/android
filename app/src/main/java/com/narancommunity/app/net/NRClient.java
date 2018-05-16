@@ -19,6 +19,8 @@ import com.narancommunity.app.entity.BookRelativeRecData;
 import com.narancommunity.app.entity.CollectEssayItem;
 import com.narancommunity.app.entity.CommentDetail;
 import com.narancommunity.app.entity.CommentListEntity;
+import com.narancommunity.app.entity.CompanyData;
+import com.narancommunity.app.entity.CompanyEntity;
 import com.narancommunity.app.entity.DonateDetailData;
 import com.narancommunity.app.entity.GradeData;
 import com.narancommunity.app.entity.IsCollect;
@@ -143,13 +145,46 @@ public class NRClient {
     //TODO 以此为基础
 
     /**
+     * 获取机构想起
+     *
+     * @param callback
+     * @return
+     */
+    public static Call getOrgDetail(Map<String, Object> baseData,
+                                    final ResultCallback<Result<CompanyEntity>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<CompanyEntity>> call = mService.getOrgDetail(header, baseData);
+        Callback<Result<CompanyEntity>> cbk = new Callback<Result<CompanyEntity>>() {
+
+            @Override
+            public void onResponse(Call<Result<CompanyEntity>> call,
+                                   Response<Result<CompanyEntity>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<CompanyEntity>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
+
+    /**
      * 获取我的求助列表
      *
      * @param callback
      * @return
      */
     public static Call modifyHead(Map<String, Object> baseData,
-                                     final ResultCallback<Result<UserInfo>> callback) {
+                                  final ResultCallback<Result<UserInfo>> callback) {
 
         if (callback == null) throw new NullPointerException("callback == null");
         NRService mService = ServiceFactory.createNewService(NRService.class);
@@ -174,6 +209,73 @@ public class NRClient {
         return call;
 
     }
+
+    /**
+     * 机构
+     *
+     * @param callback
+     * @return
+     */
+    public static Call getOrgList(Map<String, Object> baseData,
+                                  final ResultCallback<Result<CompanyData>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<CompanyData>> call = mService.getOrgList(header, baseData);
+        Callback<Result<CompanyData>> cbk = new Callback<Result<CompanyData>>() {
+
+            @Override
+            public void onResponse(Call<Result<CompanyData>> call,
+                                   Response<Result<CompanyData>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<CompanyData>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
+
+    /**
+     * 机构入驻
+     *
+     * @param callback
+     * @return
+     */
+    public static Call orgSettleDown(Map<String, Object> baseData,
+                                     final ResultCallback<Result<Void>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<Void>> call = mService.orgSettleDown(header, baseData);
+        Callback<Result<Void>> cbk = new Callback<Result<Void>>() {
+
+            @Override
+            public void onResponse(Call<Result<Void>> call,
+                                   Response<Result<Void>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<Void>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
+
     /**
      * 获取我的求助列表
      *
@@ -181,7 +283,7 @@ public class NRClient {
      * @return
      */
     public static Call getQiuZhuList(Map<String, Object> baseData,
-                                       final ResultCallback<Result<YSHYData>> callback) {
+                                     final ResultCallback<Result<YSHYData>> callback) {
 
         if (callback == null) throw new NullPointerException("callback == null");
         NRService mService = ServiceFactory.createNewService(NRService.class);
@@ -214,7 +316,7 @@ public class NRClient {
      * @return
      */
     public static Call getFaTieList(Map<String, Object> baseData,
-                                         final ResultCallback<Result<YSHYData>> callback) {
+                                    final ResultCallback<Result<YSHYData>> callback) {
 
         if (callback == null) throw new NullPointerException("callback == null");
         NRService mService = ServiceFactory.createNewService(NRService.class);
@@ -247,7 +349,7 @@ public class NRClient {
      * @return
      */
     public static Call getDarenAllList(Map<String, Object> baseData,
-                                   final ResultCallback<Result<GradeData>> callback) {
+                                       final ResultCallback<Result<GradeData>> callback) {
 
         if (callback == null) throw new NullPointerException("callback == null");
         NRService mService = ServiceFactory.createNewService(NRService.class);
@@ -274,12 +376,11 @@ public class NRClient {
     }
 
     /**
-     *
      * @param callback
      * @return
      */
     public static Call getDarenMonthList(Map<String, Object> baseData,
-                                   final ResultCallback<Result<GradeData>> callback) {
+                                         final ResultCallback<Result<GradeData>> callback) {
 
         if (callback == null) throw new NullPointerException("callback == null");
         NRService mService = ServiceFactory.createNewService(NRService.class);
@@ -306,12 +407,11 @@ public class NRClient {
     }
 
     /**
-     *
      * @param callback
      * @return
      */
     public static Call getDarenWeekList(Map<String, Object> baseData,
-                                   final ResultCallback<Result<GradeData>> callback) {
+                                        final ResultCallback<Result<GradeData>> callback) {
 
         if (callback == null) throw new NullPointerException("callback == null");
         NRService mService = ServiceFactory.createNewService(NRService.class);
@@ -338,12 +438,11 @@ public class NRClient {
     }
 
     /**
-     *
      * @param callback
      * @return
      */
     public static Call getDarenDayList(Map<String, Object> baseData,
-                                   final ResultCallback<Result<GradeData>> callback) {
+                                       final ResultCallback<Result<GradeData>> callback) {
 
         if (callback == null) throw new NullPointerException("callback == null");
         NRService mService = ServiceFactory.createNewService(NRService.class);
@@ -376,7 +475,7 @@ public class NRClient {
      * @return
      */
     public static Call getRankList(Map<String, Object> baseData,
-                                                 final ResultCallback<Result<GradeData>> callback) {
+                                   final ResultCallback<Result<GradeData>> callback) {
 
         if (callback == null) throw new NullPointerException("callback == null");
         NRService mService = ServiceFactory.createNewService(NRService.class);
@@ -409,7 +508,7 @@ public class NRClient {
      * @return
      */
     public static Call getChengjiuList(Map<String, Object> baseData,
-                                                 final ResultCallback<Result<GradeData>> callback) {
+                                       final ResultCallback<Result<GradeData>> callback) {
 
         if (callback == null) throw new NullPointerException("callback == null");
         NRService mService = ServiceFactory.createNewService(NRService.class);

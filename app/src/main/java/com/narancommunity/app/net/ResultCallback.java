@@ -7,8 +7,8 @@ package com.narancommunity.app.net;
  */
 public interface ResultCallback<Result extends com.narancommunity.app.net.Result<?>> {
 
-    void onFailure(Throwable throwable);
-
     void onSuccess(Result result);
+
+    void onFailure(Throwable throwable);
 
 }

@@ -33,7 +33,7 @@ import butterknife.OnClick;
 /**
  * Writer：fancy on 2018/4/13 15:14
  * Email：120760202@qq.com
- * FileName :  书香社区 {@link AixinBookAct}
+ * FileName :  书香社区 {@link AixinBookShelfAct}
  */
 
 public class BookCommunityAct extends BaseActivity implements OnTabSelectListener {

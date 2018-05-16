@@ -15,6 +15,8 @@ import com.narancommunity.app.entity.BookRelativeRecData;
 import com.narancommunity.app.entity.CollectEssayItem;
 import com.narancommunity.app.entity.CommentDetail;
 import com.narancommunity.app.entity.CommentListEntity;
+import com.narancommunity.app.entity.CompanyData;
+import com.narancommunity.app.entity.CompanyEntity;
 import com.narancommunity.app.entity.DonateDetailData;
 import com.narancommunity.app.entity.GradeData;
 import com.narancommunity.app.entity.IsCollect;
@@ -156,6 +158,18 @@ public interface NRService {
     @FormUrlEncoded
     @POST(NRConfig.URL_BANNER_LIST)
     Call<Result<BannerData>> getBannerList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取banner列表
+
+    @FormUrlEncoded
+    @POST(NRConfig.ORG_SETTLE_DOWN)
+    Call<Result<Void>> orgSettleDown(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//机构入驻
+
+    @FormUrlEncoded
+    @POST(NRConfig.ORG_LIST)
+    Call<Result<CompanyData>> getOrgList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//机构列表
+
+    @FormUrlEncoded
+    @POST(NRConfig.ORG_DETAIL)
+    Call<Result<CompanyEntity>> getOrgDetail(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//机构详细
 
     @FormUrlEncoded
     @POST(NRConfig.URL_MY_QIUZHU_LIST)

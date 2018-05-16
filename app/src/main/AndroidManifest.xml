@@ -172,7 +172,7 @@
             android:name=".activity.index.BookHouseAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.index.AixinBookAct"
+            android:name=".activity.index.AixinBookShelfAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.DonateBookAct"
@@ -249,6 +249,9 @@
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.love.SettleDownAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.love.CompanyDetailAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity

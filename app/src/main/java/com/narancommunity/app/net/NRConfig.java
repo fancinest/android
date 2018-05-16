@@ -11,7 +11,18 @@ public class NRConfig {
     public static final String URL_BASE = "http://47.98.218.205:8082";
     public static final String URL_RECORD = "http://47.98.218.205:8083";//记录用到的
 
-
+    /**
+     * 机构详细
+     */
+    public static final String ORG_DETAIL = URL_BASE + "/api/company/by/id";
+    /**
+     * 机构列表
+     */
+    public static final String ORG_LIST = URL_BASE + "/api/company/page";
+    /**
+     * 机构入驻
+     */
+    public static final String ORG_SETTLE_DOWN = URL_BASE + "/api/company/change";
     /**
      * 修改个人信息
      */
@@ -358,15 +369,15 @@ public class NRConfig {
     //轮播图
     public static final String URL_ROUND_PIC = URL_BASE + "/api/publicity/page";
     //地址列表
-    public static final String URL_ADDRESS_LIST = URL_BASE +  "/api/mail/page";
+    public static final String URL_ADDRESS_LIST = URL_BASE + "/api/mail/page";
     //常用地址
     public static final String URL_DEFAULT_ADDRESS = URL_BASE + "/api/mail/now";
     //新增/修改地址
-    public static final String URL_ADD_MODIFY_ADDRESS = URL_BASE +  "/api/mail/change";
+    public static final String URL_ADD_MODIFY_ADDRESS = URL_BASE + "/api/mail/change";
     //删除地址
-    public static final String URL_DEL_ADDRESS = URL_BASE +  "/api/mail/delete";
+    public static final String URL_DEL_ADDRESS = URL_BASE + "/api/mail/delete";
     //设置常用地址
-    public static final String URL_SET_DEFAULT_ADDRESS = URL_BASE +  "/api/mail/change/now";
+    public static final String URL_SET_DEFAULT_ADDRESS = URL_BASE + "/api/mail/change/now";
 
     //实名认证
     public static final String URL_AUTHORISE = URL_BASE + "/api/account/certification";
@@ -390,7 +401,7 @@ public class NRConfig {
     public static final String URL_PROTOCOL = URL_BASE
             + "/rest/credentials/protocol";
 
-    public static final String LOGIN_LOGOUT = URL_BASE +  "/api/account/logout";//登出
+    public static final String LOGIN_LOGOUT = URL_BASE + "/api/account/logout";//登出
 
     public static final String COMMENT_ZAN = URL_BASE + "rest/comment/concern/add";//给评论点赞
     public static final String COMMENT_CANCEL_ZAN = URL_BASE + "rest/comment/concern/del";//取消评论点赞

@@ -289,7 +289,7 @@ public class BookHouseAct extends BaseActivity {
     private List<String> revertData(List<TopLines> data) {
         List<String> list = new ArrayList<>();
         for (TopLines info : data) {
-            list.add(info.getToplineTitle());
+            list.add(info.getToplineContent());
         }
         return list;
     }
@@ -328,7 +328,7 @@ public class BookHouseAct extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ln_find:
-                startActivity(new Intent(getContext(), AixinBookAct.class));
+                startActivity(new Intent(getContext(), AixinBookShelfAct.class));
                 break;
             case R.id.ln_rank:
                 startActivity(new Intent(getContext(), RangeBookAct.class));

@@ -12,9 +12,11 @@ import android.widget.TextView;
 import com.joooonho.SelectableRoundedImageView;
 import com.narancommunity.app.R;
 import com.narancommunity.app.activity.index.BookDetailAct;
+import com.narancommunity.app.activity.love.CompanyDetailAct;
 import com.narancommunity.app.adapter.base.ListBaseAdapter;
 import com.narancommunity.app.adapter.base.SuperViewHolder;
 import com.narancommunity.app.common.Utils;
+import com.narancommunity.app.entity.CompanyEntity;
 import com.narancommunity.app.entity.RecEntity;
 
 /**
@@ -22,7 +24,7 @@ import com.narancommunity.app.entity.RecEntity;
  * Email：120760202@qq.com
  * FileName :
  */
-public class LoveAdapter extends ListBaseAdapter<RecEntity> {
+public class LoveAdapter extends ListBaseAdapter<CompanyEntity> {
     OnItemClickListener listener;
     boolean isSearch = false;
     boolean isCollect;
@@ -36,32 +38,27 @@ public class LoveAdapter extends ListBaseAdapter<RecEntity> {
         this.listener = listener;
     }
 
-    public void isSearch(boolean isSearch) {
-        this.isSearch = isSearch;
-    }
-
-    public void isCollect(boolean isCollect) {
-        this.isCollect = isCollect;
-    }
+//    public void isSearch(boolean isSearch) {
+//        this.isSearch = isSearch;
+//    }
+//
+//    public void isCollect(boolean isCollect) {
+//        this.isCollect = isCollect;
+//    }
 
     @Override
     public int getLayoutId() {
         return R.layout.item_love;
     }
 
-//    @Override
-//    public int getItemCount() {
-//        if (super.getItemCount() > 8)
-//            return 8;
-//        else
-//            return super.getItemCount();
-//    }
+    @Override
+    public int getItemCount() {
+        return super.getItemCount();
+    }
 
     @Override
     public void onBindItemHolder(SuperViewHolder holder, final int position) {
-        if (mDataList.size() <= 0)
-            return;
-        final RecEntity entity = mDataList.get(position);
+        final CompanyEntity entity = mDataList.get(position);
         if (entity == null)
             return;
         SelectableRoundedImageView ivImg = holder.getView(R.id.iv_logo);
@@ -70,11 +67,11 @@ public class LoveAdapter extends ListBaseAdapter<RecEntity> {
         TextView tvName = holder.getView(R.id.tv_name);
         CardView cardParent = holder.getView(R.id.card_parent);
 
-        tvName.setText(Utils.getValue(entity.getOrderTitle()));
-        tvTitle.setText(Utils.getValue("20"));
+        tvName.setText(Utils.getValue(entity.getCompanyName()) + "");
+        tvTitle.setText(Utils.getValue(entity.getCompanyType()) + "");
 
-        if (!"".equals(Utils.getValue(entity.getOrderImgs()))) {
-            Utils.setImgF(mContext, entity.getOrderImgs(), ivImg);
+        if (!"".equals(Utils.getValue(entity.getCompanyImg()))) {
+            Utils.setImgF(mContext, entity.getCompanyImg(), ivImg);
         } else {
             Utils.setImgF(mContext, R.mipmap.bg, ivImg);
         }
@@ -83,8 +80,8 @@ public class LoveAdapter extends ListBaseAdapter<RecEntity> {
             @Override
             public void onClick(View v) {
 //                listener.onItemClick(position);
-//                mContext.startActivity(new Intent(mContext, BookDetailAct.class)
-//                        .putExtra("bookId", entity.getOrderId()));
+                mContext.startActivity(new Intent(mContext, CompanyDetailAct.class)
+                        .putExtra("id", entity.getCompanyId()));
             }
         });
     }

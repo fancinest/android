@@ -156,45 +156,45 @@ public class IndexNewFragment extends Fragment {
             }
 
             mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                getData();
-                            }
-                        }, 1000);
-                    }
-                });
-
-                if (scrollView != null) {
-                    scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+                @Override
+                public void onRefresh() {
+                    new Handler().postDelayed(new Runnable() {
                         @Override
-                        public void onScrollChanged() {
+                        public void run() {
+                            getData();
+                        }
+                    }, 1000);
+                }
+            });
+
+            if (scrollView != null) {
+                scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+                    @Override
+                    public void onScrollChanged() {
 //                        200
-                            int y = scrollView.getScrollY();
-                            if (y >= 300) {
-                                if (viewBg.getAlpha() < 1) {
-                                    viewBg.setAlpha(1);
-                                    viewBg.setBackgroundResource(R.drawable.bookhouse_top_gradient);
-                                    etSearch.setBackgroundResource(R.drawable.round_corner_color_search_lighter);
-                                    etSearch.setHintTextColor(getResources().getColor(R.color.white));
-                                    Drawable drawable = getResources().getDrawable(R.mipmap.topnav_btn_sousuo_white);
-                                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), (int) (drawable.getMinimumHeight()));
-                                    etSearch.setCompoundDrawables(drawable, null, null, null);
-                                    viewBg.setAlpha(1);
-                                    Log.i("fancy", " y = " + y);
-                                }
-                            } else {
-                                float alpha = (float) y / 300;
-                                viewBg.setAlpha(alpha);
-                                etSearch.setBackgroundResource(R.drawable.round_corner_color_search);
-                                etSearch.setHintTextColor(getResources().getColor(R.color.appBlue));
-                                Drawable drawable = getResources().getDrawable(R.mipmap.topnav_btn_sousuo_blue);
+                        int y = scrollView.getScrollY();
+                        if (y >= 300) {
+                            if (viewBg.getAlpha() < 1) {
+                                viewBg.setAlpha(1);
+                                viewBg.setBackgroundResource(R.drawable.bookhouse_top_gradient);
+                                etSearch.setBackgroundResource(R.drawable.round_corner_color_search_lighter);
+                                etSearch.setHintTextColor(getResources().getColor(R.color.white));
+                                Drawable drawable = getResources().getDrawable(R.mipmap.topnav_btn_sousuo_white);
                                 drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), (int) (drawable.getMinimumHeight()));
                                 etSearch.setCompoundDrawables(drawable, null, null, null);
-                                Log.i("fancy", " y = " + y + "  alpha:" + alpha);
+                                viewBg.setAlpha(1);
+                                Log.i("fancy", " y = " + y);
                             }
+                        } else {
+                            float alpha = (float) y / 300;
+                            viewBg.setAlpha(alpha);
+                            etSearch.setBackgroundResource(R.drawable.round_corner_color_search);
+                            etSearch.setHintTextColor(getResources().getColor(R.color.appBlue));
+                            Drawable drawable = getResources().getDrawable(R.mipmap.topnav_btn_sousuo_blue);
+                            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), (int) (drawable.getMinimumHeight()));
+                            etSearch.setCompoundDrawables(drawable, null, null, null);
+                            Log.i("fancy", " y = " + y + "  alpha:" + alpha);
+                        }
 
 //                        if (scrollView.getScrollY() <= 50) {
 //                            lnSearch.setBackgroundColor(getResources().getColor(R.color.transparent));
@@ -203,8 +203,8 @@ public class IndexNewFragment extends Fragment {
 //                            lnSearch.setBackgroundColor(getResources().getColor(R.color.appBlue));
 ////                            etSearch.setHintTextColor(getResources().getColor(R.color.color_eeeeee));
 //                        }
-                        }
-                    });
+                    }
+                });
             }
             scrollView.scrollTo(0, 0);
             viewBg.setBackgroundColor(getResources().getColor(R.color.appBlue));
