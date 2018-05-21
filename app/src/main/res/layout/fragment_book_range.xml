@@ -15,9 +15,9 @@
         android:paddingTop="12dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="48dp"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:text="排名"
             android:textSize="11sp" />
 
@@ -32,14 +32,21 @@
 
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/white"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp" />
+        android:layout_weight="1">
 
-    <include layout="@layout/include_range_me"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <include layout="@layout/include_range_me" />
 </LinearLayout>

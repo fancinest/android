@@ -13,7 +13,6 @@ import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.fragment.MyCollectionSonFragment;
 import com.narancommunity.app.common.CenteredToolbar;
 
 import java.util.ArrayList;

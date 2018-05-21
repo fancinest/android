@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:background="#FFEAF0"
         android:orientation="horizontal"
-        android:paddingBottom="6dp"
         android:paddingLeft="16dp">
 
         <RelativeLayout
@@ -28,14 +27,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:src="@mipmap/gyb_jinpai" />
+                android:src="@mipmap/gyb_jinpai"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_level"
-                android:layout_width="wrap_content"
+                android:layout_width="48dp"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="5"
+                android:gravity="center"
+                android:text="未上榜"
                 android:textColor="@color/color_666666"
                 android:textSize="14sp" />
 
@@ -47,6 +48,8 @@
             android:layout_height="40dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="12dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
             android:layout_marginRight="8dp"
             android:src="@mipmap/ic_launcher"
             app:sriv_oval="true" />
@@ -62,7 +65,7 @@
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="hhehe"
+                android:text="我"
                 android:textColor="@color/color_666666"
                 android:textSize="14sp" />
 
@@ -74,7 +77,6 @@
                 android:maxEms="12"
                 android:maxLength="12"
                 android:maxLines="1"
-                android:text="这个人很懒什么都没留下"
                 android:textColor="@color/color_999999"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -116,7 +118,8 @@
                     android:paddingRight="4dp"
                     android:paddingTop="1dp"
                     android:text="那然小白"
-                    android:textSize="10sp" />
+                    android:textSize="10sp"
+                    android:visibility="gone" />
 
                 <RatingBar
                     android:id="@+id/rb_star"
@@ -124,7 +127,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:rating="2.0"
-                    android:theme="@style/RatingBar" />
+                    android:theme="@style/RatingBar"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/tv_times"

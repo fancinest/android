@@ -50,8 +50,11 @@ public class RangeBookAct extends BaseActivity implements OnTabSelectListener {
         setBar(toolbar);
         toolbar.setTitle("爱心书屋榜");
 
+        firstFrag.setTag(0);
         mFragments.add(firstFrag);
+        secondFrag.setTag(1);
         mFragments.add(secondFrag);
+        thirdFrag.setTag(2);
         mFragments.add(thirdFrag);
 
         Collections.addAll(mFragments);

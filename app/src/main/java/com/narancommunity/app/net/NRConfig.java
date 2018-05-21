@@ -12,6 +12,18 @@ public class NRConfig {
     public static final String URL_RECORD = "http://47.98.218.205:8083";//记录用到的
 
     /**
+     * 爱心-已完成
+     */
+    public static final String MY_LOVE_FINISH = URL_BASE + "/api/order/love/over/page";
+    /**
+     * 爱心-进行中
+     */
+    public static final String MY_LOVE_GOING = URL_BASE + "/api/order/love/success/page";
+    /**
+     * 爱心-等待中列表
+     */
+    public static final String MY_LOVE_WAITING = URL_BASE + "/api/order/love/going/page";
+    /**
      * 书评榜
      */
     public static final String RANK_BOOKREVIEWS = URL_BASE + "/api/rank/book/review/page";

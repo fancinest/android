@@ -46,221 +46,296 @@
 
         <activity
             android:name=".activity.index.ReleaseAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
             android:name=".activity.index.MakeWishAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
             android:name=".activity.index.FindFourAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
             android:name=".activity.index.RangeAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
             android:name=".activity.index.WallListAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
             android:name=".activity.mine.SettingAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.mine.AddressAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.EditAddressAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
             android:name=".activity.general.AuthoriseFirstAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
             android:name=".activity.general.AuthoriseSecondAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
             android:name=".activity.mine.MyInfoAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
             android:name=".activity.general.LoginAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
             android:name=".activity.general.AgreementAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
             android:name=".activity.general.RegisterAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
             android:name=".activity.general.ForgetAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
             android:name=".activity.general.SplashAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.ReleaseSelectAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <!--<activity-->
         <!--android:name=".activity.NameAndAddressAct"-->
         <!--android:theme="@style/ImageTranslucentTheme"></activity>-->
         <activity
             android:name=".activity.AskPaperAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.WishDetailAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.HelpItAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.DonateDetailAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.MoreCommentAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.IWantAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.DonateWishDetailAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.picbroswer.ImagePagerActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.StartFahuoAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.ExpAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.WishDonateDetailAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.WishFeedBackAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.TransitAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.JubaoAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.general.AppFeedbackAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.AssistantDetailAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.general.ModifyPsdAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.mine.MsgAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.mine.MyCollectionAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.AixinBookHouseAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.AixinBookShelfAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.DonateBookAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.BookDetailAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.BookLendCardAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.BookReviewListAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.AddBookCommentAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.BookReviewDetailAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.ReportAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.RangeBookAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.SearchBookAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.NeedBookAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.BookCommunityAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.BookYSHYDetailAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.BookSHHZAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.BookOrdererListAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.OrderBookAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
             android:name=".activity.index.SingleCommentDetailAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.ShuzhaiAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.mine.MySignAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.mine.MyAttendNewAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.RecommDetailAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.mine.MyReleaseAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.mine.MyWishAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.mine.MyLoveAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.mine.InfoEditAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.love.SettleDownAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.love.CompanyDetailAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.love.AddFootPrintAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.love.LoveSearchAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.IndexSearchAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.mine.LookBookStateAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.mine.DeliverBookAct"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity

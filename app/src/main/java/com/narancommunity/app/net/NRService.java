@@ -21,6 +21,7 @@ import com.narancommunity.app.entity.DonateDetailData;
 import com.narancommunity.app.entity.FootPrintData;
 import com.narancommunity.app.entity.GradeData;
 import com.narancommunity.app.entity.IsCollect;
+import com.narancommunity.app.entity.MyWishData;
 import com.narancommunity.app.entity.NewsData;
 import com.narancommunity.app.entity.OrderData;
 import com.narancommunity.app.entity.RecData;
@@ -173,16 +174,28 @@ public interface NRService {
     Call<Result<GradeData>> getRankBookDonateList(@FieldMap Map<String, Object> map);//获取爱心书屋捐赠榜单(GradeData)
 
     @FormUrlEncoded
+    @POST(NRConfig.MY_LOVE_FINISH)
+    Call<Result<MyWishData>> getMyLoveFinishList(@FieldMap Map<String, Object> map);//我的爱心已完成
+
+    @FormUrlEncoded
+    @POST(NRConfig.MY_LOVE_WAITING)
+    Call<Result<MyWishData>> getMyLoveWaitingList(@FieldMap Map<String, Object> map);//我的爱心等待中
+
+    @FormUrlEncoded
+    @POST(NRConfig.MY_LOVE_GOING)
+    Call<Result<MyWishData>> getMyLoveGoingList(@FieldMap Map<String, Object> map);//我的爱心进行中
+
+    @FormUrlEncoded
     @POST(NRConfig.MY_WISH_FINISH)
-    Call<Result<FootPrintData>> getMyWishFinishList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//我的心愿已完成
+    Call<Result<MyWishData>> getMyWishFinishList(@FieldMap Map<String, Object> map);//我的心愿已完成
 
     @FormUrlEncoded
     @POST(NRConfig.MY_WISH_WAITING)
-    Call<Result<FootPrintData>> getMyWishWaitingList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//我的心愿等待中
+    Call<Result<MyWishData>> getMyWishWaitingList(@FieldMap Map<String, Object> map);//我的心愿等待中
 
     @FormUrlEncoded
     @POST(NRConfig.MY_WISH_GOING)
-    Call<Result<FootPrintData>> getMyWishGoingList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//我的心愿进行中
+    Call<Result<MyWishData>> getMyWishGoingList(@FieldMap Map<String, Object> map);//我的心愿进行中
 
     @FormUrlEncoded
     @POST(NRConfig.ORG_ADD_FOOT)

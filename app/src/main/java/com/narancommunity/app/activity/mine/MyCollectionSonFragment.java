@@ -1,9 +1,8 @@
-package com.narancommunity.app.activity.fragment;
+package com.narancommunity.app.activity.mine;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,17 +13,10 @@ import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.adapter.CollectEssayAdapter;
 import com.narancommunity.app.adapter.FindLatestAdapter;
-import com.narancommunity.app.common.ItemDecoration.GridItemDecoration;
 import com.narancommunity.app.common.LoadDialog;
-import com.narancommunity.app.common.Utils;
-import com.narancommunity.app.entity.BookRelativeRecData;
-import com.narancommunity.app.entity.CollectDonateItem;
 import com.narancommunity.app.entity.CollectEssayItem;
 import com.narancommunity.app.entity.CollectTieziItem;
-import com.narancommunity.app.entity.CollectTopicItem;
-import com.narancommunity.app.entity.CollectWishItem;
 import com.narancommunity.app.entity.RecEntity;
-import com.narancommunity.app.net.NRClient;
 
 import java.util.ArrayList;
 import java.util.HashMap;

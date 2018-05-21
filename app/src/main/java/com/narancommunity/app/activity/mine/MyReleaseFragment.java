@@ -1,4 +1,4 @@
-package com.narancommunity.app.activity.fragment;
+package com.narancommunity.app.activity.mine;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

@@ -45,12 +45,12 @@ public class MyWishAct extends BaseActivity implements OnTabSelectListener {
         toolbar.setTitle("我的心愿");
         setBar(toolbar);
 
-        CommunitySonFragment one = CommunitySonFragment.newInstance();
+        MyWishFragment one = MyWishFragment.newInstance();
         one.setType(0);
-        CommunitySonFragment two = CommunitySonFragment.newInstance();
+        MyWishFragment two = MyWishFragment.newInstance();
         two.setType(1);
-        CommunitySonFragment three = CommunitySonFragment.newInstance();
-        two.setType(2);
+        MyWishFragment three = MyWishFragment.newInstance();
+        three.setType(2);
         Collections.addAll(mFragments, one, two, three);
 
         vp.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));

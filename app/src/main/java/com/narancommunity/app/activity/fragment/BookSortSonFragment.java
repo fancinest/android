@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.narancommunity.app.R;
 import com.narancommunity.app.activity.index.BookDetailAct;
+import com.narancommunity.app.activity.mine.MyCollectionSonFragment;
 import com.narancommunity.app.adapter.BookListAdapter;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
@@ -35,7 +36,7 @@ import butterknife.ButterKnife;
  * Writer：fancy on 2017/12/19 17:18
  * Email：120760202@qq.com
  * FileName : 寻一本书子片段
- * 参考{@link com.narancommunity.app.activity.fragment.MyCollectionSonFragment}
+ * 参考{@link MyCollectionSonFragment}
  */
 
 public class BookSortSonFragment extends Fragment {

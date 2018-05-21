@@ -10,23 +10,11 @@ import android.support.v4.view.ViewPager;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.narancommunity.app.BaseActivity;
-import com.narancommunity.app.MyParticipateFragment;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.fragment.CommunitySonFragment;
-import com.narancommunity.app.activity.fragment.MyReleaseFragment;
 import com.narancommunity.app.common.CenteredToolbar;
-import com.narancommunity.app.common.LoadDialog;
-import com.narancommunity.app.common.Utils;
-import com.narancommunity.app.entity.BookListData;
-import com.narancommunity.app.entity.YSHYData;
-import com.narancommunity.app.net.NRClient;
-import com.narancommunity.app.net.Result;
-import com.narancommunity.app.net.ResultCallback;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

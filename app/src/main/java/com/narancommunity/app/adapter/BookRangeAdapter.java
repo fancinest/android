@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.joooonho.SelectableRoundedImageView;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
+import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.common.adapter.EasyRecyclerAdapter;
 import com.narancommunity.app.entity.MeFunctionEntity;
 import com.narancommunity.app.entity.RankEntity;
@@ -46,35 +47,42 @@ public class BookRangeAdapter extends EasyRecyclerAdapter<RankEntity> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final MyViewHolder hold = (MyViewHolder) (holder);
 
-//        final MeFunctionEntity item = getList().get(position);
-//        hold.tv_name.setText(Utils.getValue(item.getName()) + "");
-//        int url = item.getId();
-//        hold.iv_pic.setImageResource(url);
-//        Utils.setImgF(mContext, url, hold.iv_pic);
-        if (tag == 0) {
-            if (position < 3) {
-                if (position == 0)
-                    hold.ivLevel.setImageResource(R.mipmap.gyb_jinpai);
-                else if (position == 1)
-                    hold.ivLevel.setImageResource(R.mipmap.gyb_yinpai);
-                else if (position == 2)
-                    hold.ivLevel.setImageResource(R.mipmap.gyb_tongpai);
-                hold.tvLevel.setVisibility(View.INVISIBLE);
-                hold.ivLevel.setVisibility(View.VISIBLE);
-            } else {
-                hold.ivLevel.setVisibility(View.INVISIBLE);
-                hold.tvLevel.setVisibility(View.VISIBLE);
-                hold.tvLevel.setText("" + (position + 1));
-            }
+        final RankEntity item = getList().get(position);
+        hold.tvName.setText(Utils.getValue(item.getAccountName()) + "");
+        String url = Utils.getValue(item.getAccountImg());
+        if (!"".equals(url))
+            Utils.setImgF(mContext, url, hold.ivIcon);
+        else Utils.setImgF(mContext, R.mipmap.zw_morentouxiang, hold.ivIcon);
+        String remark = Utils.getValue(item.getAccountRemark());
+        if (!remark.equals(""))
+            hold.tvRemark.setText(remark + "");
+        else hold.tvRemark.setText("这个人很懒，什么都没留下");
+        if (position < 3) {
+            if (position == 0)
+                hold.ivLevel.setImageResource(R.mipmap.gyb_jinpai);
+            else if (position == 1)
+                hold.ivLevel.setImageResource(R.mipmap.gyb_yinpai);
+            else if (position == 2)
+                hold.ivLevel.setImageResource(R.mipmap.gyb_tongpai);
+            hold.tvLevel.setVisibility(View.INVISIBLE);
+            hold.ivLevel.setVisibility(View.VISIBLE);
+        } else {
+            hold.ivLevel.setVisibility(View.INVISIBLE);
+            hold.tvLevel.setVisibility(View.VISIBLE);
+            hold.tvLevel.setText("" + (position + 1));
         }
-//        hold.lnParent.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                mContext.startActivity(new Intent(mContext, SortSearchAct.class)
-////                        .putExtra("type", Utils.getValue(item.getClassifyName())));
-//                meItemInterface.OnItemClick(position);
-//            }
-//        });
+        hold.tvTimes.setText("" + Utils.getValue(item.getRankScore()));
+        hold.tvTimes.setVisibility(View.VISIBLE);
+//        if (tag == 0 || tag == 2) {
+//            hold.tvGrades.setVisibility(View.GONE);
+//            hold.rbStar.setVisibility(View.GONE);
+//        } else {
+//            hold.tvTimes.setVisibility(View.GONE);
+//            hold.tvGrades.setVisibility(View.VISIBLE);
+//            hold.rbStar.setVisibility(View.VISIBLE);
+//            hold.tvGrades.setText("" + Utils.getValue(item.getRankName()));
+//            hold.rbStar.setRating(Utils.getValue(item.getRankScore()) / 2);
+//        }
     }
 
     @Override

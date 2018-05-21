@@ -1,5 +1,7 @@
-package com.narancommunity.app.activity.fragment;
+package com.narancommunity.app.activity.mine;
 
+import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,17 +9,30 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
+import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.mine.MyCollectionSonFragment;
+import com.narancommunity.app.activity.index.BookDetailAct;
 import com.narancommunity.app.adapter.CommunityYSHYAdapter;
+import com.narancommunity.app.adapter.MyWishAdapter;
+import com.narancommunity.app.adapter.OnItemClickListener;
 import com.narancommunity.app.common.LoadDialog;
+import com.narancommunity.app.common.RecyclerItemClickListener;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
+import com.narancommunity.app.entity.BookDetail;
+import com.narancommunity.app.entity.MyWishData;
+import com.narancommunity.app.entity.WishEntity;
 import com.narancommunity.app.entity.YSHYData;
 import com.narancommunity.app.entity.YSHYEntity;
 import com.narancommunity.app.net.NRClient;
@@ -35,32 +50,30 @@ import butterknife.ButterKnife;
 /**
  * Writer：fancy on 2017/12/19 17:18
  * Email：120760202@qq.com
- * FileName : 以书会友和书荒互动片段
- * 参考{@link MyCollectionSonFragment}
+ * FileName : 我的心愿
  */
 
-public class CommunitySonFragment extends Fragment {
+public class MyWishFragment extends Fragment {
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
-    CommunityYSHYAdapter adapterYSHY;
-    CommunityYSHYAdapter adapterSHHZ;
-    List<YSHYEntity> list = new ArrayList<>();
+    MyWishAdapter adapter;
+    List<WishEntity> listData = new ArrayList<>();
     int pageSize = 5;
     int pageNum = 1;
     private int TOTAL_PAGE = 1;
 
-    public static CommunitySonFragment newInstance() {
-        CommunitySonFragment fragment = new CommunitySonFragment();
+    public static MyWishFragment newInstance() {
+        MyWishFragment fragment = new MyWishFragment();
 
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
 
-    int type = 0;//0 YSHY 1 SHHZ
+    int type = 0;
 
     public void setType(int type) {
         this.type = type;
@@ -93,10 +106,12 @@ public class CommunitySonFragment extends Fragment {
         Map<String, Object> map = new HashMap<>();
         map.put("pageSize", pageSize);
         map.put("pageNum", pageNum);
+        map.put("accessToken", MApplication.getAccessToken());
+        map.put("accountId", MApplication.getAccountId(getContext()));
         if (type == 0) {
-            NRClient.getYSHYList(map, new ResultCallback<Result<YSHYData>>() {
+            NRClient.getMyWishWaitingList(map, new ResultCallback<Result<MyWishData>>() {
                 @Override
-                public void onSuccess(Result<YSHYData> result) {
+                public void onSuccess(Result<MyWishData> result) {
                     LoadDialog.dismiss(getContext());
                     setData(result.getData());
                 }
@@ -108,9 +123,23 @@ public class CommunitySonFragment extends Fragment {
                 }
             });
         } else if (type == 1) {
-            NRClient.getSHHZList(map, new ResultCallback<Result<YSHYData>>() {
+            NRClient.getMyWishGoingList(map, new ResultCallback<Result<MyWishData>>() {
                 @Override
-                public void onSuccess(Result<YSHYData> result) {
+                public void onSuccess(Result<MyWishData> result) {
+                    LoadDialog.dismiss(getContext());
+                    setData(result.getData());
+                }
+
+                @Override
+                public void onFailure(Throwable throwable) {
+                    LoadDialog.dismiss(getContext());
+                    Utils.showErrorToast(getContext(), throwable);
+                }
+            });
+        } else if (type == 2) {
+            NRClient.getMyWishFinishList(map, new ResultCallback<Result<MyWishData>>() {
+                @Override
+                public void onSuccess(Result<MyWishData> result) {
                     LoadDialog.dismiss(getContext());
                     setData(result.getData());
                 }
@@ -124,62 +153,34 @@ public class CommunitySonFragment extends Fragment {
         }
     }
 
-    private void setData(YSHYData data) {
+    private void setData(MyWishData data) {
         if (pageNum == 1)
-            list.clear();
+            listData.clear();
         TOTAL_PAGE = data.getTotalPageNum();
         if (data != null) {
-            list.addAll(data.getContents());
+            listData.addAll(data.getOrders());
             pageNum++;
         }
-        if (type == 0)
-            adapterYSHY.notifyDataSetChanged();
-        else if (type == 1)
-            adapterSHHZ.notifyDataSetChanged();
+        adapter.setDataList(listData);
+        adapter.notifyDataSetChanged();
     }
 
     private void setView() {
-        if (type == 0) {
-            final LinearLayoutManager lmYSHY = new LinearLayoutManager(getContext());
-            lmYSHY.setOrientation(LinearLayoutManager.VERTICAL);
-            adapterYSHY = new CommunityYSHYAdapter(getContext(), list);
-            adapterYSHY.setListener(new MeItemInterface() {
-                @Override
-                public void OnItemClick(int position) {
-
-                }
-
-                @Override
-                public void OnDelClick(int position) {
-
-                }
-            });
-
-            adapterYSHY.setTag(true);
-            recyclerView.setLayoutManager(lmYSHY);
-            recyclerView.setAdapter(adapterYSHY);
-            recyclerView.setBackgroundColor(getResources().getColor(R.color.white));
-        } else if (type == 1) {
-            final LinearLayoutManager lmSHHZ = new LinearLayoutManager(getContext());
-            lmSHHZ.setOrientation(LinearLayoutManager.VERTICAL);
-            adapterSHHZ = new CommunityYSHYAdapter(getContext(), list);
-            adapterSHHZ.setListener(new MeItemInterface() {
-                @Override
-                public void OnItemClick(int position) {
-
-                }
-
-                @Override
-                public void OnDelClick(int position) {
-
-                }
-            });
-
-            adapterSHHZ.setTag(false);
-            recyclerView.setLayoutManager(lmSHHZ);
-            recyclerView.setAdapter(adapterSHHZ);
-            recyclerView.setBackgroundColor(getResources().getColor(R.color.white));
-        }
+        final LinearLayoutManager lmYSHY = new LinearLayoutManager(getContext());
+        lmYSHY.setOrientation(LinearLayoutManager.VERTICAL);
+        adapter = new MyWishAdapter(getContext());
+        adapter.setDataList(listData);
+        adapter.setType(type);
+        adapter.setListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                startActivity(new Intent(getContext(), BookDetailAct.class)
+                        .putExtra("bookId", listData.get(position).getOrderId()));
+            }
+        });
+        recyclerView.setLayoutManager(lmYSHY);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setBackgroundColor(getResources().getColor(R.color.white));
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -197,7 +198,7 @@ public class CommunitySonFragment extends Fragment {
                             lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
                             Log.i("fancy", "最后的可见位置:" + lastVisibleItemPosition);
                         }
-                        if (lastVisibleItemPosition + 1 == list.size()) {
+                        if (lastVisibleItemPosition + 1 == listData.size()) {
                             if (pageNum <= TOTAL_PAGE) {
                                 getData();
                             } else
@@ -207,6 +208,20 @@ public class CommunitySonFragment extends Fragment {
                 }
             }
         });
+
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerView,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+
+                    }
+
+                    @Override
+                    public void onItemLongClick(View view, int position) {
+                        Log.i("fancy", "position= " + position);
+                        showDelPop(position);
+                    }
+                }));
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
@@ -223,6 +238,50 @@ public class CommunitySonFragment extends Fragment {
                 });
             }
         });
+    }
+
+    PopupWindow mPop;
+
+    private void showDelPop(final int position) {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View v = inflater.inflate(R.layout.normal_pop, null);
+
+        if (mPop == null) {
+            mPop = new PopupWindow(v, LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            mPop.setFocusable(true);
+            mPop.setOutsideTouchable(true);
+            mPop.setBackgroundDrawable(new BitmapDrawable());
+            TextView tv_dial = (TextView) v.findViewById(R.id.dial);
+            tv_dial.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+            tv_dial.setText("是否确认删除？");
+            tv_dial.setTextColor(getResources().getColor(R.color.black));
+            Button btnOk = v.findViewById(R.id.ok);
+            Button btnCancel = v.findViewById(R.id.cancel);
+            btnCancel.setTextColor(getResources().getColor(R.color.appBlue));
+            btnOk.setTextColor(getResources().getColor(R.color.appBlue));
+            btnOk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    deleteItem(position);
+                }
+            });
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View arg0) {
+                    mPop.dismiss();
+                }
+            });
+        }
+        if (mPop != null && !mPop.isShowing())
+            mPop.showAtLocation(recyclerView, Gravity.CENTER, 0, 0);
+    }
+
+    private void deleteItem(int position) {
+        adapter.remove(position);
+        adapter.notifyDataSetChanged();
+        mPop.dismiss();
     }
 
     @Override
