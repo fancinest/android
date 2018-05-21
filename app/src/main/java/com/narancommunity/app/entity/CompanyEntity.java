@@ -22,6 +22,7 @@ public class CompanyEntity {
     String address;//	是	string	地址
     String ordinate;//是	string	纵坐标
     String abscissa;//
+    Integer accountId;
 
     @Override
     public String toString() {
@@ -42,6 +43,14 @@ public class CompanyEntity {
                 ", ordinate='" + ordinate + '\'' +
                 ", abscissa='" + abscissa + '\'' +
                 '}';
+    }
+
+    public Integer getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
     }
 
     public String getProvince() {

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.narancommunity.app.MeItemInterface;
@@ -80,7 +81,7 @@ public class AssistantAdapter extends EasyRecyclerAdapter<AssistantMissionEntity
         TextView tvTitle;
         TextView tvDate;
         TextView tvRead;
-        ConstraintLayout lnParent;
+        LinearLayout lnParent;
         ImageView ivImg;
         TextView tvContent;
 

@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:layout_marginTop="24dp"
-        android:src="@mipmap/side_btn_shoucang" />
+        android:src="@mipmap/side_btn_shoucang_pre" />
 
     <ImageView
         android:id="@+id/iv_add_comment"

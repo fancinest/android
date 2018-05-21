@@ -3,19 +3,18 @@ package com.narancommunity.app.entity;
 import java.util.List;
 
 /**
- * Writer：fancy on 2018/5/3 11:58
+ * Writer：fancy on 2018/5/17 17:32
  * Email：120760202@qq.com
  * FileName :
  */
 
-public class GradeData {
+public class FootPrintData {
     Integer totalPageNum;//
     Integer totalCount;// 6;
     Integer pageSize;// 3
     Integer pageNum;// 3
 
-    RankEntity myRank;
-    List<RankEntity> ranks;
+    List<FootPrintEntity> footprints;
 
     public Integer getTotalPageNum() {
         return totalPageNum;
@@ -48,20 +47,12 @@ public class GradeData {
     public void setPageNum(Integer pageNum) {
         this.pageNum = pageNum;
     }
-//
-    public RankEntity getMyRank() {
-        return myRank;
+
+    public List<FootPrintEntity> getFootprints() {
+        return footprints;
     }
 
-    public void setMyRank(RankEntity myRank) {
-        this.myRank = myRank;
-    }
-
-    public List<RankEntity> getRanks() {
-        return ranks;
-    }
-
-    public void setRanks(List<RankEntity> ranks) {
-        this.ranks = ranks;
+    public void setFootprints(List<FootPrintEntity> footprints) {
+        this.footprints = footprints;
     }
 }

@@ -41,7 +41,7 @@
                         android:id="@+id/iv_msg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/wode_yijianfankui" />
+                        android:src="@mipmap/wode_btn_msg" />
 
                     <ImageView
                         android:id="@+id/iv_set"
@@ -240,7 +240,7 @@
                             android:layout_marginTop="4dp"
                             android:max="100"
                             android:progress="80"
-                            android:progressDrawable="@drawable/progress"/>
+                            android:progressDrawable="@drawable/progress" />
 
                         <LinearLayout
                             android:id="@+id/ln_love"
@@ -280,17 +280,17 @@
 
                         <ProgressBar
                             android:id="@+id/pb_love"
-                            android:layout_below="@id/ln_love"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="match_parent"
                             android:layout_height="4dp"
+                            android:layout_below="@id/ln_love"
                             android:layout_marginBottom="4dp"
                             android:layout_marginLeft="24dp"
                             android:layout_marginRight="24dp"
                             android:layout_marginTop="4dp"
                             android:max="100"
-                            android:secondaryProgress="60"
-                            android:progressDrawable="@drawable/progress"/>
+                            android:progressDrawable="@drawable/progress"
+                            android:secondaryProgress="60" />
 
                         <View
                             android:layout_width="match_parent"

@@ -116,6 +116,8 @@ public class MyInfoAct extends BaseActivity {
 
     private void setInfo() {
         UserInfo info = MApplication.getUserInfo(getContext());
+        if (info == null)
+            return;
         String photo = Utils.getValue(info.getPhoto());
         if (!"".equals(photo))
             Utils.setImgF(getContext(), photo, ivHead);
@@ -528,7 +530,7 @@ public class MyInfoAct extends BaseActivity {
 //                    if (result.getData().getData().size() > 0) {
 //                        sb.append(result.getData().getData().get(0) + ",");
 //                    }
-                    String pic = result.getData().getData().get(0)+"";
+                    String pic = result.getData().getData().get(0) + "";
                     updateHead(pic, file);
                 } else {
                     Toaster.toast(getContext(), "数据为空！");

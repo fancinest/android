@@ -20,6 +20,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.emilsjolander.components.StickyScrollViewItems.StickyScrollView;
 import com.joooonho.SelectableRoundedImageView;
 import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.PetFragment;
@@ -52,7 +53,7 @@ public class CompanyDetailAct extends BaseActivity {
     @BindView(R.id.rl_bg)
     ImageView rlBg;
     @BindView(R.id.scrollView)
-    NestedScrollView scrollView;
+    StickyScrollView scrollView;
     @BindView(R.id.iv_logo)
     SelectableRoundedImageView ivLogo;
     @BindView(R.id.tv_name)
@@ -75,20 +76,19 @@ public class CompanyDetailAct extends BaseActivity {
     RadioGroup tabRdoGrp;
     @BindView(R.id.view)
     View view;
-    //    @BindView(R.id.viewPager)
-//    ViewPager viewPager;
     @BindView(R.id.toolbar)
     CenteredToolbar toolbar;
     boolean isWhiteIcon = true;
 
     private LoveIntroduceFragment mLove = LoveIntroduceFragment.newInstance();
     private LoveFootPrintFragment mFootprint = LoveFootPrintFragment.newInstance();
-    private LoveIntroduceFragment mHonour = LoveIntroduceFragment.newInstance();
+    private LoveHonourFragment mHonour = LoveHonourFragment.newInstance();
     private final Fragment[] TABS_FRAGMENT = new Fragment[]{
             mLove,
             mFootprint,
             mHonour
     };
+    private int accountId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,6 +96,7 @@ public class CompanyDetailAct extends BaseActivity {
         setContentView(R.layout.act_company_detail);
         ButterKnife.bind(this);
         id = getIntent().getIntExtra("id", 0);
+        accountId = getIntent().getIntExtra("accountId", 0);
 
         setScroll();
         setBar(toolbar);
@@ -106,9 +107,11 @@ public class CompanyDetailAct extends BaseActivity {
         getData();
     }
 
+
     private void setFragment() {
         homeTab.setChecked(true);
         tabRdoGrp.setOnCheckedChangeListener(mOnTabCheckedChangeListenernew);
+        mFootprint.setId(id, accountId);
 
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
@@ -151,7 +154,7 @@ public class CompanyDetailAct extends BaseActivity {
         tvType.setText("" + Utils.getValue(data.getCompanyType()));
         tvTel.setText("" + Utils.getValue(data.getPhone()));
         tvAddress.setText("" + Utils.getValue(data.getProvince()) + Utils.getValue(data.getCity()) + Utils.getValue(data.getCounty()));
-        mLove.setView(""+Utils.getValue(data.getCompanyContent()));
+        mLove.setView("" + Utils.getValue(data.getCompanyContent()));
     }
 
     @Override
@@ -167,13 +170,11 @@ public class CompanyDetailAct extends BaseActivity {
                 public void onScrollChanged() {
                     int y = scrollView.getScrollY();
                     if (y >= 100) {
-                        isWhiteIcon = false;
-                        toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_gray_24dp);
-                        invalidateOptionsMenu();
+                        toolbar.setBackground(getResources().getDrawable(R.drawable.bookhouse_top_gradient));
+                        toolbar.setTitle("机构主页");
                     } else {
-                        isWhiteIcon = true;
-                        toolbar.setNavigationIcon(R.mipmap.nav_back);
-                        invalidateOptionsMenu();
+                        toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
+                        toolbar.setTitle("");
                     }
                 }
             });
@@ -230,8 +231,7 @@ public class CompanyDetailAct extends BaseActivity {
             checkedRdoBtn.playSoundEffect(SoundEffectConstants.CLICK);
             int checkedPosition = radioGroup.indexOfChild(checkedRdoBtn);
             if (0 <= checkedPosition && checkedPosition < TABS_FRAGMENT.length) {
-                if (checkedPosition != 2)
-                    showFragment(checkedPosition);
+                showFragment(checkedPosition);
             }
         }
     };

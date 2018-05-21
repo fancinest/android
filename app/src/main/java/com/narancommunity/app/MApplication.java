@@ -156,7 +156,6 @@ public class MApplication extends Application {
         } catch (SnappydbException e) {
             e.printStackTrace();
         }
-        Log.i("accessToken =", info.getAccessToken());
         return info.getAccessToken();
     }
 

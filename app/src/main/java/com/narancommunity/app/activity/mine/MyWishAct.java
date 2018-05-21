@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.widget.ImageView;
 
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
@@ -27,19 +26,16 @@ import butterknife.ButterKnife;
  * FileName : 我的心愿
  */
 public class MyWishAct extends BaseActivity implements OnTabSelectListener {
+
     @BindView(R.id.toolbar)
     CenteredToolbar toolbar;
     @BindView(R.id.slide_tab)
     SlidingTabLayout slideTab;
     @BindView(R.id.vp)
     ViewPager vp;
-    @BindView(R.id.iv_release)
-    ImageView ivRelease;
-
     private String[] mTitles = {"    等待中    ", "    进行中    ", "    已完成    "};
     private ArrayList<Fragment> mFragments = new ArrayList<>();
     int mPosition = 0;//当前页
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

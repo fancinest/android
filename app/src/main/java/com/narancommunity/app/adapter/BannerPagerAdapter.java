@@ -2,6 +2,7 @@ package com.narancommunity.app.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.narancommunity.app.R;
+import com.narancommunity.app.activity.index.BookSHHZAct;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.entity.BannerItem;
 import com.narancommunity.app.entity.Publicitys;
@@ -76,12 +78,23 @@ public class BannerPagerAdapter extends PagerAdapter implements IconPagerAdapter
             @Override
             public void onClick(View v) {
                 Publicitys item = getBannerList().get(position);
-//                String url = item.getPubUrl();
-//                if (null != null && !url.equals("")) {
-//                    Toaster.toast(context, "是要跳转的这里");
-//                }
+                int type = item.getUrlType();//1 ;//H5外链 2 ;//爱心行动 3 ;//互助社区
+                String url = item.getPublicityUrl();//当不为1时publicityUrl 为相应跳转的ID
+                if (type == 1) {
+                    Intent intent = new Intent();
+                    intent.setAction("android.intent.action.VIEW");
+                    Uri content_url = Uri.parse(url);
+                    intent.setData(content_url);
+                    context.startActivity(intent);
+                } else if(type==2){
+                    Toaster.toast(context,"这里要跳转爱心行动");
 //                    context.startActivity(new Intent(context, WebViewTwoAct.class).putExtra(
 //                            "url", url).putExtra("title", ""));
+                }else {
+//                    context.startActivity(new Intent(context, BookSHHZAct.class).putExtra(
+//                            "url", url).putExtra("title", ""));
+                    Toaster.toast(context,"这里要跳转互助社区");
+                }
             }
         });
         String url = getBannerList().get(position).getPublicityImg();

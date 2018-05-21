@@ -256,9 +256,9 @@ public class ForgetAct extends AppCompatActivity {
         map.put("phone", phone);
         map.put("exist", "forgetpw");
         map.put("doSendSMS", MApplication.isRelease);
-        NRClient.getVerifyCode(map, new ResultCallback<Result<Object>>() {
+        NRClient.getVerifyCode(map, new ResultCallback<Result<Void>>() {
             @Override
-            public void onSuccess(Result<Object> result) {
+            public void onSuccess(Result<Void> result) {
                 LoadDialog.dismiss(ForgetAct.this);
                 mSendVerificationCodeCountDownTimer.start();
                 if (!MApplication.isRelease)

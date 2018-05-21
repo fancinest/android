@@ -46,7 +46,7 @@ import butterknife.OnClick;
  * Email：120760202@qq.com
  * FileName : 爱心书屋
  */
-public class BookHouseAct extends BaseActivity {
+public class AixinBookHouseAct extends BaseActivity {
     @BindView(R.id.toolbar)
     CenteredToolbar toolbar;
     @BindView(R.id.ln_find)

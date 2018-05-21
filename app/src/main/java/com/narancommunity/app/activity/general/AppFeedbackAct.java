@@ -1,13 +1,17 @@
 package com.narancommunity.app.activity.general;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.CenteredToolbar;
+import com.narancommunity.app.common.LoadDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,6 +30,10 @@ public class AppFeedbackAct extends BaseActivity {
     EditText etContent;
     @BindView(R.id.btn_release)
     Button btnRelease;
+    @BindView(R.id.ln_success)
+    LinearLayout lnSuccess;
+
+    boolean isSuccess = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,5 +47,19 @@ public class AppFeedbackAct extends BaseActivity {
 
     @OnClick(R.id.btn_release)
     public void onViewClicked() {
+        if (!isSuccess) {
+            LoadDialog.show(getContext(), "提交中...");
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    isSuccess = true;
+                    LoadDialog.dismiss(getContext());
+                    toolbar.setTitle("提交成功");
+                    btnRelease.setText("完成");
+                    lnSuccess.setVisibility(View.VISIBLE);
+                    etContent.setVisibility(View.GONE);
+                }
+            }, 1000);
+        } else finish();
     }
 }

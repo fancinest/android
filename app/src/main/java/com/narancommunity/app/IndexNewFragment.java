@@ -14,6 +14,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +23,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
-import com.narancommunity.app.activity.index.BookHouseAct;
+import com.narancommunity.app.activity.index.AixinBookHouseAct;
 import com.narancommunity.app.activity.index.FindFourAct;
 import com.narancommunity.app.activity.general.LoginAct;
+import com.narancommunity.app.activity.index.IndexSearchAct;
 import com.narancommunity.app.activity.index.RangeAct;
 import com.narancommunity.app.adapter.BannerPagerAdapter;
 import com.narancommunity.app.adapter.FindLatestAdapter;
@@ -90,8 +93,8 @@ public class IndexNewFragment extends Fragment {
     RecyclerView recyclerViewSort;
     @BindView(R.id.recyclerView_new)
     RecyclerView recyclerViewNew;
-    @BindView(R.id.et_search)
-    EditText etSearch;
+    @BindView(R.id.tv_search)
+    TextView tvSearch;
     @BindView(R.id.view_bg)
     View viewBg;
     @BindView(R.id.scrollView)
@@ -162,10 +165,13 @@ public class IndexNewFragment extends Fragment {
                         @Override
                         public void run() {
                             getData();
+                            mRefreshLayout.setRefreshing(false);
                         }
                     }, 1000);
                 }
             });
+            //往下移动80个单位
+            mRefreshLayout.setProgressViewOffset(true, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80, getResources().getDisplayMetrics()));
 
             if (scrollView != null) {
                 scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
@@ -177,32 +183,25 @@ public class IndexNewFragment extends Fragment {
                             if (viewBg.getAlpha() < 1) {
                                 viewBg.setAlpha(1);
                                 viewBg.setBackgroundResource(R.drawable.bookhouse_top_gradient);
-                                etSearch.setBackgroundResource(R.drawable.round_corner_color_search_lighter);
-                                etSearch.setHintTextColor(getResources().getColor(R.color.white));
+                                tvSearch.setBackgroundResource(R.drawable.round_corner_color_search_lighter);
+                                tvSearch.setHintTextColor(getResources().getColor(R.color.white));
                                 Drawable drawable = getResources().getDrawable(R.mipmap.topnav_btn_sousuo_white);
                                 drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), (int) (drawable.getMinimumHeight()));
-                                etSearch.setCompoundDrawables(drawable, null, null, null);
+                                tvSearch.setCompoundDrawables(drawable, null, null, null);
                                 viewBg.setAlpha(1);
                                 Log.i("fancy", " y = " + y);
                             }
                         } else {
                             float alpha = (float) y / 300;
                             viewBg.setAlpha(alpha);
-                            etSearch.setBackgroundResource(R.drawable.round_corner_color_search);
-                            etSearch.setHintTextColor(getResources().getColor(R.color.appBlue));
+                            tvSearch.setBackgroundResource(R.drawable.round_corner_color_search);
+                            tvSearch.setHintTextColor(getResources().getColor(R.color.appBlue));
                             Drawable drawable = getResources().getDrawable(R.mipmap.topnav_btn_sousuo_blue);
                             drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), (int) (drawable.getMinimumHeight()));
-                            etSearch.setCompoundDrawables(drawable, null, null, null);
+                            tvSearch.setCompoundDrawables(drawable, null, null, null);
                             Log.i("fancy", " y = " + y + "  alpha:" + alpha);
                         }
 
-//                        if (scrollView.getScrollY() <= 50) {
-//                            lnSearch.setBackgroundColor(getResources().getColor(R.color.transparent));
-////                            etSearch.setHintTextColor(getResources().getColor(R.color.appBlue));
-//                        } else {
-//                            lnSearch.setBackgroundColor(getResources().getColor(R.color.appBlue));
-////                            etSearch.setHintTextColor(getResources().getColor(R.color.color_eeeeee));
-//                        }
                     }
                 });
             }
@@ -337,7 +336,7 @@ public class IndexNewFragment extends Fragment {
     private List<String> revertData(List<TopLines> data) {
         List<String> list = new ArrayList<>();
         for (TopLines info : data) {
-            list.add(info.getToplineTitle());
+            list.add(info.getToplineContent());
         }
         return list;
     }
@@ -412,15 +411,15 @@ public class IndexNewFragment extends Fragment {
         if (mBannerPager != null) mBannerPager.removeCallbacks(mBannerChgRunnable);
     }
 
-    @OnClick({R.id.ln_week, R.id.ln_assistant, R.id.ln_topic, R.id.ln_rank, R.id.ln_book, R.id.et_search})
+    @OnClick({R.id.ln_week, R.id.ln_assistant, R.id.ln_topic, R.id.ln_rank, R.id.ln_book, R.id.tv_search})
     public void onViewClicked(View view) {
         Intent it = new Intent(getContext(), FindFourAct.class);
         switch (view.getId()) {
-            case R.id.et_search:
-                startActivity(new Intent(getContext(), LoginAct.class));
+            case R.id.tv_search:
+                startActivity(new Intent(getContext(), IndexSearchAct.class));
                 break;
             case R.id.ln_book:
-                Intent itBook = new Intent(getContext(), BookHouseAct.class);
+                Intent itBook = new Intent(getContext(), AixinBookHouseAct.class);
                 itBook.putExtra("tag", 0);
                 startActivity(itBook);
                 break;

@@ -17,7 +17,6 @@ import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.activity.general.AppFeedbackAct;
-import com.narancommunity.app.activity.general.ModifyPsdAct;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
@@ -40,24 +39,21 @@ import butterknife.OnClick;
  */
 
 public class SettingAct extends BaseActivity {
+
     @BindView(R.id.toolbar)
     CenteredToolbar toolbar;
-    @BindView(R.id.mSwitch)
-    Switch mSwitch;
+    @BindView(R.id.mSwitch_push)
+    Switch mSwitchPush;
+    @BindView(R.id.mSwitch_sound)
+    Switch mSwitchSound;
+    @BindView(R.id.mSwitch_info)
+    Switch mSwitchInfo;
     @BindView(R.id.ln_feedback)
     LinearLayout lnFeedback;
     @BindView(R.id.ln_invite)
     LinearLayout lnInvite;
-    @BindView(R.id.textView2)
-    TextView textView2;
-    @BindView(R.id.tr_modify)
-    LinearLayout trModify;
     @BindView(R.id.ln_about)
     LinearLayout lnAbout;
-    @BindView(R.id.textView)
-    TextView textView;
-    @BindView(R.id.tr_version)
-    LinearLayout trVersion;
     @BindView(R.id.ln_logout)
     TextView lnLogout;
 
@@ -71,7 +67,7 @@ public class SettingAct extends BaseActivity {
         toolbar.setTitle("个人设置");
     }
 
-    @OnClick({R.id.ln_feedback, R.id.ln_invite, R.id.tr_modify, R.id.ln_about, R.id.tr_version, R.id.ln_logout})
+    @OnClick({R.id.ln_feedback, R.id.ln_invite, R.id.ln_about, R.id.ln_logout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ln_feedback:
@@ -80,12 +76,7 @@ public class SettingAct extends BaseActivity {
             case R.id.ln_invite:
                 showShareBoard();
                 break;
-            case R.id.tr_modify:
-                startActivity(new Intent(getContext(),ModifyPsdAct.class));
-                break;
             case R.id.ln_about:
-                break;
-            case R.id.tr_version:
                 break;
             case R.id.ln_logout:
                 showPopView(view);

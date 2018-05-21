@@ -60,27 +60,48 @@
                 android:layout_marginBottom="10dp"
                 android:background="@color/white"></View>
 
-            <android.support.design.widget.TextInputLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:textColorHint="@color/white">
+                android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/et_psd"
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:background="@null"
+                    android:layout_height="50dp"
                     android:gravity="center"
-                    android:hint="@string/prompt_password"
-                    android:inputType="textPassword"
-                    android:maxLength="20"
-                    android:maxLines="1"
-                    android:textColor="@color/color_333333"
-                    android:textColorHint="@color/color_333333"
-                    android:textSize="17sp" />
+                    android:textColorHint="@color/white">
 
-            </android.support.design.widget.TextInputLayout>
+                    <EditText
+                        android:id="@+id/et_verify_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:background="@null"
+                        android:gravity="center"
+                        android:hint="验证码"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white"
+                        android:textSize="17sp" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/tv_get_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/round_corner_gradient"
+                    android:clickable="true"
+                    android:paddingBottom="6dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="6dp"
+                    android:text="发送验证码"
+                    android:textColor="@color/clickable_green_grey"
+                    android:textSize="11sp" />
+            </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -101,8 +122,38 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginBottom="12dp"
+                android:layout_marginTop="12dp"
                 android:gravity="center">
+
+                <CheckedTextView
+                    android:id="@+id/ctv_is_agree"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:drawableLeft="@drawable/team_checkedbox"
+                    android:drawablePadding="8dp"
+                    android:text="我已阅读并同意"
+                    android:textColor="@color/white"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_agreement"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:text="《那然公社用户服务协定》"
+                    android:textColor="@color/clickable_green_grey"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tv_reset"

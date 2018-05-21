@@ -22,8 +22,10 @@ import com.joooonho.SelectableRoundedImageView;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.activity.general.AuthoriseFirstAct;
+import com.narancommunity.app.activity.general.LoginAct;
 import com.narancommunity.app.adapter.MeFunctionAdapter;
 import com.narancommunity.app.common.ItemDecoration.GridItemDecoration;
+import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.MeFunctionEntity;
 import com.narancommunity.app.entity.UserInfo;
@@ -125,8 +127,8 @@ public class MeFragment extends Fragment {
             Integer love = Utils.getValue(userInfo.getNowLove());
             tvLove.setText("" + love);
             if (top != 0) {
-                tvAll.setText(top + "");
-                Integer percent = Integer.parseInt(getPercent(now, top));
+                tvAll.setText("/" + top);
+                int percent = (int) getPercent(now, top);
                 pbExp.setProgress(percent);
             } else pbExp.setProgress(0);
         } else Utils.setImgF(getContext(), R.mipmap.zw_morentouxiang, ivIcon);
@@ -153,12 +155,12 @@ public class MeFragment extends Fragment {
         }
     }
 
-    private String getPercent(Integer now, Integer top) {
+    private float getPercent(Integer now, Integer top) {
         // 创建一个数值格式化对象
         NumberFormat numberFormat = NumberFormat.getInstance();
         // 设置精确到小数点后2位
         numberFormat.setMaximumFractionDigits(2);
-        return numberFormat.format((float) now / (float) top * 100);
+        return Float.parseFloat(numberFormat.format((float) now / (float) top * 100));
     }
 
     String[] names = new String[]{"我的签到", "我的收藏", "我的参与", "我的爱心", "我的心愿", "我的发布",
@@ -210,26 +212,62 @@ public class MeFragment extends Fragment {
     //    String[] names = new String[]{"我的签到", "我的收藏", "我的参与", "我的爱心", "我的心愿", "我的发布",
 //            "我的地址", "联系客服", "关于那然"};
     private void switchTo(int position) {
+        String token = MApplication.getAccessToken();
         switch (position) {
             case 0://我的签到
+                if (token.equals("")) {
+                    startActivity(new Intent(getContext(), LoginAct.class));
+                    Toaster.toast(getContext(), "请先登录！");
+                    return;
+                }
                 startActivity(new Intent(getContext(), MySignAct.class));
                 break;
             case 1://我的收藏
+                if (token.equals("")) {
+                    startActivity(new Intent(getContext(), LoginAct.class));
+                    Toaster.toast(getContext(), "请先登录！");
+                    return;
+                }
                 startActivity(new Intent(getContext(), MyCollectionAct.class));
                 break;
             case 2://我的参与
+                if (token.equals("")) {
+                    startActivity(new Intent(getContext(), LoginAct.class));
+                    Toaster.toast(getContext(), "请先登录！");
+                    return;
+                }
                 startActivity(new Intent(getContext(), MyAttendNewAct.class));
                 break;
             case 3://我的爱心
+                if (token.equals("")) {
+                    startActivity(new Intent(getContext(), LoginAct.class));
+                    Toaster.toast(getContext(), "请先登录！");
+                    return;
+                }
                 startActivity(new Intent(getContext(), MyLoveAct.class));
                 break;
             case 4://我的心愿
+                if (token.equals("")) {
+                    startActivity(new Intent(getContext(), LoginAct.class));
+                    Toaster.toast(getContext(), "请先登录！");
+                    return;
+                }
                 startActivity(new Intent(getContext(), MyWishAct.class));
                 break;
             case 5://我的发布
+                if (token.equals("")) {
+                    startActivity(new Intent(getContext(), LoginAct.class));
+                    Toaster.toast(getContext(), "请先登录！");
+                    return;
+                }
                 startActivity(new Intent(getContext(), MyReleaseAct.class));
                 break;
             case 6://我的地址
+                if (token.equals("")) {
+                    startActivity(new Intent(getContext(), LoginAct.class));
+                    Toaster.toast(getContext(), "请先登录！");
+                    return;
+                }
                 startActivity(new Intent(getContext(), AddressAct.class));
                 break;
             case 7://联系客服
@@ -267,17 +305,33 @@ public class MeFragment extends Fragment {
 
     @OnClick({R.id.iv_msg, R.id.iv_set, R.id.tv_authorise, R.id.iv_icon})
     public void onViewClicked(View view) {
+        String token = MApplication.getAccessToken();
         switch (view.getId()) {
             case R.id.iv_msg:
+                if (token.equals("")) {
+                    startActivity(new Intent(getContext(), LoginAct.class));
+                    Toaster.toast(getContext(), "请先登录！");
+                    return;
+                }
                 startActivity(new Intent(getContext(), MsgAct.class));
                 break;
             case R.id.iv_set:
                 startActivity(new Intent(getContext(), SettingAct.class));
                 break;
             case R.id.tv_authorise:
+                if (token.equals("")) {
+                    startActivity(new Intent(getContext(), LoginAct.class));
+                    Toaster.toast(getContext(), "请先登录！");
+                    return;
+                }
                 startActivity(new Intent(getContext(), AuthoriseFirstAct.class));
                 break;
             case R.id.iv_icon:
+                if (token.equals("")) {
+                    startActivity(new Intent(getContext(), LoginAct.class));
+                    Toaster.toast(getContext(), "请先登录！");
+                    return;
+                }
                 startActivity(new Intent(getContext(), MyInfoAct.class));
                 break;
         }

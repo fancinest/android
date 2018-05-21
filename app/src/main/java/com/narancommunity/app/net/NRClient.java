@@ -22,6 +22,7 @@ import com.narancommunity.app.entity.CommentListEntity;
 import com.narancommunity.app.entity.CompanyData;
 import com.narancommunity.app.entity.CompanyEntity;
 import com.narancommunity.app.entity.DonateDetailData;
+import com.narancommunity.app.entity.FootPrintData;
 import com.narancommunity.app.entity.GradeData;
 import com.narancommunity.app.entity.IsCollect;
 import com.narancommunity.app.entity.NewsData;
@@ -143,6 +144,104 @@ public class NRClient {
     }
 
     //TODO 以此为基础
+
+    /**
+     * 通用接受数据接口
+     *
+     * @param callback
+     * @return
+     */
+    public static Call getRankBookDonateList(Map<String, Object> baseData,
+                                  final ResultCallback<Result<GradeData>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<GradeData>> call = mService.getRankBookDonateList( baseData);
+        Callback<Result<GradeData>> cbk = new Callback<Result<GradeData>>() {
+
+            @Override
+            public void onResponse(Call<Result<GradeData>> call,
+                                   Response<Result<GradeData>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<GradeData>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+    }
+
+    /**
+     * 获取机构zuji
+     *
+     * @param callback
+     * @return
+     */
+    public static Call addFoot(Map<String, Object> baseData,
+                               final ResultCallback<Result<Void>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<Void>> call = mService.addFoot(header, baseData);
+        Callback<Result<Void>> cbk = new Callback<Result<Void>>() {
+
+            @Override
+            public void onResponse(Call<Result<Void>> call,
+                                   Response<Result<Void>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<Void>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
+
+    /**
+     * 获取机构zuji
+     *
+     * @param callback
+     * @return
+     */
+    public static Call getOrgFootList(Map<String, Object> baseData,
+                                      final ResultCallback<Result<FootPrintData>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<FootPrintData>> call = mService.getOrgFootList(header, baseData);
+        Callback<Result<FootPrintData>> cbk = new Callback<Result<FootPrintData>>() {
+
+            @Override
+            public void onResponse(Call<Result<FootPrintData>> call,
+                                   Response<Result<FootPrintData>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<FootPrintData>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+
+    }
 
     /**
      * 获取机构想起
@@ -3247,22 +3346,19 @@ public class NRClient {
     }
 
     public static Call getVerifyCode(Map<String, Object> baseData,
-                                     final ResultCallback<Result<Object>> callback) {
+                                     final ResultCallback<Result<Void>> callback) {
 
         if (callback == null) throw new NullPointerException("callback == null");
         NRService mService = ServiceFactory.createNewService(NRService.class);
-        HashMap<String, Object> header = new HashMap<>();
-        header.put("NARAN-ACCESS-USER", "");
-        header.put("NARAN-ACCESS-TOKEN", "");
-        Call<Result<Object>> call = mService.getVerifyCode(header, baseData);
-        Callback<Result<Object>> cbk = new Callback<Result<Object>>() {
+        Call<Result<Void>> call = mService.getVerifyCode(baseData);
+        Callback<Result<Void>> cbk = new Callback<Result<Void>>() {
             @Override
-            public void onResponse(Call<Result<Object>> call, Response<Result<Object>> response) {
+            public void onResponse(Call<Result<Void>> call, Response<Result<Void>> response) {
                 Result.onResponse(response, callback);
             }
 
             @Override
-            public void onFailure(Call<Result<Object>> call, Throwable t) {
+            public void onFailure(Call<Result<Void>> call, Throwable t) {
                 Result.onFailure(t, callback);
             }
         };

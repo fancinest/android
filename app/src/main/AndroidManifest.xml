@@ -169,7 +169,7 @@
             android:name=".activity.mine.MyCollectionAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.index.BookHouseAct"
+            android:name=".activity.index.AixinBookHouseAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.index.AixinBookShelfAct"
@@ -252,6 +252,15 @@
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.love.CompanyDetailAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.love.AddFootPrintAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.love.LoveSearchAct"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.index.IndexSearchAct"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity

@@ -18,12 +18,54 @@
         android:padding="12dp"
         android:textSize="14sp" />
 
+    <LinearLayout
+        android:id="@+id/ln_success"
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingBottom="60dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/chahua_tijiaochenggong" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="提交成功"
+            android:textColor="@color/color_999999"
+            android:textSize="20sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/color_bbbbbb" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="感谢您的反馈，我们会认真处理你的反馈。"
+            android:textColor="@color/color_999999"
+            android:textSize="14sp" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/btn_release"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:background="@color/login_gray"
+        android:background="@drawable/round_corner_green"
         android:text="发布"
         android:textColor="@color/clickable_white_grey"
         android:textSize="17sp" />

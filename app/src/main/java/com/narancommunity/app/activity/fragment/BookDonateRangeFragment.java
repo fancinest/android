@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SoundEffectConstants;
 import android.view.View;
@@ -13,17 +14,30 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.adapter.BookRangeAdapter;
 import com.narancommunity.app.adapter.RangeListRangeAdapter;
 import com.narancommunity.app.common.ItemDecoration.DividerItemDecoration;
+import com.narancommunity.app.common.LoadDialog;
+import com.narancommunity.app.common.Utils;
+import com.narancommunity.app.entity.GradeData;
 import com.narancommunity.app.entity.MeFunctionEntity;
+import com.narancommunity.app.entity.RankEntity;
+import com.narancommunity.app.net.NRClient;
+import com.narancommunity.app.net.NRService;
+import com.narancommunity.app.net.Result;
+import com.narancommunity.app.net.ResultCallback;
+import com.narancommunity.app.net.ServiceFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
 
 /**
  * Writer：fancy on 2017/12/27 11:49
@@ -36,8 +50,12 @@ public class BookDonateRangeFragment extends Fragment {
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
-    List<MeFunctionEntity> list;
+    List<RankEntity> listData = new ArrayList<>();
     BookRangeAdapter adapter;
+
+    int pageSize = 5;
+    int pageNum = 1;
+    private int TOTAL_PAGE = 1;
 
     public static BookDonateRangeFragment newInstance() {
 
@@ -51,10 +69,7 @@ public class BookDonateRangeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            list.add(new MeFunctionEntity());
-        }
+
     }
 
     View rootView;
@@ -78,6 +93,43 @@ public class BookDonateRangeFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getData();
+    }
+
+    private void getData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("accessToken", MApplication.getAccessToken());
+        map.put("pageNum", pageNum);
+        map.put("pageSize", pageSize);
+        NRClient.getRankBookDonateList(map, new ResultCallback<Result<GradeData>>() {
+            @Override
+            public void onSuccess(Result<GradeData> result) {
+                LoadDialog.dismiss(getContext());
+                GradeData data = result.getData();
+                if (data != null)
+                    setDataView(data);
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+        });
+    }
+
+    private void setDataView(GradeData data) {
+        if (data.getTotalCount() > 0) {
+            TOTAL_PAGE = data.getTotalPageNum();
+            listData.addAll(data.getRanks());
+            pageNum++;
+            adapter.notifyDataSetChanged();
+        }
+    }
+
     private void setListView() {
         DividerItemDecoration dividerItemDecoration =
                 new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
@@ -86,9 +138,7 @@ public class BookDonateRangeFragment extends Fragment {
         LinearLayoutManager linearLayout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayout);
 
-//        switch (tag) {
-//            case 0:
-        adapter = new BookRangeAdapter(getContext(), list, 0);
+        adapter = new BookRangeAdapter(getContext(), listData, 0);
 //        adapter.setListener(new MeItemInterface() {
 //            @Override
 //            public void OnItemClick(int position) {

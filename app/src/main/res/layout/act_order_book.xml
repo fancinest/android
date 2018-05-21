@@ -61,7 +61,7 @@
                 android:layout_height="8dp"
                 android:background="@color/color_eeeeee" />
 
-            <CalendarView
+            <com.applikeysolutions.cosmocalendar.view.CalendarView
                 android:id="@+id/calendar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

@@ -15,8 +15,10 @@ public class AppConstants {
 
     public static final String DB_NAME = "NaranComDB";
     public static final String USER_INFO = "user_info";//用户所有信息存在此处
-//    public static final String USER_ACCESS_TOKEN = "user_access_token";//用户token
+    //    public static final String USER_ACCESS_TOKEN = "user_access_token";//用户token
     public static final String USER_SEARCH_HISTORY_LIST = "user_search_history_list";
+    public static final String USER_SEARCH_HISTORY_LIST_OF_LOVE = "user_search_history_list_of_love";//爱心搜索
+    public static final String USER_SEARCH_HISTORY_LIST_OF_INDEX = "user_search_history_list_of_index";//首页搜索
     public static final String IS_FIRST_INSTALL = "is_first_install";//是否是第一次安装
 
     public static final String CODE_SUCCESS = "0000";//	服务器响应成功

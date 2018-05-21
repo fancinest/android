@@ -13,6 +13,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.narancommunity.app.activity.index.DonateBookAct;
 import com.narancommunity.app.activity.index.ReleaseAct;
 import com.narancommunity.app.activity.love.LoveFragment;
 import com.narancommunity.app.activity.mine.MeFragment;
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         iv_release.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, ReleaseAct.class));
+                startActivity(new Intent(MainActivity.this, DonateBookAct.class));
             }
         });
         home_tab.setChecked(true);

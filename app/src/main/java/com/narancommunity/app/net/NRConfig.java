@@ -12,6 +12,38 @@ public class NRConfig {
     public static final String URL_RECORD = "http://47.98.218.205:8083";//记录用到的
 
     /**
+     * 书评榜
+     */
+    public static final String RANK_BOOKREVIEWS = URL_BASE + "/api/rank/book/review/page";
+    /**
+     * 读书榜
+     */
+    public static final String RANK_READ = URL_BASE + "/api/rank/book/read/page";
+    /**
+     * 赠书榜
+     */
+    public static final String RANK_DONATE = URL_BASE + "/api/rank/book/give/page";
+    /**
+     * 心愿-已完成
+     */
+    public static final String MY_WISH_FINISH = URL_BASE + "/api/order/wish/over/page";
+    /**
+     * 心愿-进行中
+     */
+    public static final String MY_WISH_GOING = URL_BASE + "/api/order/wish/success/page";
+    /**
+     * 心愿-等待中列表
+     */
+    public static final String MY_WISH_WAITING = URL_BASE + "/api/order/wish/going/page";
+    /**
+     * 机构足迹添加
+     */
+    public static final String ORG_ADD_FOOT = URL_BASE + "/api/company/footprint/change";
+    /**
+     * 机构足迹列表
+     */
+    public static final String ORG_FOOT_LIST = URL_BASE + "/api/company/footprint/page";
+    /**
      * 机构详细
      */
     public static final String ORG_DETAIL = URL_BASE + "/api/company/by/id";
@@ -383,7 +415,7 @@ public class NRConfig {
     public static final String URL_AUTHORISE = URL_BASE + "/api/account/certification";
     // 获取验证码
     public static final String URL_GET_CODE = URL_BASE
-            + "/api/account/register/verifycode";
+            + "/api/account/login/verifyCode";
     // 注册
     public static final String URL_REG = URL_BASE
             + "/api/account/register";

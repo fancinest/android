@@ -6,12 +6,23 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.OrientationHelper;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CalendarView;
+
+import com.applikeysolutions.cosmocalendar.model.Day;
+import com.applikeysolutions.cosmocalendar.selection.criteria.BaseCriteria;
+import com.applikeysolutions.cosmocalendar.selection.criteria.WeekDayCriteria;
+import com.applikeysolutions.cosmocalendar.selection.criteria.month.CurrentMonthCriteria;
+import com.applikeysolutions.cosmocalendar.selection.criteria.month.NextMonthCriteria;
+import com.applikeysolutions.cosmocalendar.selection.criteria.month.PreviousMonthCriteria;
+import com.applikeysolutions.cosmocalendar.utils.SelectionType;
+import com.applikeysolutions.cosmocalendar.view.CalendarView;
+
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -35,7 +46,10 @@ import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -84,7 +98,7 @@ public class OrderBookAct extends BaseActivity {
     @BindView(R.id.card_parent)
     CardView cardParent;
     @BindView(R.id.calendar)
-    CalendarView calendar;
+    CalendarView calendarView;
     @BindView(R.id.tv)
     TextView tv;
     @BindView(R.id.ctv_yes)
@@ -104,6 +118,16 @@ public class OrderBookAct extends BaseActivity {
 
     BookInfo mData;
 
+    //以下为日历的控件
+    private List<BaseCriteria> threeMonthsCriteriaList;
+    private WeekDayCriteria fridayCriteria;
+
+    private boolean fridayCriteriaEnabled;
+    private boolean threeMonthsCriteriaEnabled;
+
+//    private MenuItem menuFridays;
+//    private MenuItem menuThreeMonth;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,10 +138,28 @@ public class OrderBookAct extends BaseActivity {
 
         mData = (BookInfo) getIntent().getSerializableExtra("data");
         setView();
+        createCriterias();
+    }
+
+    private void createCriterias() {
+        fridayCriteria = new WeekDayCriteria(Calendar.FRIDAY);
+
+        threeMonthsCriteriaList = new ArrayList<>();
+        threeMonthsCriteriaList.add(new CurrentMonthCriteria());
+        threeMonthsCriteriaList.add(new NextMonthCriteria());
+        threeMonthsCriteriaList.add(new PreviousMonthCriteria());
     }
 
 
     private void setView() {
+        calendarView.setCalendarOrientation(OrientationHelper.HORIZONTAL);
+        calendarView.setSelectionType(SelectionType.RANGE);
+        calendarView.setSelectedDayBackgroundColor(getResources().getColor(R.color.appBlue));
+        calendarView.setSelectedDayBackgroundStartColor(getResources().getColor(R.color.appBlue));
+        calendarView.setSelectedDayBackgroundEndColor(getResources().getColor(R.color.appBlue));
+//        menuFridays.setVisible(false);
+//        menuThreeMonth.setVisible(false);
+
         cardParent.setCardElevation(0);
         cardParent.setBackgroundColor(getResources().getColor(R.color.white));
         lnScore.setVisibility(View.GONE);
@@ -143,20 +185,30 @@ public class OrderBookAct extends BaseActivity {
                 startActivityForResult(its, 2000);
                 break;
             case R.id.btn_want:
-                LoadDialog.show(getContext(), "正在发送请求...");
                 if (mAddress == null) {
                     Toaster.toast(getContext(), "请填写收货地址!");
                     return;
                 }
-
+                List<Calendar> dd = calendarView.getSelectedDates();
+                if (dd.size() <= 0) {
+                    Toaster.toast(getContext(), "请选择借阅时间！");
+                    return;
+                }
+                String getTime = Utils.getDate(dd.get(0).getTimeInMillis(), "yyyy-MM-dd");
+                if (!Utils.isAfterToday(dd.get(0).getTimeInMillis())) {
+                    Toaster.toast(getContext(), "借阅时间必须在今日之后！");
+                    return;
+                }
+                String returnTime = Utils.getDate(dd.get(dd.size() - 1).getTimeInMillis(), "yyyy-MM-dd");
                 Map<String, Object> map = new HashMap<>();
                 map.put("orderId", mData.getOrderId());
                 map.put("accessToken", MApplication.getAccessToken());
                 map.put("mailId", mAddress.getMailId());
-                map.put("getTime", "2018-5-1 12:00:00");
-                map.put("returnTime", "2018-5-21 12:00:00");
+                map.put("getTime", getTime);
+                map.put("returnTime", returnTime);
                 map.put("mailType", getWay());
                 map.put("applyContent", etMemo.getText().toString());
+                LoadDialog.show(getContext(), "正在发送请求...");
                 NRClient.lendBook(map, new ResultCallback<Result<Void>>() {
                     @Override
                     public void onFailure(Throwable throwable) {

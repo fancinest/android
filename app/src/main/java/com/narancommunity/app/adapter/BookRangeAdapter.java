@@ -13,6 +13,7 @@ import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.adapter.EasyRecyclerAdapter;
 import com.narancommunity.app.entity.MeFunctionEntity;
+import com.narancommunity.app.entity.RankEntity;
 
 import java.util.List;
 
@@ -22,11 +23,11 @@ import java.util.List;
  * FileName :
  */
 
-public class BookRangeAdapter extends EasyRecyclerAdapter<MeFunctionEntity> {
+public class BookRangeAdapter extends EasyRecyclerAdapter<RankEntity> {
     int tag;
     MeItemInterface meItemInterface;
 
-    public BookRangeAdapter(Context context, List<MeFunctionEntity> list, int tag) {
+    public BookRangeAdapter(Context context, List<RankEntity> list, int tag) {
         super(context, list);
         this.tag = tag;
     }

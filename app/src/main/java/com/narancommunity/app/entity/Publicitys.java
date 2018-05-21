@@ -7,19 +7,39 @@ package com.narancommunity.app.entity;
  */
 
 public class Publicitys {
-    String publicityCategory, createTime, publicityImg, publicityName, publicityType;
-    Integer publicityId;
+    String publicityCategory, createTime, publicityImg, publicityName, publicityType, publicityUrl;
+    Integer publicityId, urlType;
+//    publicityUrl	string	当不为1时publicityUrl 为相应跳转的ID
+//    urlType	number	1 ;//H5外链 2 ;//爱心行动 3 ;//互助社区
 
     @Override
     public String toString() {
         return "Publicitys{" +
-                "createTime='" + createTime + '\'' +
+                "publicityCategory='" + publicityCategory + '\'' +
+                ", createTime='" + createTime + '\'' +
                 ", publicityImg='" + publicityImg + '\'' +
                 ", publicityName='" + publicityName + '\'' +
-                ", publicityCategory=" + publicityCategory +
+                ", publicityType='" + publicityType + '\'' +
+                ", publicityUrl='" + publicityUrl + '\'' +
                 ", publicityId=" + publicityId +
-                ", publicityType=" + publicityType +
+                ", urlType=" + urlType +
                 '}';
+    }
+
+    public String getPublicityUrl() {
+        return publicityUrl;
+    }
+
+    public void setPublicityUrl(String publicityUrl) {
+        this.publicityUrl = publicityUrl;
+    }
+
+    public Integer getUrlType() {
+        return urlType;
+    }
+
+    public void setUrlType(Integer urlType) {
+        this.urlType = urlType;
     }
 
     public String getCreateTime() {

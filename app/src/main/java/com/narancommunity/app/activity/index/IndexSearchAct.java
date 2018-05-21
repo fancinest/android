@@ -61,7 +61,7 @@ import butterknife.OnClick;
  * FileName : 书籍搜索界面
  */
 
-public class SearchBookAct extends BaseActivity {
+public class IndexSearchAct extends BaseActivity {
     @BindView(R.id.et_search)
     EditText etSearch;
     @BindView(R.id.tv_cancel)

@@ -181,9 +181,9 @@ public class RegisterAct extends AppCompatActivity {
         Map<String, Object> map = new HashMap<>();
         map.put("mobile", phone);
         map.put("isTest", MApplication.isTest);
-        NRClient.getVerifyCode(map, new ResultCallback<Result<Object>>() {
+        NRClient.getVerifyCode(map, new ResultCallback<Result<Void>>() {
             @Override
-            public void onSuccess(Result<Object> result) {
+            public void onSuccess(Result<Void> result) {
                 LoadDialog.dismiss(RegisterAct.this);
                 mSendVerificationCodeCountDownTimer.start();
                 Toaster.toast(RegisterAct.this, "请注意查收！");

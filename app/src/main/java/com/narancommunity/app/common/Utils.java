@@ -680,6 +680,31 @@ public class Utils {
         return formatter.format(calendar.getTime());
     }
 
+    //获得日期
+    public static String getDate(long time, String format) {
+        DateFormat formatter = new SimpleDateFormat(format);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+        return formatter.format(calendar.getTime());
+    }
+
+    public static boolean isAfterToday(long time) {
+        Date date = new Date(time);
+        Date now = new Date();
+        if (date.after(now)) {
+            return true;
+        } else {
+            if (sameDate(date, now))
+                return true;//如果在两天一样，也算可以选择，毕竟忽略时分秒
+            else return false;
+        }
+    }
+
+    public static boolean sameDate(Date d1, Date d2) {
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+        return fmt.format(d1).equals(fmt.format(d2));
+    }
+
     /**
      * 格式为 System.currentTimeMillion
      *

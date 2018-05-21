@@ -18,6 +18,7 @@ import com.narancommunity.app.entity.CommentListEntity;
 import com.narancommunity.app.entity.CompanyData;
 import com.narancommunity.app.entity.CompanyEntity;
 import com.narancommunity.app.entity.DonateDetailData;
+import com.narancommunity.app.entity.FootPrintData;
 import com.narancommunity.app.entity.GradeData;
 import com.narancommunity.app.entity.IsCollect;
 import com.narancommunity.app.entity.NewsData;
@@ -62,7 +63,7 @@ import retrofit2.http.Url;
 public interface NRService {
     @FormUrlEncoded
     @POST(NRConfig.URL_GET_CODE)
-    Call<Result<Object>> getVerifyCode(@HeaderMap Map<String, Object> headers, @FieldMap Map<String, Object> map);
+    Call<Result<Void>> getVerifyCode(@FieldMap Map<String, Object> map);
 
     @FormUrlEncoded
     @POST(NRConfig.URL_REG)
@@ -160,8 +161,40 @@ public interface NRService {
     Call<Result<BannerData>> getBannerList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取banner列表
 
     @FormUrlEncoded
+    @POST(NRConfig.RANK_BOOKREVIEWS)
+    Call<Result<GradeData>> getRankBookReviewList(@FieldMap Map<String, Object> map);//获取爱心书屋书评榜单
+
+    @FormUrlEncoded
+    @POST(NRConfig.RANK_READ)
+    Call<Result<GradeData>> getRankBookReadList(@FieldMap Map<String, Object> map);//获取爱心书屋读书榜单
+
+    @FormUrlEncoded
+    @POST(NRConfig.RANK_DONATE)
+    Call<Result<GradeData>> getRankBookDonateList(@FieldMap Map<String, Object> map);//获取爱心书屋捐赠榜单(GradeData)
+
+    @FormUrlEncoded
+    @POST(NRConfig.MY_WISH_FINISH)
+    Call<Result<FootPrintData>> getMyWishFinishList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//我的心愿已完成
+
+    @FormUrlEncoded
+    @POST(NRConfig.MY_WISH_WAITING)
+    Call<Result<FootPrintData>> getMyWishWaitingList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//我的心愿等待中
+
+    @FormUrlEncoded
+    @POST(NRConfig.MY_WISH_GOING)
+    Call<Result<FootPrintData>> getMyWishGoingList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//我的心愿进行中
+
+    @FormUrlEncoded
+    @POST(NRConfig.ORG_ADD_FOOT)
+    Call<Result<Void>> addFoot(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//机构足迹添加
+
+    @FormUrlEncoded
     @POST(NRConfig.ORG_SETTLE_DOWN)
     Call<Result<Void>> orgSettleDown(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//机构入驻
+
+    @FormUrlEncoded
+    @POST(NRConfig.ORG_FOOT_LIST)
+    Call<Result<FootPrintData>> getOrgFootList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//机构列表
 
     @FormUrlEncoded
     @POST(NRConfig.ORG_LIST)

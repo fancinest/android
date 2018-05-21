@@ -233,6 +233,7 @@ public class LoveFragment extends Fragment {
                 startActivity(new Intent(getContext(), SettleDownAct.class));
                 break;
             case R.id.iv_search:
+                startActivity(new Intent(getContext(), LoveSearchAct.class));
                 break;
         }
     }

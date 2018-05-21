@@ -12,43 +12,38 @@ import android.widget.TextView;
 import com.joooonho.SelectableRoundedImageView;
 import com.narancommunity.app.R;
 import com.narancommunity.app.activity.index.BookDetailAct;
-import com.narancommunity.app.activity.love.CompanyDetailAct;
 import com.narancommunity.app.adapter.base.ListBaseAdapter;
 import com.narancommunity.app.adapter.base.SuperViewHolder;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.CompanyEntity;
 import com.narancommunity.app.entity.RecEntity;
 
+import butterknife.BindView;
+
 /**
  * Writer：fancy on 2017/8/30 17:17
  * Email：120760202@qq.com
  * FileName :
  */
-public class LoveAdapter extends ListBaseAdapter<CompanyEntity> {
+public class LoveSearchAdapter extends ListBaseAdapter<CompanyEntity> {
     OnItemClickListener listener;
     boolean isSearch = false;
-    boolean isCollect;
 
-    public LoveAdapter(Context context) {
+    public LoveSearchAdapter(Context context) {
         super(context);
     }
-
 
     public void setListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
-//    public void isSearch(boolean isSearch) {
-//        this.isSearch = isSearch;
-//    }
-//
-//    public void isCollect(boolean isCollect) {
-//        this.isCollect = isCollect;
-//    }
+    public void isSearch(boolean isSearch) {
+        this.isSearch = isSearch;
+    }
 
     @Override
     public int getLayoutId() {
-        return R.layout.item_love;
+        return R.layout.item_love_search;
     }
 
     @Override
@@ -58,30 +53,30 @@ public class LoveAdapter extends ListBaseAdapter<CompanyEntity> {
 
     @Override
     public void onBindItemHolder(SuperViewHolder holder, final int position) {
+        if (mDataList.size() <= 0)
+            return;
         final CompanyEntity entity = mDataList.get(position);
         if (entity == null)
             return;
-        SelectableRoundedImageView ivImg = holder.getView(R.id.iv_logo);
 
-        TextView tvTitle = holder.getView(R.id.tv_title);
+        LinearLayout lnItem = holder.getView(R.id.ln_item);
+        SelectableRoundedImageView ivLogo = holder.getView(R.id.iv_logo);
+
+        TextView tvDesc = holder.getView(R.id.tv_desc);
         TextView tvName = holder.getView(R.id.tv_name);
-        CardView cardParent = holder.getView(R.id.card_parent);
 
-        tvName.setText(Utils.getValue(entity.getCompanyName()) + "");
-        tvTitle.setText(Utils.getValue(entity.getCompanyType()) + "");
+        tvName.setText(Utils.getValue(entity.getCompanyName()));
+        tvDesc.setText(Utils.getValue(entity.getCompanyContent()));
 
         if (!"".equals(Utils.getValue(entity.getCompanyImg()))) {
-            Utils.setImgF(mContext, entity.getCompanyImg(), ivImg);
+            Utils.setImgF(mContext, entity.getCompanyImg(), ivLogo);
         } else {
-            Utils.setImgF(mContext, R.mipmap.bg, ivImg);
+            Utils.setImgF(mContext, R.mipmap.bg, ivLogo);
         }
-
-        cardParent.setOnClickListener(new View.OnClickListener() {
+        lnItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                listener.onItemClick(position);
-                mContext.startActivity(new Intent(mContext, CompanyDetailAct.class)
-                        .putExtra("id", entity.getCompanyId()).putExtra("accountId", entity.getAccountId()));
+                listener.onItemClick(position);
             }
         });
     }

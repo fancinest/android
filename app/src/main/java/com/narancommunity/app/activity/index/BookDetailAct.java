@@ -165,7 +165,6 @@ public class BookDetailAct extends BaseActivity {
 
         bookId = getIntent().getIntExtra("bookId", 0);
         setView();
-        setPopView();
         getData();
     }
 
@@ -192,18 +191,21 @@ public class BookDetailAct extends BaseActivity {
             public void onSuccess(Result<IsCollect> result) {
                 LoadDialog.dismiss(getContext());
                 isCollect = result.getData().isMe();
-                setBookCollect();
+                setBookCollect(false);
             }
         });
     }
 
-    private void setBookCollect() {
+    private void setBookCollect(boolean isAdd) {
         if (isCollect)
             tvWishCollect.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.mipmap.list_btn_shoucang_pre)
                     , null, null, null);
         else
             tvWishCollect.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.mipmap.list_btn_shoucang_gre)
                     , null, null, null);
+        if (isAdd)
+            tvWishCollect.setText("" + (collectCount + 1));
+        setPopView();
     }
 
     @Override
@@ -286,6 +288,7 @@ public class BookDetailAct extends BaseActivity {
 
     BookInfo mData;
     String orderStatus = "INITIAL";
+    int collectCount;
 
     private void setBookData(BookInfo data) {
         mData = data;
@@ -330,6 +333,7 @@ public class BookDetailAct extends BaseActivity {
             tvDonater.setText(Utils.getValue(data.getInitiatorNike()) + "");
             tvPublisher.setText(Utils.getValue(data.getPublisher()) + "");
             tvPrice.setText(Utils.getValue(data.getPrice()) + "");
+            collectCount = Utils.getValue(data.getCollectionTimes());
             tvWishCollect.setText(Utils.getValue(data.getCollectionTimes()) + "");
             tvWishComment.setText(Utils.getValue(data.getCommentTimes()) + "");
             tvWishLike.setText(Utils.getValue(data.getLikeTimes()) + "");
@@ -771,7 +775,7 @@ public class BookDetailAct extends BaseActivity {
                 LoadDialog.dismiss(getContext());
                 Toaster.toast(getContext(), "收藏成功");
                 isCollect = true;
-                setBookCollect();
+                setBookCollect(true);
             }
         });
     }
@@ -812,37 +816,42 @@ public class BookDetailAct extends BaseActivity {
         LayoutInflater inflater = LayoutInflater.from(this);
         View v = inflater.inflate(R.layout.pop_function_new, null);
 
-        if (mPop == null) {
-            mPop = new PopupWindow(v, LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            mPop.setFocusable(false);
-            mPop.setAnimationStyle(R.style.popwin_anim_style);
-            v.findViewById(R.id.iv_like).setOnClickListener(new View.OnClickListener() {
+        mPop = new PopupWindow(v, LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        mPop.setFocusable(false);
+        mPop.setAnimationStyle(R.style.popwin_anim_style);
+        v.findViewById(R.id.iv_like).setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View arg0) {
-                    likeBook();
-                }
-            });
-            v.findViewById(R.id.iv_collect).setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View arg0) {
-//                    doCollect();
-                    //TODO
-                }
-            });
-            v.findViewById(R.id.iv_add_comment).setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View arg0) {
-//                    showInputDialog(0, "");
-                    startActivity(new Intent(getContext(), AddBookCommentAct.class)
-                            .putExtra("replyName", "").putExtra("tag", 1)
-                            .putExtra("commentId", "").putExtra("bookId", bookId));
-                }
-            });
+            @Override
+            public void onClick(View arg0) {
+                likeBook();
+            }
+        });
+        ImageView img = v.findViewById(R.id.iv_collect);
+        if (isCollect) {
+            img.setBackground(getResources().getDrawable(R.mipmap.side_btn_shoucang_pre));
         }
+        img.findViewById(R.id.iv_collect).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                if (!isCollect)
+                    addCollect();
+                else Toaster.toast(getContext(), "您已经收藏过啦！");
+            }
+        });
+        v.findViewById(R.id.iv_add_comment).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+//                    showInputDialog(0, "");
+                startActivity(new Intent(getContext(), AddBookCommentAct.class)
+                        .putExtra("replyName", "").putExtra("tag", 1)
+                        .putExtra("commentId", "").putExtra("bookId", bookId));
+            }
+        });
+
+        showPop();
     }
 
 }

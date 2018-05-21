@@ -2,8 +2,10 @@ package com.narancommunity.app.activity.general;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -19,8 +21,10 @@ import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.UserInfo;
 import com.narancommunity.app.net.AppConstants;
 import com.narancommunity.app.net.NRClient;
+import com.narancommunity.app.net.NRConfig;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.narancommunity.app.net.ServiceFactory;
 import com.snappydb.DB;
 import com.snappydb.SnappydbException;
 
@@ -38,12 +42,19 @@ import butterknife.OnClick;
  */
 
 public class LoginAct extends BaseActivity {
+
     @BindView(R.id.et_phone)
     EditText etPhone;
-    @BindView(R.id.et_psd)
-    EditText etPsd;
+    @BindView(R.id.et_verify_code)
+    EditText etVerifyCode;
+    @BindView(R.id.tv_get_code)
+    TextView tvGetCode;
     @BindView(R.id.tv_login)
     TextView tvLogin;
+    @BindView(R.id.ctv_is_agree)
+    CheckedTextView ctvIsAgree;
+    @BindView(R.id.tv_agreement)
+    TextView tvAgreement;
     @BindView(R.id.tv_reset)
     TextView tvReset;
     @BindView(R.id.center)
@@ -69,11 +80,13 @@ public class LoginAct extends BaseActivity {
         MApplication.putActivity("login", LoginAct.this);
     }
 
-    @OnClick({R.id.tv_login, R.id.tv_reset, R.id.tv_register, R.id.tv_qq, R.id.tv_sina, R.id.tv_wechat})
+    @OnClick({R.id.tv_login, R.id.tv_reset, R.id.tv_register, R.id.tv_qq,
+            R.id.tv_sina, R.id.tv_wechat, R.id.tv_agreement, R.id.ctv_is_agree
+            , R.id.tv_get_code})
     public void onViewClicked(View view) {
+        String phone = etPhone.getText().toString();
         switch (view.getId()) {
             case R.id.tv_login:
-                String phone = etPhone.getText().toString();
                 if (Utils.isEmpty(phone)) {
                     Toaster.toast(this, "请输入手机号码");
                     etPhone.requestFocus();
@@ -84,24 +97,13 @@ public class LoginAct extends BaseActivity {
                     etPhone.requestFocus();
                     return;
                 }
-                String psd = etPsd.getText().toString();
-                if (Utils.isEmpty(psd)) {
-                    Toaster.toast(this, "请输入密码");
-                    etPsd.requestFocus();
+                String code = etVerifyCode.getText().toString();
+                if (Utils.isEmpty(code)) {
+                    Toaster.toast(this, "请输入验证码");
+                    etVerifyCode.requestFocus();
                     return;
                 }
-                if (psd.length() < 6) {
-                    Toaster.toast(this, "密码长度需大于6");
-                    etPsd.requestFocus();
-                    return;
-                }
-                doLogin(phone, psd);
-                break;
-            case R.id.tv_reset:
-                startActivity(new Intent(getContext(), ForgetAct.class));
-                break;
-            case R.id.tv_register:
-                startActivity(new Intent(getContext(), RegisterAct.class));
+                doLogin(phone, code);
                 break;
             case R.id.tv_qq:
                 break;
@@ -109,15 +111,33 @@ public class LoginAct extends BaseActivity {
                 break;
             case R.id.tv_wechat:
                 break;
+            case R.id.tv_agreement:
+                startActivity(new Intent(getContext(), AgreementAct.class)
+                        .putExtra("url", ServiceFactory.API_BASE_URL + NRConfig.URL_PROTOCOL));
+                break;
+            case R.id.ctv_is_agree:
+                ctvIsAgree.setChecked(!ctvIsAgree.isChecked());
+                break;
+            case R.id.tv_get_code:
+                if (Utils.isEmpty(phone)) {
+                    Toaster.toast(this, "请输入手机号码");
+                    return;
+                }
+                if (phone.length() != 11) {
+                    Toaster.toast(this, "手机号码输入错误！");
+                    etPhone.requestFocus();
+                    return;
+                }
+                doGetCode(phone);
+                break;
         }
     }
 
-    private void doLogin(String phone, String psd) {
+    private void doLogin(String phone, String code) {
         LoadDialog.show(this, "正在为您登录...");
-        String pass = Utils.MD5(psd);
         Map<String, Object> map = new HashMap<>();
-        map.put("accountNum", phone);
-        map.put("password", pass);
+        map.put("mobile", phone);
+        map.put("verifyCode", code);
         map.put("deviceNo", Utils.getDeviceID(getContext()));
         NRClient.login(map, new ResultCallback<Result<UserInfo>>() {
             @Override
@@ -137,18 +157,58 @@ public class LoginAct extends BaseActivity {
         });
     }
 
+    private void doGetCode(String phone) {
+        LoadDialog.show(this);
+        Map<String, Object> map = new HashMap<>();
+        map.put("mobile", phone);
+        map.put("isTest", MApplication.isTest);
+        NRClient.getVerifyCode(map, new ResultCallback<Result<Void>>() {
+            @Override
+            public void onSuccess(Result<Void> result) {
+                LoadDialog.dismiss(getContext());
+                mSendVerificationCodeCountDownTimer.start();
+                Toaster.toast(getContext(), "请注意查收！");
+                if (!MApplication.isRelease)
+                    etVerifyCode.setText("" + Utils.getValue(result.getMsg()));
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+        });
+    }
+
+    private CountDownTimer mSendVerificationCodeCountDownTimer = new CountDownTimer(60000, 1000) {
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            if (tvGetCode != null) {
+                tvGetCode.setEnabled(false);
+                tvGetCode.setBackgroundResource(R.drawable.round_corner_grey);
+                tvGetCode.setText(
+                        getString(R.string.send_verification_code_countdown,
+                                "" + millisUntilFinished / 1000));
+            }
+        }
+
+        @Override
+        public void onFinish() {
+            if (tvGetCode != null) {
+                tvGetCode.setBackgroundResource(R.drawable.round_corner_green);
+                tvGetCode.setEnabled(true);
+                tvGetCode.setText(R.string.send_verification_code);
+            }
+        }
+    };
+
     /**
      * 保存用户信息
      *
      * @param data
      */
     private void saveUserInfo(UserInfo data) {
-//                UserInfo info = new UserInfo();
-//                info.setAccessToken(result.getData().get("accessToken") + "");
-//                info.setAccountId(result.getData().get("accountId") + "");
-//                info.setNickName(result.getData().get("nickName") + "");
-//                info.setPhone(result.getData().get("phone") + "");
-
         try {
             DB snappyDb =
                     DBHelper.getDB(this);
