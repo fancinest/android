@@ -62,6 +62,10 @@ dependencies {
     implementation 'me.leefeng:citypicker:1.0'
     implementation 'se.emilsjolander:StickyScrollViewItems:1.1.0'
     implementation 'com.github.applikeysolutions:cosmocalendar:1.0.4'
+
+    compile 'com.amap.api:location:4.0.1'
+    compile 'com.amap.api:3dmap:6.2.0'
+    compile 'com.amap.api:search:6.1.0'
     //    implementation 'io.reactivex:rxjava:1.0.14'
     //    implementation 'io.reactivex:rxandroid:1.0.1'
 }

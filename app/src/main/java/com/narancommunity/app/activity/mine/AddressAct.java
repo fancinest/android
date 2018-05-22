@@ -147,7 +147,10 @@ public class AddressAct extends BaseActivity {
 
     @OnClick(R.id.btn_add)
     public void onViewClicked() {
-        getContext().startActivity(new Intent(getContext(), EditAddressAct.class)
+//        getContext().startActivity(new Intent(getContext(), EditAddressAct.class)
+//                .putExtra("flag", 0));
+
+        getContext().startActivity(new Intent(getContext(), AddAddressAct.class)
                 .putExtra("flag", 0));
     }
 }
