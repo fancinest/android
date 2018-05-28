@@ -275,14 +275,13 @@
                     android:textColor="@color/color_333333"
                     android:textSize="15sp" />
 
-                <TextView
-                    android:id="@+id/tv_address"
+                <EditText
+                    android:id="@+id/et_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:background="@color/white"
-                    android:drawableRight="@mipmap/list_icon_xiangqing"
-                    android:hint="请选择机构地址"
+                    android:hint="请输入机构地址"
                     android:textColor="@color/color_333333"
                     android:textColorHint="@color/color_999999"
                     android:textSize="15sp" />

@@ -68,6 +68,8 @@
             android:id="@+id/tv_name_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="fancy"
             android:textColor="@color/appBlue"
             android:textSize="15sp" />

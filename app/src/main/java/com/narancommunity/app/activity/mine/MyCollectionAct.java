@@ -56,7 +56,7 @@ public class MyCollectionAct extends BaseActivity implements OnTabSelectListener
         MyCollectionSonFragment donate = MyCollectionSonFragment.newInstance();
         donate.setType(1);
         MyCollectionSonFragment tiezi = MyCollectionSonFragment.newInstance();
-        tiezi.setType(3);
+        tiezi.setType(2);
         Collections.addAll(mFragments, essay, donate, tiezi);
 
         vp.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));

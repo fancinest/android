@@ -14,7 +14,8 @@
         android:background="@color/white"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
-        android:paddingRight="15dp">
+        android:paddingRight="15dp"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="0dp"
@@ -36,7 +37,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#ffececec" />
+        android:background="#ffececec"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,7 +46,8 @@
         android:background="@color/white"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
-        android:paddingRight="15dp">
+        android:paddingRight="15dp"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="0dp"
@@ -66,7 +69,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#ffececec" />
+        android:background="#ffececec"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -74,7 +78,8 @@
         android:background="@color/white"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
-        android:paddingRight="15dp">
+        android:paddingRight="15dp"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="0dp"
@@ -170,40 +175,40 @@
         android:background="#ffececec" />
 
     <!--<LinearLayout-->
-        <!--android:id="@+id/tr_modify"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@color/white"-->
-        <!--android:clickable="true"-->
-        <!--android:gravity="center_vertical"-->
-        <!--android:minHeight="38dp"-->
-        <!--android:orientation="horizontal"-->
-        <!--android:paddingLeft="15dp"-->
-        <!--android:paddingRight="15dp">-->
+    <!--android:id="@+id/tr_modify"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@color/white"-->
+    <!--android:clickable="true"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:minHeight="38dp"-->
+    <!--android:orientation="horizontal"-->
+    <!--android:paddingLeft="15dp"-->
+    <!--android:paddingRight="15dp">-->
 
-        <!--<TextView-->
-            <!--android:id="@+id/textView2"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:drawableLeft="@mipmap/wode_xiugaimima"-->
-            <!--android:drawablePadding="12dp"-->
-            <!--android:text="修改密码"-->
-            <!--android:textColor="@color/black"-->
-            <!--android:textSize="16sp" />-->
+    <!--<TextView-->
+    <!--android:id="@+id/textView2"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:drawableLeft="@mipmap/wode_xiugaimima"-->
+    <!--android:drawablePadding="12dp"-->
+    <!--android:text="修改密码"-->
+    <!--android:textColor="@color/black"-->
+    <!--android:textSize="16sp" />-->
 
 
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:src="@mipmap/icon_xiangqing" />-->
+    <!--<ImageView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:src="@mipmap/icon_xiangqing" />-->
 
     <!--</LinearLayout>-->
 
     <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1px"-->
-        <!--android:background="#ffececec" />-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="1px"-->
+    <!--android:background="#ffececec" />-->
 
     <LinearLayout
         android:id="@+id/ln_about"
@@ -236,34 +241,34 @@
 
 
     <!--<LinearLayout-->
-        <!--android:id="@+id/tr_version"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginTop="16dp"-->
-        <!--android:background="@color/white"-->
-        <!--android:clickable="true"-->
-        <!--android:gravity="center_vertical"-->
-        <!--android:minHeight="38dp"-->
-        <!--android:orientation="horizontal"-->
-        <!--android:paddingLeft="15dp"-->
-        <!--android:paddingRight="15dp">-->
+    <!--android:id="@+id/tr_version"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="16dp"-->
+    <!--android:background="@color/white"-->
+    <!--android:clickable="true"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:minHeight="38dp"-->
+    <!--android:orientation="horizontal"-->
+    <!--android:paddingLeft="15dp"-->
+    <!--android:paddingRight="15dp">-->
 
-        <!--<TextView-->
-            <!--android:id="@+id/textView"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:drawableLeft="@mipmap/wode_zuixinbanben"-->
-            <!--android:drawablePadding="12dp"-->
-            <!--android:text="最新版本"-->
-            <!--android:textColor="@color/black"-->
-            <!--android:textSize="16sp" />-->
+    <!--<TextView-->
+    <!--android:id="@+id/textView"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:drawableLeft="@mipmap/wode_zuixinbanben"-->
+    <!--android:drawablePadding="12dp"-->
+    <!--android:text="最新版本"-->
+    <!--android:textColor="@color/black"-->
+    <!--android:textSize="16sp" />-->
 
 
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:src="@mipmap/icon_xiangqing" />-->
+    <!--<ImageView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:src="@mipmap/icon_xiangqing" />-->
 
     <!--</LinearLayout>-->
 

@@ -165,7 +165,6 @@ public class BookDetailAct extends BaseActivity {
 
         bookId = getIntent().getIntExtra("bookId", 0);
         setView();
-        getData();
     }
 
     private void getData() {
@@ -211,6 +210,7 @@ public class BookDetailAct extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        getData();
         getLikeState();
     }
 
@@ -634,7 +634,7 @@ public class BookDetailAct extends BaseActivity {
                 showDesc();
                 break;
             case R.id.iv_lend_card:
-                startActivity(new Intent(getContext(), BookLendCardAct.class));
+                startActivity(new Intent(getContext(), BookLendCardAct.class).putExtra("bookId", bookId));
                 break;
             case R.id.iv_donater:
                 break;
@@ -851,7 +851,12 @@ public class BookDetailAct extends BaseActivity {
             }
         });
 
-        showPop();
+        v.post(new Runnable() {
+            @Override
+            public void run() {
+                showPop();
+            }
+        });
     }
 
 }

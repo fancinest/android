@@ -1,9 +1,13 @@
 package com.narancommunity.app;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.SoundEffectConstants;
@@ -17,6 +21,8 @@ import com.narancommunity.app.activity.index.DonateBookAct;
 import com.narancommunity.app.activity.index.ReleaseAct;
 import com.narancommunity.app.activity.love.LoveFragment;
 import com.narancommunity.app.activity.mine.MeFragment;
+import com.narancommunity.app.common.Toaster;
+import com.narancommunity.app.common.Utils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -76,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 .hide(mPhilFragment)
                 .hide(mMeFragment)
                 .commit();
+        registerMessageReceiver();  // used for receive msg
     }
 
     /**
@@ -125,13 +132,63 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void onResume() {
-        super.onResume();
-//        MobclickAgent.onResume(this);
+    private MessageReceiver mMessageReceiver;
+
+    public void registerMessageReceiver() {
+        mMessageReceiver = new MessageReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
+        filter.addAction(MESSAGE_RECEIVED_ACTION);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, filter);
     }
 
-    public void onPause() {
+    public class MessageReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                if (MESSAGE_RECEIVED_ACTION.equals(intent.getAction())) {
+                    String messge = intent.getStringExtra(KEY_MESSAGE);
+                    String extras = intent.getStringExtra(KEY_EXTRAS);
+                    StringBuilder showMsg = new StringBuilder();
+                    showMsg.append(KEY_MESSAGE + " : " + messge + "\n");
+                    if (!Utils.isEmpty(extras)) {
+                        showMsg.append(KEY_EXTRAS + " : " + extras + "\n");
+                    }
+                    setCostomMsg(showMsg.toString());
+                }
+            } catch (Exception e) {
+            }
+        }
+    }
+
+    private void setCostomMsg(String msg) {
+        Toaster.toast(getApplicationContext(), "要显示用户自定义推送");
+    }
+
+    @Override
+    protected void onDestroy() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+        super.onDestroy();
+    }
+
+    public static boolean isForeground = false;
+
+    public static final String MESSAGE_RECEIVED_ACTION = "com.example.jpushdemo.MESSAGE_RECEIVED_ACTION";
+    public static final String KEY_TITLE = "title";
+    public static final String KEY_MESSAGE = "message";
+    public static final String KEY_EXTRAS = "extras";
+
+    @Override
+    protected void onResume() {
+        isForeground = true;
+        super.onResume();
+    }
+
+
+    @Override
+    protected void onPause() {
+        isForeground = false;
         super.onPause();
-//        MobclickAgent.onPause(this);
     }
 }

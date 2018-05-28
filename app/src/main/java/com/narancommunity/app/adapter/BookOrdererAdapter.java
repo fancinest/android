@@ -38,7 +38,7 @@ public class BookOrdererAdapter extends ListBaseAdapter<OrderEntity> {
     public void onBindItemHolder(SuperViewHolder holder, final int position) {
         if (mDataList.size() <= 0)
             return;
-        OrderEntity entity = getDataList().get(position);
+        final OrderEntity entity = getDataList().get(position);
         ImageView iv_img = holder.getView(R.id.iv);
         String url = Utils.getValue(entity.getAccountImg());
         if (!"".equals(url)) {
@@ -48,7 +48,7 @@ public class BookOrdererAdapter extends ListBaseAdapter<OrderEntity> {
         iv_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mContext.startActivity(new Intent(mContext, BookOrdererListAct.class));
+                mContext.startActivity(new Intent(mContext, BookOrdererListAct.class).putExtra("bookId",entity.getOrderId()));
             }
         });
     }

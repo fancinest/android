@@ -131,7 +131,10 @@ public class MeFragment extends Fragment {
                 int percent = (int) getPercent(now, top);
                 pbExp.setProgress(percent);
             } else pbExp.setProgress(0);
-        } else Utils.setImgF(getContext(), R.mipmap.zw_morentouxiang, ivIcon);
+        } else {
+            tvName.setText("请登录");
+            Utils.setImgF(getContext(), R.mipmap.zw_morentouxiang, ivIcon);
+        }
 
         if (MApplication.getUserInfo(getContext()) != null &&
                 MApplication.getUserInfo(getContext()).getCertificationType().equals("SUCCESS")) {
@@ -146,11 +149,15 @@ public class MeFragment extends Fragment {
             Drawable drawable = getResources().getDrawable(R.mipmap.icon_weirenzheng);
             tvAuthorise.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
         } else if (MApplication.getUserInfo(getContext()) != null &&
-                (MApplication.getUserInfo(getContext()).getCertificationType().equals("INITIAL") ||
-                        MApplication.getUserInfo(getContext()).getCertificationType().equals("GOING"))) {
+                MApplication.getUserInfo(getContext()).getCertificationType().equals("GOING")) {
             tvAuthorise.setText("申请实名认证中");
             tvAuthorise.setTextColor(getResources().getColor(R.color.green_tag));
             Drawable drawable = getResources().getDrawable(R.mipmap.icon_renzhengzhong);
+            tvAuthorise.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+        } else {
+            tvAuthorise.setText("申请实名认证");
+            tvAuthorise.setTextColor(getResources().getColor(R.color.appRed));
+            Drawable drawable = getResources().getDrawable(R.mipmap.icon_weirenzheng);
             tvAuthorise.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
         }
     }
@@ -273,6 +280,7 @@ public class MeFragment extends Fragment {
             case 7://联系客服
                 break;
             case 8://关于那然
+                startActivity(new Intent(getContext(), LookBookStateAct.class));
                 break;
 
         }
@@ -303,7 +311,7 @@ public class MeFragment extends Fragment {
         super.onDestroyView();
     }
 
-    @OnClick({R.id.iv_msg, R.id.iv_set, R.id.tv_authorise, R.id.iv_icon})
+    @OnClick({R.id.iv_msg, R.id.iv_set, R.id.tv_authorise, R.id.iv_icon, R.id.ln_info})
     public void onViewClicked(View view) {
         String token = MApplication.getAccessToken();
         switch (view.getId()) {
@@ -316,6 +324,11 @@ public class MeFragment extends Fragment {
                 startActivity(new Intent(getContext(), MsgAct.class));
                 break;
             case R.id.iv_set:
+                if (token.equals("")) {
+                    startActivity(new Intent(getContext(), LoginAct.class));
+                    Toaster.toast(getContext(), "请先登录！");
+                    return;
+                }
                 startActivity(new Intent(getContext(), SettingAct.class));
                 break;
             case R.id.tv_authorise:
@@ -324,8 +337,20 @@ public class MeFragment extends Fragment {
                     Toaster.toast(getContext(), "请先登录！");
                     return;
                 }
-                startActivity(new Intent(getContext(), AuthoriseFirstAct.class));
+
+                if (MApplication.getUserInfo(getContext()) != null &&
+                        MApplication.getUserInfo(getContext()).getCertificationType().equals("INITIAL"))
+                    startActivity(new Intent(getContext(), AuthoriseFirstAct.class));
+                else if (MApplication.getUserInfo(getContext()) != null &&
+                        MApplication.getUserInfo(getContext()).getCertificationType().equals("SUCCESS")) {
+                    startActivity(new Intent(getContext(), AuthoriseSuccessAct.class));
+                } else if (MApplication.getUserInfo(getContext()) != null &&
+                        MApplication.getUserInfo(getContext()).getCertificationType().equals("FAIL")) {
+                } else if (MApplication.getUserInfo(getContext()) != null &&
+                        MApplication.getUserInfo(getContext()).getCertificationType().equals("GOING")) {
+                }
                 break;
+            case R.id.ln_info:
             case R.id.iv_icon:
                 if (token.equals("")) {
                     startActivity(new Intent(getContext(), LoginAct.class));

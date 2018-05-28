@@ -88,8 +88,8 @@ public class SettleDownAct extends BaseActivity {
     EditText etTel;
     @BindView(R.id.tv_create_time)
     TextView tvCreateTime;
-    @BindView(R.id.tv_address)
-    TextView tvAddress;
+    @BindView(R.id.et_address)
+    EditText etAddress;
     @BindView(R.id.tagFlow_type)
     TagFlowLayout tagFlowType;
     @BindView(R.id.et_remark)
@@ -152,7 +152,7 @@ public class SettleDownAct extends BaseActivity {
                 String man = etMan.getText().toString();
                 String tel = etTel.getText().toString();
                 String date = tvCreateTime.getText().toString();
-                String address = tvAddress.getText().toString();
+                String address = etAddress.getText().toString();
                 String remark = etRemark.getText().toString();
                 String type = getSortType();
                 if ("".equals(name)) {
@@ -175,7 +175,7 @@ public class SettleDownAct extends BaseActivity {
                     return;
                 }
                 if ("".equals(address)) {
-                    Toaster.toast(getContext(), "请先选择机构地址");
+                    Toaster.toast(getContext(), "请先输入机构地址");
                     return;
                 }
                 if ("".equals(type)) {
@@ -480,11 +480,7 @@ public class SettleDownAct extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 2001 && data != null) {
-            AddressEntity address = (AddressEntity) data.getSerializableExtra("address");
-            mAddress = address;
-            setAddress(address);
-        } else if (Activity.RESULT_OK == resultCode) {
+        if (Activity.RESULT_OK == resultCode) {
             switch (requestCode) {
                 case GET_IMAGE_VIA_CAMERA: // 相机
                     // 拍完照片直接返回，不用截图
@@ -502,12 +498,6 @@ public class SettleDownAct extends BaseActivity {
                     break;
             }
         }
-    }
-
-    private void setAddress(AddressEntity address) {
-        tvAddress.setVisibility(View.VISIBLE);
-        tvAddress.setText(Utils.getValue(address.getProvince() + address.getCity() + address.getCounty()
-                + address.getMailAddress()) + "");
     }
 
     private Uri getNewPath() {

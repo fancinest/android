@@ -51,7 +51,8 @@ public class CommunityYSHYAdapter extends EasyRecyclerAdapter<YSHYEntity> {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_bookcommunity_son, parent, false);
+        View convertView;
+        convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_bookcommunity_son, parent, false);
         return new MyViewHolder(convertView);
     }
 

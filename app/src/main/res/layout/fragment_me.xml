@@ -33,7 +33,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
                     android:gravity="right"
                     android:orientation="horizontal">
 
@@ -41,14 +40,18 @@
                         android:id="@+id/iv_msg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="14dp"
                         android:src="@mipmap/wode_btn_msg" />
 
                     <ImageView
                         android:id="@+id/iv_set"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="16dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="14dp"
                         android:src="@mipmap/wode_btn_shezhi" />
 
                 </LinearLayout>
@@ -113,6 +116,7 @@
                                 app:sriv_oval="true" />
 
                             <LinearLayout
+                                android:id="@+id/ln_info"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="16dp"
@@ -127,7 +131,6 @@
                                     android:maxEms="8"
                                     android:maxLength="8"
                                     android:maxLines="1"
-                                    android:text="哈哈"
                                     android:textColor="@color/color_666666"
                                     android:textSize="16sp" />
 
@@ -135,7 +138,6 @@
                                     android:id="@+id/tv_intro"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="说一句介绍自己"
                                     android:textColor="@color/color_999999"
                                     android:textSize="12sp" />
 
@@ -239,7 +241,6 @@
                             android:layout_marginRight="24dp"
                             android:layout_marginTop="4dp"
                             android:max="100"
-                            android:progress="80"
                             android:progressDrawable="@drawable/progress" />
 
                         <LinearLayout
@@ -289,8 +290,7 @@
                             android:layout_marginRight="24dp"
                             android:layout_marginTop="4dp"
                             android:max="100"
-                            android:progressDrawable="@drawable/progress"
-                            android:secondaryProgress="60" />
+                            android:progressDrawable="@drawable/progress" />
 
                         <View
                             android:layout_width="match_parent"
@@ -320,7 +320,7 @@
                                     android:drawablePadding="6dp"
                                     android:gravity="center_vertical"
                                     android:paddingLeft="24dp"
-                                    android:text="心愿海ID：3525255"
+                                    android:text="心愿海ID：无"
                                     android:textColor="@color/color_666666"
                                     android:textSize="12sp" />
                             </LinearLayout>

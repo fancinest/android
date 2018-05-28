@@ -1,14 +1,82 @@
 package com.narancommunity.app.entity;
 
+import java.io.Serializable;
+
 /**
  * Writer：fancy on 2018/4/19 15:19
  * Email：120760202@qq.com
  * FileName : 预定的人（想要看的人的对象）
  */
 
-public class OrderEntity {
+public class OrderEntity implements Serializable {
+
     String accountImg, accountNike, applyStatus, getTime, returnTime;
     Integer accountId, applyId, orderId;
+    String city, county, createTime, mailAddress, mailName, mailPhone, province, updateTime;
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
+    public void setCounty(String county) {
+        this.county = county;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getMailAddress() {
+        return mailAddress;
+    }
+
+    public void setMailAddress(String mailAddress) {
+        this.mailAddress = mailAddress;
+    }
+
+    public String getMailName() {
+        return mailName;
+    }
+
+    public void setMailName(String mailName) {
+        this.mailName = mailName;
+    }
+
+    public String getMailPhone() {
+        return mailPhone;
+    }
+
+    public void setMailPhone(String mailPhone) {
+        this.mailPhone = mailPhone;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
 
     public String getAccountImg() {
         return accountImg;

@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -15,8 +14,7 @@ import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.common.adapter.EasyRecyclerAdapter;
-import com.narancommunity.app.entity.MeFunctionEntity;
-import com.narancommunity.app.entity.WantEntity;
+import com.narancommunity.app.entity.OrderEntity;
 
 import java.util.List;
 
@@ -26,11 +24,11 @@ import java.util.List;
  * FileName :
  */
 
-public class WantListAdapter extends EasyRecyclerAdapter<WantEntity> {
+public class WantListAdapter extends EasyRecyclerAdapter<OrderEntity> {
     boolean isLimited = false;
     MeItemInterface meItemInterface;
 
-    public WantListAdapter(Context context, List<WantEntity> list) {
+    public WantListAdapter(Context context, List<OrderEntity> list) {
         super(context, list);
     }
 
@@ -48,8 +46,8 @@ public class WantListAdapter extends EasyRecyclerAdapter<WantEntity> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final MyViewHolder hold = (MyViewHolder) (holder);
 
-        final WantEntity item = getList().get(position);
-        hold.tv_content.setText(Utils.getValue(item.getApplyTitle()) + "");
+        final OrderEntity item = getList().get(position);
+        hold.tv_content.setText(Utils.getValue(item.getAccountNike() + ""));
         String url = item.getAccountImg();
         Utils.setImgF(mContext, url, hold.iv_pic);
         hold.ln_parent.setOnClickListener(new View.OnClickListener() {

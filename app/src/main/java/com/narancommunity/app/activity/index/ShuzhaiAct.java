@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 
 import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
 import com.narancommunity.app.adapter.card.CardPagerAdapter;
@@ -14,6 +15,7 @@ import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
+import com.narancommunity.app.entity.OrderData;
 import com.narancommunity.app.entity.ShuzhaiData;
 import com.narancommunity.app.entity.ShuzhaiItem;
 import com.narancommunity.app.net.NRClient;
@@ -116,13 +118,31 @@ public class ShuzhaiAct extends BaseActivity {
         mCardAdapter.setListener(new MeItemInterface() {
             @Override
             public void OnItemClick(int position) {
-
-                Log.i("fancy", "点击了赞");
+                likeIt(position);
             }
 
             @Override
             public void OnDelClick(int position) {
-                Log.i("fancy", "点击了分享");
+                showShareBoard();
+            }
+        });
+    }
+
+    private void likeIt(int position) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("accessToken", MApplication.getAccessToken());
+        map.put("contentId", listData.get(position).getContentId());
+        NRClient.likeEssay(map, new ResultCallback<Result<Void>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<Void> result) {
+                LoadDialog.dismiss(getContext());
+                Toaster.toast(getContext(), "点赞成功");
             }
         });
     }

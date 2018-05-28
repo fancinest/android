@@ -80,4 +80,6 @@ public class WishEntity implements Serializable{
     public void setOrderTitle(String orderTitle) {
         this.orderTitle = orderTitle;
     }
+
+
 }

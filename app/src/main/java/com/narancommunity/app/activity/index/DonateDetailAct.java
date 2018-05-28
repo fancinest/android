@@ -46,7 +46,7 @@ import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.CommentEntity;
 import com.narancommunity.app.entity.CommentListEntity;
 import com.narancommunity.app.entity.DonateDetailData;
-import com.narancommunity.app.entity.WantEntity;
+import com.narancommunity.app.entity.OrderEntity;
 import com.narancommunity.app.entity.WantListEntity;
 import com.narancommunity.app.interfaces.CommentInterfaces;
 import com.narancommunity.app.net.NRClient;
@@ -340,7 +340,7 @@ public class DonateDetailAct extends BaseActivity {
     }
 
     private void setWantList(WantListEntity data) {
-        final List<WantEntity> list;
+        final List<OrderEntity> list;
         if (data != null && data.getApplys() != null && data.getApplys().size() > 0) {
             recyclerViewWant.setVisibility(View.VISIBLE);
             lnDonateWant.setVisibility(View.VISIBLE);

@@ -51,6 +51,7 @@
             android:background="@color/white"
             android:gravity="left"
             android:hint="请输入或扫描运单号"
+            android:inputType="number"
             android:textColor="@color/color_999999"
             android:textSize="12sp" />
 

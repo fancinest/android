@@ -276,6 +276,28 @@ public class BookYSHYDetailAct extends BaseActivity {
         }
     }
 
+    private void addCollect() {
+        LoadDialog.show(getContext());
+        Map<String, Object> map = new HashMap<>();
+        map.put("contentId", mData.getContentId());
+        map.put("accessToken", MApplication.getAccessToken());
+        NRClient.collectEssay(map, new ResultCallback<Result<Void>>() {
+            @Override
+            public void onSuccess(Result<Void> result) {
+                LoadDialog.dismiss(getContext());
+//                isCollect = true;
+                Toaster.toast(getContext(), "收藏成功！");
+//                setIsCollect();
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+        });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_jubao_share, menu);
@@ -304,8 +326,7 @@ public class BookYSHYDetailAct extends BaseActivity {
 
                 @Override
                 public void onClick(View arg0) {
-//                    doCollect();
-                    //TODO
+                    addCollect();
                 }
             });
             v.findViewById(R.id.iv_add_comment).setOnClickListener(new View.OnClickListener() {

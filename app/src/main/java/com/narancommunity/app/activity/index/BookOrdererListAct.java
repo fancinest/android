@@ -14,14 +14,23 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.adapter.BookOrderListAdapter;
 import com.narancommunity.app.adapter.OnItemClickListener;
 import com.narancommunity.app.common.CenteredToolbar;
-import com.narancommunity.app.entity.BookOrderer;
+import com.narancommunity.app.common.LoadDialog;
+import com.narancommunity.app.common.Utils;
+import com.narancommunity.app.entity.OrderData;
+import com.narancommunity.app.entity.OrderEntity;
+import com.narancommunity.app.net.NRClient;
+import com.narancommunity.app.net.Result;
+import com.narancommunity.app.net.ResultCallback;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,7 +48,8 @@ public class BookOrdererListAct extends BaseActivity {
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     BookOrderListAdapter adapter;
-    List<BookOrderer> listData = new ArrayList<>();
+    List<OrderEntity> listData = new ArrayList<>();
+    int bookId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,12 +58,12 @@ public class BookOrdererListAct extends BaseActivity {
         ButterKnife.bind(this);
         setBar(toolbar);
         toolbar.setTitle("想看的人");
+        bookId = getIntent().getIntExtra("bookId", 0);
 
         setView();
     }
 
     private void setView() {
-        setData();
         final LinearLayoutManager lm_latest = new LinearLayoutManager(getContext());
         lm_latest.setOrientation(LinearLayoutManager.VERTICAL);
         adapter = new BookOrderListAdapter(getContext());
@@ -68,15 +78,37 @@ public class BookOrdererListAct extends BaseActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    private void setData() {
-        BookOrderer entity;
-        for (int i = 0; i < 9; i++) {
-            entity = new BookOrderer();
-            entity.setDate("10");
-            entity.setDistance(10 + "");
-            entity.setUrl("http://img.qqzhi.com/upload/img_3_1897173975D2024083860_27.jpg");
-            listData.add(entity);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getOrderData();
+    }
+
+    private void getOrderData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("accessToken", MApplication.getAccessToken());
+        map.put("orderId", bookId);
+        NRClient.getBookOrderer(map, new ResultCallback<Result<OrderData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<OrderData> result) {
+                LoadDialog.dismiss(getContext());
+                setOrdererData(result.getData());
+            }
+        });
+    }
+
+    private void setOrdererData(OrderData data) {
+        if (data != null && data.getApplys() != null) {
+            listData.addAll(data.getApplys());
+            adapter.setDataList(listData);
         }
+        adapter.notifyDataSetChanged();
     }
 
     @OnClick(R.id.recyclerView)

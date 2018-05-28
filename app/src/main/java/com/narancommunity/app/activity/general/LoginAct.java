@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.MApplication;
@@ -27,6 +28,9 @@ import com.narancommunity.app.net.ResultCallback;
 import com.narancommunity.app.net.ServiceFactory;
 import com.snappydb.DB;
 import com.snappydb.SnappydbException;
+import com.umeng.socialize.UMAuthListener;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -78,7 +82,11 @@ public class LoginAct extends BaseActivity {
         setContentView(R.layout.act_login);
         ButterKnife.bind(this);
         MApplication.putActivity("login", LoginAct.this);
+
+        mShareAPI = UMShareAPI.get(getContext());
     }
+
+    UMShareAPI mShareAPI;
 
     @OnClick({R.id.tv_login, R.id.tv_reset, R.id.tv_register, R.id.tv_qq,
             R.id.tv_sina, R.id.tv_wechat, R.id.tv_agreement, R.id.ctv_is_agree
@@ -106,10 +114,13 @@ public class LoginAct extends BaseActivity {
                 doLogin(phone, code);
                 break;
             case R.id.tv_qq:
+                mShareAPI.getPlatformInfo(getContext(), SHARE_MEDIA.QQ, authListener);
                 break;
             case R.id.tv_sina:
+                mShareAPI.getPlatformInfo(getContext(), SHARE_MEDIA.SINA, authListener);
                 break;
             case R.id.tv_wechat:
+                mShareAPI.getPlatformInfo(getContext(), SHARE_MEDIA.WEIXIN, authListener);
                 break;
             case R.id.tv_agreement:
                 startActivity(new Intent(getContext(), AgreementAct.class)
@@ -132,6 +143,102 @@ public class LoginAct extends BaseActivity {
                 break;
         }
     }
+
+    UMAuthListener authListener = new UMAuthListener() {
+        /**
+         * @desc 授权开始的回调
+         * @param platform 平台名称
+         */
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+            LoadDialog.show(getContext());
+        }
+
+        /**
+         * @desc 授权成功的回调
+         * @param platform 平台名称
+         * @param action 行为序号，开发者用不上
+         * @param data 用户资料返回
+         */
+        @Override
+        public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
+            LoadDialog.dismiss(getContext());
+//            if (platform == SHARE_MEDIA.QQ) {
+            String uid = data.get("uid");
+            String screenName = data.get("screen_name");
+            String gender = data.get("gender");
+            String iconUrl = data.get("iconurl");
+//            } else {
+//                String uid = data.get("uid");
+//                String screenName = data.get("screen_name");
+//                String gender = data.get("gender");
+//                String iconUrl = data.get("iconurl");
+//            }
+            Map<String, Object> map = new HashMap<>();
+            map.put("uuid", uid);
+            map.put("source", getFrom(platform));
+            map.put("deviceNo", Utils.getDeviceID(getContext()));
+            map.put("nickName", screenName);
+            map.put("sex", gender);
+            doLoginThird(map);
+//            Toast.makeText(getContext(), "成功了", Toast.LENGTH_LONG).show();
+
+        }
+
+        /**
+         * @desc 授权失败的回调
+         * @param platform 平台名称
+         * @param action 行为序号，开发者用不上
+         * @param t 错误原因
+         */
+        @Override
+        public void onError(SHARE_MEDIA platform, int action, Throwable t) {
+            LoadDialog.dismiss(getContext());
+            Toast.makeText(getContext(), "拉取失败：" + t.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @desc 授权取消的回调
+         * @param platform 平台名称
+         * @param action 行为序号，开发者用不上
+         */
+        @Override
+        public void onCancel(SHARE_MEDIA platform, int action) {
+            LoadDialog.dismiss(getContext());
+            Toast.makeText(getContext(), "用户取消", Toast.LENGTH_LONG).show();
+        }
+    };
+
+    private String getFrom(SHARE_MEDIA platform) {
+        if (platform == SHARE_MEDIA.QQ) {
+            return "QQ";
+        } else if (platform == SHARE_MEDIA.WEIXIN) {
+            return "weixin";
+        } else {
+            return "sina";
+        }
+    }
+
+    private void doLoginThird(Map<String, Object> map) {
+        LoadDialog.show(this, "正在为您登录...");
+        NRClient.loginThird(map, new ResultCallback<Result<UserInfo>>() {
+            @Override
+            public void onSuccess(Result<UserInfo> result) {
+                LoadDialog.dismiss(LoginAct.this);
+                Toaster.toast(LoginAct.this, "登录成功！");
+                saveUserInfo(result.getData());
+                MApplication.finishAllActivity();
+                finish();
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(LoginAct.this);
+                Utils.showErrorToast(getContext(), throwable);
+            }
+        });
+    }
+
 
     private void doLogin(String phone, String code) {
         LoadDialog.show(this, "正在为您登录...");
@@ -202,6 +309,12 @@ public class LoginAct extends BaseActivity {
             }
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
 
     /**
      * 保存用户信息

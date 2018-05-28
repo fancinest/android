@@ -3,20 +3,30 @@ package com.narancommunity.app.activity.mine;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
+import com.narancommunity.app.adapter.CollectDonateAdapter;
 import com.narancommunity.app.adapter.CollectEssayAdapter;
+import com.narancommunity.app.adapter.CollectTieziAdapter;
 import com.narancommunity.app.adapter.FindLatestAdapter;
 import com.narancommunity.app.common.LoadDialog;
-import com.narancommunity.app.entity.CollectEssayItem;
-import com.narancommunity.app.entity.CollectTieziItem;
+import com.narancommunity.app.common.Toaster;
+import com.narancommunity.app.common.Utils;
+import com.narancommunity.app.entity.RecData;
 import com.narancommunity.app.entity.RecEntity;
+import com.narancommunity.app.entity.YSHYData;
+import com.narancommunity.app.entity.YSHYEntity;
+import com.narancommunity.app.net.NRClient;
+import com.narancommunity.app.net.Result;
+import com.narancommunity.app.net.ResultCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,11 +41,13 @@ import butterknife.ButterKnife;
  * FileName：我的收藏
  */
 public class MyCollectionSonFragment extends Fragment {
-    ArrayList<CollectEssayItem> listEssayData = new ArrayList<>();
+    ArrayList<YSHYEntity> listEssayData = new ArrayList<>();
     ArrayList<RecEntity> listDonateData = new ArrayList<>();
-    ArrayList<CollectTieziItem> listTieziData = new ArrayList<>();
+    ArrayList<YSHYEntity> listTieziData = new ArrayList<>();
     @BindView(R.id.recyclerView)
-    RecyclerView recycleView;
+    RecyclerView recyclerView;
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout swipeRefreshLayout;
     int type = 0;
 
     public void setType(int type) {
@@ -52,82 +64,39 @@ public class MyCollectionSonFragment extends Fragment {
     }
 
     CollectEssayAdapter essayAdapter;
-    FindLatestAdapter donateAdapter;
-//    CollectNewsAdapter newsAdapter;
-//    LRecyclerViewAdapter adapter;
+    CollectDonateAdapter donateAdapter;
+    CollectTieziAdapter tieziAdapter;
 
     View rootView;
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_info_son, container, false);
             ButterKnife.bind(this, rootView);
-            recycleView.setBackgroundColor(getResources().getColor(R.color.color_f5f5f5));
+            recyclerView.setBackgroundColor(getResources().getColor(R.color.color_f5f5f5));
             switch (type) {
                 case 0:
                     essayAdapter = new CollectEssayAdapter(getContext(), listEssayData);
-                    essayAdapter.setList(listEssayData);
                     LinearLayoutManager linearLayout1 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-                    recycleView.setLayoutManager(linearLayout1);
-                    recycleView.setAdapter(essayAdapter);
+                    recyclerView.setLayoutManager(linearLayout1);
+                    recyclerView.setAdapter(essayAdapter);
                     break;
                 case 1:
-                    donateAdapter = new FindLatestAdapter(getContext());
+                    donateAdapter = new CollectDonateAdapter(getContext());
                     donateAdapter.setDataList(listDonateData);
-                    LinearLayoutManager linearLayout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-                    recycleView.setLayoutManager(linearLayout);
-                    recycleView.setAdapter(donateAdapter);
+                    LinearLayoutManager linearLayout2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+                    recyclerView.setLayoutManager(linearLayout2);
+                    recyclerView.setAdapter(donateAdapter);
                     break;
-//                case 2:
-//                    newsAdapter = new CollectNewsAdapter(getContext());
-//                    newsAdapter.setDataList(listTopicData);
-//                    LinearLayoutManager linearLayout2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-//                    recycleView.setLayoutManager(linearLayout2);
-//                    adapter = new LRecyclerViewAdapter(newsAdapter);
-//                    break;
+                case 2:
+                    tieziAdapter = new CollectTieziAdapter(getContext(), listTieziData);
+                    LinearLayoutManager linearLayout3 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+                    recyclerView.setLayoutManager(linearLayout3);
+                    recyclerView.setAdapter(tieziAdapter);
+                    break;
             }
-//            recycleView.setAdapter(adapter);
-//            adapter.setOnItemClickListener(new OnItemClickListener() {
-//                @Override
-//                public void onItemClick(View view, int position) {
-//                    if (type == 0) {
-//                        String title = listEssayData.get(position).getProductTitle();
-//                        String url = "";
-//                        if (listEssayData.get(position).getCover() != null)
-//                            url = listEssayData.get(position).getCover().getPictureUrl();
-//                        String productId = listEssayData.get(position).getProductId();
-//                        startActivity(new Intent(getActivity(), ProductDetailAct.class)
-//                                .putExtra("id", productId)
-//                                .putExtra("title", title)
-//                                .putExtra("url", url));
-//                    }
-//                    if (type == 1) {
-//                        NRCommunityTopicItem item = listDonateData.get(position);
-//                        if (NRApplication.getUserInfo() == null) {
-//                            Toaster.toast(getContext(), "请先登录！");
-//                            startActivity(new Intent(getContext(), LoginActivity.class));
-//                        } else
-//                            startActivity(new Intent(getContext(), CommunityTopicDetailAct.class)
-//                                    .putExtra("data", item));
-//                    } else {
-//                        String title = "";
-//                        String url = ServiceFactory.API_BASE_URL + NRConfig.NORMAL_JUMP + listTopicData.get(position).getContentId();
-//                        String secondTitle = listTopicData.get(position).getContentTitle();
-//                        String icon = "";
-//                        if (listTopicData.get(position).getCover() != null)
-//                            icon = listTopicData.get(position).getCover().getPictureUrl();
-//                        startActivity(new Intent(getContext(), WebViewAct.class)
-//                                .putExtra("title", title)
-//                                .putExtra("secondTitle", secondTitle)
-//                                .putExtra("shareIcon", icon)
-//                                .putExtra("url", url));
-//                    }
-//                }
-//            });
-            setRefreshListener();
-            getNetData();
+            setView();
 
             return rootView;
         } else {
@@ -140,96 +109,58 @@ public class MyCollectionSonFragment extends Fragment {
         }
     }
 
-    private int pageNum = 1;
-    private int M_PAGE_SIZE = 20;//总共的页数
-    private int totalPage = 1;
-
-    private void setRefreshListener() {
-//        recycleView.setOnRefreshListener(new OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                onRefreshData();
-//            }
-//        });
-//        recycleView.setOnLoadMoreListener(new OnLoadMoreListener() {
-//            @Override
-//            public void onLoadMore() {
-//                if (pageNum < totalPage) {
-//                    onLoadData();
-//                } else {
-//                    recycleView.setNoMore(true);
-//                }
-//            }
-//        });
-//        recycleView.setOnNetWorkErrorListener(new OnNetWorkErrorListener() {
-//            @Override
-//            public void reload() {
-//                getNetData();
-//            }
-//        });
-//        adapter.setOnItemClickListener(new OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                //TODO 这里处理每个点击事件
-//                Intent it = null;
-//                if (type == 0) {
-//                    String url = "";
-//                    if (listEssayData.get(position).getCover() != null)
-//                        url = listEssayData.get(position).getCover().getPictureUrl();
-//                    it = new Intent(getContext(), ProductDetailAct.class);
-//                    it.putExtra("title", listEssayData.get(position).getProductTitle());
-//                    it.putExtra("id", listEssayData.get(position).getProductId());
-//                    it.putExtra("url", url);
-//                } else if (type == 1) {
-//                    NRCommunityTopicItem data = listDonateData.get(position);
-//                    it = new Intent(getContext(), CommunityTopicDetailAct.class);
-//                    it.putExtra("data", data);
-//                } else if (type == 2) {
-//                    NRNewsItem item = listTopicData.get(position);
-//                    it = new Intent(getContext(), WebViewAct.class);
-//                    it.putExtra("url", ServiceFactory.API_BASE_URL + NRConfig.NORMAL_JUMP + item.getContentId());
-//                    it.putExtra("title", getTitles(item.getContentClassify()));
-//                }
-//                startActivity(it);
-//            }
-//
-//        });
-//
-//        View emptyView = rootView.findViewById(R.id.empty_view);
-//        recycleView.setEmptyView(emptyView);
-//        recycleView.setLoadMoreEnabled(true);
-//
-//        //设置底部加载颜色
-//        recycleView.setFooterViewColor(R.color.colorAccent, R.color.black, android.R.color.white);
-//        //设置底部加载文字提示
-//        recycleView.setFooterViewHint("拼命加载中", "已经全部为你呈现了", "网络不给力啊，点击再试一次吧");
-//
-//        recycleView.setRefreshProgressStyle(ProgressStyle.LineSpinFadeLoader);
-//        recycleView.setLoadingMoreProgressStyle(ProgressStyle.BallSpinFadeLoader);
-    }
-
-    private String getTitles(String contentClassify) {
-        String s = "那然资讯";
-        if (contentClassify.equals("HYDT"))
-            s = "行业动态";
-        else if (contentClassify.equals("JKSH"))
-            s = "健康生活";
-        else if (contentClassify.equals("QWFB"))
-            s = "权威发布";
-        else if (contentClassify.equals("ZDGZ"))
-            s = "制度规则";
-        return s;
-    }
-
-    public void onRefreshData() {
-        pageNum = 1;
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         getNetData();
     }
 
-    public void onLoadData() {
-        pageNum++;
-        getNetData();
+    private void setView() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                    Log.i("fancy", "最后的可见位置:" + lastVisibleItemPosition);
+                    if (lastVisibleItemPosition + 1 == getCount()) {
+                        if (pageNum <= TOTAL_PAGE) {
+                            getNetData();
+                        } else
+                            Toaster.toast(getContext(), "已无更多数据");
+                    }
+                }
+            }
+        });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(true);
+                recyclerView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        pageNum = 1;
+                        getNetData();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+            }
+        });
     }
+
+    private int getCount() {
+        if (type == 0)
+            return essayAdapter.getItemCount();
+        else if (type == 1)
+            return donateAdapter.getItemCount();
+        else return tieziAdapter.getItemCount();
+    }
+
+    int pageSize = 5;
+    int pageNum = 1;
+    private int TOTAL_PAGE = 1;
 
     private void getNetData() {
         if (type == 0) {
@@ -237,156 +168,113 @@ public class MyCollectionSonFragment extends Fragment {
         } else if (type == 1) {
             getDonateData();
         } else if (type == 2) {
-            getNewsData();
+            getTieziData();
         }
     }
 
     private void getDonateData() {
-        LoadDialog.show(getContext());
         Map<String, Object> map = new HashMap<>();
-        map.put("userId", MApplication.getAccessToken());
-        map.put("contentType", "NEWS");
-        map.put("page", pageNum);
-        map.put("row", M_PAGE_SIZE);
-//        NRClient.getCollectDonateList(map, new ResultCallback<Result<NRNewsData>>() {
-//            @Override
-//            public void onFailure(Throwable throwable) {
-//                LoadDialog.dismiss(getContext());
-//                Utils.showErrorToast(getContext(), throwable);
-//                setViewNewsData(null);
-//            }
-//
-//            @Override
-//            public void onSuccess(Result<NRNewsData> result) {
-//                LoadDialog.dismiss(getContext());
-//                if (result != null && result.getData() != null
-//                        && result.getData().getDataPage() != null)
-//                    totalPage = result.getData().getDataPage().getMaxPage();
-//                setViewNewsData(result.getData().getDataPage());
-//            }
-//        });
+        map.put("accessToken", MApplication.getAccessToken());
+        map.put("accountId", MApplication.getAccountId(getContext()));
+        map.put("pageNum", pageNum);
+        map.put("pageSize", pageSize);
+        NRClient.getCollectDonate(map, new ResultCallback<Result<RecData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<RecData> result) {
+                if (result.getData() != null)
+                    setDonateData(result.getData());
+            }
+        });
     }
 
-    private void getNewsData() {
-//        LoadDialog.show(getContext());
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("userId", MApplication.getAccessToken());
-//        map.put("contentType", "NEWS");
-//        map.put("page", pageNum);
-//        map.put("row", M_PAGE_SIZE);
-//        NRClient.getMineCollectNews(map, new ResultCallback<Result<NRNewsData>>() {
-//            @Override
-//            public void onFailure(Throwable throwable) {
-//                LoadDialog.dismiss(getContext());
-//                Utils.showErrorToast(getContext(), throwable);
-//                setViewNewsData(null);
-//            }
-//
-//            @Override
-//            public void onSuccess(Result<NRNewsData> result) {
-//                LoadDialog.dismiss(getContext());
-//                if (result != null && result.getData() != null
-//                        && result.getData().getDataPage() != null)
-//                    totalPage = result.getData().getDataPage().getMaxPage();
-//                setViewNewsData(result.getData().getDataPage());
-//            }
-//        });
+    private void setDonateData(RecData data) {
+        if (pageNum == 1)
+            listDonateData.clear();
+        TOTAL_PAGE = data.getTotalPageNum();
+        if (data != null && data.getOrders() != null && data.getOrders().size() > 0) {
+            listDonateData.addAll(data.getOrders());
+            donateAdapter.setDataList(listDonateData);
+            pageNum++;
+        }
+        donateAdapter.notifyDataSetChanged();
     }
 
-//    private void setViewNewsData(NRBaseData<NRNewsItem> datapage) {
-//        if (pageNum == 1)
-//            listTopicData.clear();
-//        if (datapage != null && datapage.getList() != null)
-//            listTopicData.addAll(datapage.getList());
-//        newsAdapter.setDataList(listTopicData);
-//        notifyData();
-//    }
+    private void getTieziData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("accessToken", MApplication.getAccessToken());
+        map.put("accountId", MApplication.getAccountId(getContext()));
+        map.put("pageNum", pageNum);
+        map.put("pageSize", pageSize);
+        NRClient.getCollectTiezi(map, new ResultCallback<Result<YSHYData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                Utils.showErrorToast(getContext(), throwable);
+            }
 
-//    private void getTopicData() {
-//        LoadDialog.show(getContext());
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("userId", NRApplication.getUserID());
-//        map.put("contentType", "TOPIC");
-//        map.put("page", pageNum);
-//        map.put("row", M_PAGE_SIZE);
-//        NRClient.getMineCollectTopic(map, new ResultCallback<Result<NRMineTopic>>() {
-//            @Override
-//            public void onFailure(Throwable throwable) {
-//                LoadDialog.dismiss(getContext());
-//                Utils.showErrorToast(getContext(), throwable);
-//                setViewTopicData(null);
-//            }
-//
-//            @Override
-//            public void onSuccess(Result<NRMineTopic> result) {
-//                LoadDialog.dismiss(getContext());
-//                if (result != null && result.getData() != null
-//                        && result.getData().getDatapage() != null)
-//                    totalPage = result.getData().getDatapage().getMaxPage();
-//                setViewTopicData(result.getData().getDatapage());
-//            }
-//        });
-//    }
+            @Override
+            public void onSuccess(Result<YSHYData> result) {
+                if (result.getData() != null)
+                    setTieziData(result.getData());
+            }
+        });
+    }
 
-//    private void setViewTopicData(NRBaseData<NRCommunityTopicItem> datapage) {
-//        if (pageNum == 1)
-//            listDonateData.clear();
-//        if (datapage != null && datapage.getList() != null)
-//            listDonateData.addAll(datapage.getList());
-//        topicAdapter.setDataList(listDonateData);
-//        notifyData();
-//    }
+    private void setTieziData(YSHYData data) {
+        if (pageNum == 1)
+            listTieziData.clear();
+        TOTAL_PAGE = data.getTotalPageNum();
+        if (data != null && data.getContents() != null && data.getContents().size() > 0) {
+            listTieziData.addAll(data.getContents());
+            pageNum++;
+        }
+        tieziAdapter.notifyDataSetChanged();
+    }
 
     private void getEssayData() {
-        LoadDialog.show(getContext());
         Map<String, Object> map = new HashMap<>();
-        map.put("userId", MApplication.getAccessToken());
-        map.put("contentType", "PRODUCT");
-        map.put("page", pageNum);
-        map.put("row", M_PAGE_SIZE);
-//        NRClient.getMineCollectProduct(map, new ResultCallback<Result<CollectEssayItem>>() {
-//            @Override
-//            public void onFailure(Throwable throwable) {
-//                LoadDialog.dismiss(getContext());
-//                Utils.showErrorToast(getContext(), throwable);
-//                setViewProductData(null);
-//            }
-//
-//            @Override
-//            public void onSuccess(Result<CollectEssayItem> result) {
-//                LoadDialog.dismiss(getContext());
-//                if (result != null && result.getData() != null
-//                        && result.getData().getDatapage() != null)
-//                    totalPage = result.getData().getDatapage().getMaxPage();
-//                setViewProductData(result.getData().getDatapage());
-//            }
-//        });
+        map.put("accessToken", MApplication.getAccessToken());
+        map.put("accountId", MApplication.getAccountId(getContext()));
+        map.put("pageNum", pageNum);
+        map.put("pageSize", pageSize);
+        NRClient.getCollectEssay(map, new ResultCallback<Result<YSHYData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<YSHYData> result) {
+                if (result.getData() != null)
+                    setEssayData(result.getData());
+            }
+        });
     }
 
-    private void setViewProductData(CollectEssayItem datapage) {
+    private void setEssayData(YSHYData data) {
         if (pageNum == 1)
             listEssayData.clear();
-//        if (datapage != null && datapage.getList() != null)
-//            listEssayData.addAll(datapage.getList());
-        essayAdapter.setList(listEssayData);
-        notifyData();
+        TOTAL_PAGE = data.getTotalPageNum();
+        if (data != null && data.getContents() != null && data.getContents().size() > 0) {
+            listEssayData.addAll(data.getContents());
+            pageNum++;
+        }
+        essayAdapter.notifyDataSetChanged();
     }
 
-    private void notifyData() {
-//        recycleView.refreshComplete(M_PAGE_SIZE);
-//        adapter.notifyDataSetChanged();
-    }
 
     @Override
     public void onResume() {
         super.onResume();
-//        MobclickAgent.onPageStart("SplashScreen");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-//        MobclickAgent.onPageEnd("SplashScreen");
     }
 
 }

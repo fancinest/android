@@ -263,9 +263,9 @@ public class RangeDaRenFragment extends Fragment {
     }
 
     private void setListView() {
-        DividerItemDecoration dividerItemDecoration =
-                new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
-        recyclerView.addItemDecoration(dividerItemDecoration);
+//        DividerItemDecoration dividerItemDecoration =
+//                new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
+//        recyclerView.addItemDecoration(dividerItemDecoration);
 
         final LinearLayoutManager linearLayout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayout);

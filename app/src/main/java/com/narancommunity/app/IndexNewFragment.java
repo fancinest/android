@@ -189,7 +189,6 @@ public class IndexNewFragment extends Fragment {
                                 drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), (int) (drawable.getMinimumHeight()));
                                 tvSearch.setCompoundDrawables(drawable, null, null, null);
                                 viewBg.setAlpha(1);
-                                Log.i("fancy", " y = " + y);
                             }
                         } else {
                             float alpha = (float) y / 300;
@@ -199,7 +198,6 @@ public class IndexNewFragment extends Fragment {
                             Drawable drawable = getResources().getDrawable(R.mipmap.topnav_btn_sousuo_blue);
                             drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), (int) (drawable.getMinimumHeight()));
                             tvSearch.setCompoundDrawables(drawable, null, null, null);
-                            Log.i("fancy", " y = " + y + "  alpha:" + alpha);
                         }
 
                     }

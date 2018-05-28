@@ -12,9 +12,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.narancommunity.app.activity.index.ReportAct;
 import com.narancommunity.app.common.CenteredToolbar;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.ShareContent;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 /**
  * Writer：fancy on 2017/4/14 13:33
@@ -74,6 +79,11 @@ public class BaseActivity extends AppCompatActivity {
 //                NRApplication.ItemClick(getContext(),"那然公益APP",
 //                        "分享APP", "http://wx4.sinaimg.cn/square/006behBIgy1fe6d1v8mr3j3028028q2t.jpg",
 //                        "", 0, platformActionListener);
+                new ShareAction(BaseActivity.this)
+                        .setPlatform(SHARE_MEDIA.SINA)//传入平台
+                        .withText("hello")//分享内容
+                        .setCallback(shareListener)//回调监听器
+                        .share();
             }
         });
         weixin.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +93,11 @@ public class BaseActivity extends AppCompatActivity {
 //                NRApplication.ItemClick(getContext(),"那然公益APP",
 //                        "分享APP", "http://wx4.sinaimg.cn/square/006behBIgy1fe6d1v8mr3j3028028q2t.jpg",
 //                        "", 1, platformActionListener);
+                new ShareAction(BaseActivity.this)
+                        .setPlatform(SHARE_MEDIA.WEIXIN)//传入平台
+                        .withText("hello")//分享内容
+                        .setCallback(shareListener)//回调监听器
+                        .share();
             }
         });
         weixin_circle.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +106,11 @@ public class BaseActivity extends AppCompatActivity {
 //                NRApplication.ItemClick(getContext(),"那然公益APP",
 //                        "分享APP", "http://wx4.sinaimg.cn/square/006behBIgy1fe6d1v8mr3j3028028q2t.jpg",
 //                        "", 2, platformActionListener);
+                new ShareAction(BaseActivity.this)
+                        .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)//传入平台
+                        .withText("hello")//分享内容
+                        .setCallback(shareListener)//回调监听器
+                        .share();
             }
         });
         qq.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +120,11 @@ public class BaseActivity extends AppCompatActivity {
 //                NRApplication.ItemClick(getContext(),"那然公益APP",
 //                        "分享APP", "http://wx4.sinaimg.cn/square/006behBIgy1fe6d1v8mr3j3028028q2t.jpg",
 //                        "", 3, platformActionListener);
+                new ShareAction(BaseActivity.this)
+                        .setPlatform(SHARE_MEDIA.QQ)//传入平台
+                        .withText("hello")//分享内容
+                        .setCallback(shareListener)//回调监听器
+                        .share();
             }
         });
         cha.setOnClickListener(new View.OnClickListener() {
@@ -111,31 +136,45 @@ public class BaseActivity extends AppCompatActivity {
         mWindowDialog.show();
     }
 
-//    PlatformActionListener platformActionListener = new PlatformActionListener() {
-//
-//        @Override
-//        public void onError(Platform arg0, int arg1, Throwable arg2) {
-//            //操作失败啦，打印提供的错误，方便调试
-//            arg2.printStackTrace();
-//            mWindowDialog.dismiss();
-//        }
-//
-//        @Override
-//        public void onComplete(Platform arg0, int arg1, HashMap<String, Object> arg2) {
-//            //操作成功，在这里可以做后续的步骤
-//            //这里需要说明的一个参数就是HashMap<String, Object> arg2
-//            //这个参数在你进行登录操作的时候里面会保存有用户的数据，例如用户名之类的。
-//            Toaster.toast(getContext(), "分享成功！");
-//            mWindowDialog.dismiss();
-//        }
-//
-//        @Override
-//        public void onCancel(Platform arg0, int arg1) {
-//            //用户取消操作会调用这里
-//            Toaster.toast(getContext(), "取消分享");
-//            mWindowDialog.dismiss();
-//        }
-//    };
+    private UMShareListener shareListener = new UMShareListener() {
+        /**
+         * @descrption 分享开始的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+
+        }
+
+        /**
+         * @descrption 分享成功的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            Toast.makeText(BaseActivity.this, "成功了", Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @descrption 分享失败的回调
+         * @param platform 平台类型
+         * @param t 错误原因
+         */
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            Toast.makeText(BaseActivity.this, "失败" + t.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @descrption 分享取消的回调
+         * @param platform 平台类型
+         */
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            Toast.makeText(BaseActivity.this, "取消了", Toast.LENGTH_LONG).show();
+
+        }
+    };
 
 
     public boolean isViewCovered(final View view) {

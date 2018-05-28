@@ -108,6 +108,7 @@ public class DonateBookAct extends BaseActivity {
     String average = "";//平均分
 
     String[] bookCondition = new String[]{"全新", "九成新 ", "七成新", "六成新以下"};
+    String[] bookRelCondition = new String[]{"ALL_NEW", "NINE_NEW ", "SEVEN_NEW", "SIX_NEW"};
     String[] bookType = new String[]{"教育教科", "文学小说", "人文社科", "童书绘本", "成功励志", "生活艺术", "金融经管", "其他书籍"};
     String[] realType = new String[]{"BOOK_EDUCATION", "BOOK_NOVEL", "BOOK_HUMANITY", "BOOK_CHILD", "BOOK_SUCCESS", "BOOK_LIFE", "BOOK_FINANCE", "BOOK_OTHER"};
     int contentId;//表示书荒互助的文章ID,普通的时候是0
@@ -256,7 +257,7 @@ public class DonateBookAct extends BaseActivity {
         if (s.size() == 0)
             return "";
         for (Integer position : s) {
-            condition = bookCondition[position];
+            condition = bookRelCondition[position];
         }
         return condition;
     }

@@ -6,7 +6,6 @@ import android.support.v7.widget.OrientationHelper;
 
 import com.applikeysolutions.cosmocalendar.model.Day;
 import com.applikeysolutions.cosmocalendar.selection.OnDaySelectedListener;
-import com.applikeysolutions.cosmocalendar.selection.RangeSelectionManager;
 import com.applikeysolutions.cosmocalendar.selection.criteria.BaseCriteria;
 import com.applikeysolutions.cosmocalendar.selection.criteria.WeekDayCriteria;
 import com.applikeysolutions.cosmocalendar.selection.criteria.month.CurrentMonthCriteria;
@@ -17,6 +16,7 @@ import com.applikeysolutions.cosmocalendar.view.CalendarView;
 import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.CenteredToolbar;
+import com.narancommunity.app.common.RangeSelectionManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -75,8 +75,25 @@ public class LookBookStateAct extends BaseActivity {
 
             }
         });
-        Day day = new Day(new Date());
-        manager.toggleDay(day);
         calendarView.setSelectionManager(manager);
+        selectRangeProgrammatically();
+    }
+
+    private void selectRangeProgrammatically() {
+        if (calendarView.getSelectionManager() instanceof RangeSelectionManager) {
+            RangeSelectionManager rangeSelectionManager =
+                    (RangeSelectionManager) calendarView.getSelectionManager();
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DATE, 3);
+            rangeSelectionManager.toggleDay(new Day(Calendar.getInstance()));
+            rangeSelectionManager.toggleDay(new Day(calendar));
+            //calendarView.setDisabledDays(Collections.singleton(System.currentTimeMillis()));
+            calendarView.update();
+            rangeSelectionManager.setCanToggleDay(false);
+            //calendarView.setDissabled(false);
+            /*DisabledDaysCriteria criteria = new DisabledDaysCriteria(Calendar.SUNDAY, Calendar.SATURDAY, DisabledDaysCriteriaType.DAYS_OF_WEEK);
+            calendarView.setDisabledDaysCriteria(criteria);
+            calendarView.update();*/
+        }
     }
 }

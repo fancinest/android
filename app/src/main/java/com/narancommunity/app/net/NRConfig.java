@@ -12,6 +12,34 @@ public class NRConfig {
     public static final String URL_RECORD = "http://47.98.218.205:8083";//记录用到的
 
     /**
+     * 第三方登录
+     */
+    public static final String USER_THIRD_LOGIN = URL_BASE + "/api/account/third/login";
+    /**
+     * 我收藏的捐赠
+     */
+    public static final String MY_COLLECT_DONATE = URL_RECORD + "/api/record/collection/order/page";
+    /**
+     * 我收藏的文章
+     */
+    public static final String MY_COLLECT_ESSAY = URL_RECORD + "/api/record/collection/content/page";
+    /**
+     * 我收藏的帖子
+     */
+    public static final String MY_COLLECT_TIEZI = URL_RECORD + "/api/record/collection/invitation/page";
+    /**
+     * 图书申请-获取借阅人
+     */
+    public static final String BOOK_GET_ORDERER = URL_BASE + "/api/book/apply/get/by/order";
+    /**
+     * 书籍-传输给他
+     */
+    public static final String BOOK_DELIVER = URL_BASE + "/api/book/apply/give";
+    /**
+     * 获取指定id的常用地址(弃用)
+     */
+    public static final String GET_ADDRESS_BY_ID = URL_BASE + "/api/mail/now/by/account";
+    /**
      * 爱心-已完成
      */
     public static final String MY_LOVE_FINISH = URL_BASE + "/api/order/love/over/page";

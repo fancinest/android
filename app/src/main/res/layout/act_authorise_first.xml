@@ -114,7 +114,6 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:drawablePadding="12dp"
-                    android:drawableRight="@mipmap/list_icon_xiangqing"
                     android:gravity="right"
                     android:hint="身份证"
                     android:textColorHint="@color/color_999999"

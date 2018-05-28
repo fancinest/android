@@ -157,7 +157,7 @@ public class MyWishFragment extends Fragment {
         if (pageNum == 1)
             listData.clear();
         TOTAL_PAGE = data.getTotalPageNum();
-        if (data != null) {
+        if (data != null && data.getOrders() != null) {
             listData.addAll(data.getOrders());
             pageNum++;
         }

@@ -23,17 +23,26 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.CenteredToolbar;
+import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.SDCardUtils;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.AddressEntity;
+import com.narancommunity.app.entity.OrderEntity;
 import com.narancommunity.app.entity.WishEntity;
+import com.narancommunity.app.entity.YSHYData;
+import com.narancommunity.app.net.NRClient;
+import com.narancommunity.app.net.Result;
+import com.narancommunity.app.net.ResultCallback;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -77,6 +86,10 @@ public class DeliverBookAct extends BaseActivity {
     ImageView ivScan;
     @BindView(R.id.btn_go)
     Button btnGo;
+    WishEntity entity;
+
+    int applyId;
+    int position = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,11 +98,49 @@ public class DeliverBookAct extends BaseActivity {
         ButterKnife.bind(this);
         toolbar.setTitle("传给TA");
         setBar(toolbar);
-        WishEntity entity = (WishEntity) getIntent().getSerializableExtra("data");
+        entity = (WishEntity) getIntent().getSerializableExtra("data");
+        position = getIntent().getIntExtra("position", 0);
+        mAddress = (OrderEntity) getIntent().getSerializableExtra("address");
         setBook(entity);
+        setAddress(mAddress);
 
-        tvSelectAddress.setVisibility(View.VISIBLE);
-        lnAddress.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        getOrdererInfo();
+    }
+
+//    private void getOrdererInfo() {
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("accessToken", MApplication.getAccessToken());
+//        map.put("orderId", entity.getOrderId());
+//        NRClient.getBookOrdererInfo(map, new ResultCallback<Result<OrderEntity>>() {
+//            @Override
+//            public void onSuccess(Result<OrderEntity> result) {
+//                LoadDialog.dismiss(getContext());
+//                setAddress(result.getData());
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable throwable) {
+//                LoadDialog.dismiss(getContext());
+//                Utils.showErrorToast(getContext(), throwable);
+//            }
+//        });
+//    }
+
+    private void setAddress(OrderEntity address) {
+        if (address == null || address.getApplyId() == null)
+            return;
+        lnAddress.setVisibility(View.VISIBLE);
+        tvName.setText("收货人：" + Utils.getValue(address.getMailName()) + "");
+        tvTel.setText(Utils.getValue(address.getMailPhone()) + "");
+        tvAddress.setText("收货地址：" + Utils.getValue(address.getProvince() + address.getCity() + address.getCounty()
+                + address.getMailAddress()) + "");
+        tvAddress.setCompoundDrawablesRelativeWithIntrinsicBounds(getResources().getDrawable(R.mipmap.list_dizhi), null, null, null);
+        applyId = address.getApplyId();
     }
 
     private void setBook(WishEntity entity) {
@@ -102,21 +153,54 @@ public class DeliverBookAct extends BaseActivity {
 
     }
 
-    @OnClick({R.id.ln_address, R.id.iv_scan, R.id.btn_go, R.id.tv_select_address})
+    @OnClick({/*R.id.ln_address,*/ R.id.iv_scan, R.id.btn_go/*, R.id.tv_select_address*/})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.tv_select_address:
-            case R.id.ln_address:
-                Intent its = new Intent(getContext(), AddressAct.class);
-                its.putExtra("isForResult", true);
-                startActivityForResult(its, 2000);
-                break;
+//            case R.id.tv_select_address:
+//            case R.id.ln_address:
+//                Intent its = new Intent(getContext(), AddressAct.class);
+//                its.putExtra("isForResult", true);
+//                startActivityForResult(its, 2000);
+//                break;
             case R.id.iv_scan:
                 checkCamera(null);
                 break;
             case R.id.btn_go:
+                Log.i("fancy", "要删除第" + position + "条");
+                deliverBook();
                 break;
         }
+    }
+
+
+    private void deliverBook() {
+        String mailCode = etNum.getText().toString();
+        if ("".equals(mailCode)) {
+            Toaster.toast(getContext(), "请输入或扫描运单号!");
+            return;
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("accessToken", MApplication.getAccessToken());
+        map.put("orderId", entity.getOrderId());
+        map.put("applyId", applyId);
+        map.put("mailCode", mailCode);
+        NRClient.deliverBook(map, new ResultCallback<Result<Void>>() {
+            @Override
+            public void onSuccess(Result<Void> result) {
+                LoadDialog.dismiss(getContext());
+                Toaster.toast(getContext(), "传送成功！");
+                Intent it = new Intent();
+                it.putExtra("position", position);
+                setResult(10010, it);
+                finish();
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+        });
     }
 
     private void checkCamera(Dialog dialog) {
@@ -270,16 +354,11 @@ public class DeliverBookAct extends BaseActivity {
         startActivity(intent);
     }
 
-    AddressEntity mAddress = null;
+    OrderEntity mAddress = null;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 2000 && data != null) {
-            AddressEntity address = (AddressEntity) data.getSerializableExtra("address");
-            mAddress = address;
-            setAddress(address);
-        }
         if (requestCode == CaptureActivity.REQ_CODE)
             switch (resultCode) {
                 case RESULT_OK:
@@ -293,12 +372,4 @@ public class DeliverBookAct extends BaseActivity {
             }
     }
 
-    private void setAddress(AddressEntity address) {
-        tvSelectAddress.setVisibility(View.GONE);
-        lnAddress.setVisibility(View.VISIBLE);
-        tvName.setText("收货人：" + Utils.getValue(address.getMailName()) + "");
-        tvTel.setText(Utils.getValue(address.getMailPhone()) + "");
-        tvAddress.setText("收货地址：" + Utils.getValue(address.getProvince() + address.getCity() + address.getCounty()
-                + address.getMailAddress()) + "");
-    }
 }

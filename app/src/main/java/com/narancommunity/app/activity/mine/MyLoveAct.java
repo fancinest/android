@@ -1,13 +1,17 @@
 package com.narancommunity.app.activity.mine;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.widget.TabHost;
 
 import com.flyco.tablayout.SlidingTabLayout;
+import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.CenteredToolbar;
@@ -24,7 +28,7 @@ import butterknife.ButterKnife;
  * FileName :
  */
 
-public class MyLoveAct extends BaseActivity {
+public class MyLoveAct extends BaseActivity implements OnTabSelectListener {
     @BindView(R.id.toolbar)
     CenteredToolbar toolbar;
     @BindView(R.id.slide_tab)
@@ -35,6 +39,7 @@ public class MyLoveAct extends BaseActivity {
     private String[] mTitles = {"    等待中    ", "    进行中    ", "    已完成    "};
     private ArrayList<Fragment> mFragments = new ArrayList<>();
     int mPosition = 0;//当前页
+    MyPagerAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,8 +57,25 @@ public class MyLoveAct extends BaseActivity {
         three.setType(2);
         Collections.addAll(mFragments, one, two, three);
 
-        vp.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+        adapter = new MyPagerAdapter(getSupportFragmentManager());
+        vp.setAdapter(adapter);
         slideTab.setViewPager(vp);
+        vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mPosition = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     private class MyPagerAdapter extends FragmentPagerAdapter {
@@ -77,5 +99,23 @@ public class MyLoveAct extends BaseActivity {
             return mFragments.get(position);
         }
 
+    }
+
+
+    @Override
+    public void onTabSelect(int position) {
+        mPosition = position;
+    }
+
+    @Override
+    public void onTabReselect(int position) {
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i("fancy", "执行了1次");
+        adapter.getItem(mPosition).onActivityResult(requestCode, resultCode, data);
     }
 }

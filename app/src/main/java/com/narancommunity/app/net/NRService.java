@@ -1,6 +1,7 @@
 package com.narancommunity.app.net;
 
 import com.narancommunity.app.entity.Address;
+import com.narancommunity.app.entity.AddressEntity;
 import com.narancommunity.app.entity.AnswerComment;
 import com.narancommunity.app.entity.ApplyDetailEntity;
 import com.narancommunity.app.entity.AskPapers;
@@ -12,7 +13,6 @@ import com.narancommunity.app.entity.BookInfo;
 import com.narancommunity.app.entity.BookLendCardData;
 import com.narancommunity.app.entity.BookListData;
 import com.narancommunity.app.entity.BookRelativeRecData;
-import com.narancommunity.app.entity.CollectEssayItem;
 import com.narancommunity.app.entity.CommentDetail;
 import com.narancommunity.app.entity.CommentListEntity;
 import com.narancommunity.app.entity.CompanyData;
@@ -24,6 +24,7 @@ import com.narancommunity.app.entity.IsCollect;
 import com.narancommunity.app.entity.MyWishData;
 import com.narancommunity.app.entity.NewsData;
 import com.narancommunity.app.entity.OrderData;
+import com.narancommunity.app.entity.OrderEntity;
 import com.narancommunity.app.entity.RecData;
 import com.narancommunity.app.entity.ShuzhaiData;
 import com.narancommunity.app.entity.WallListData;
@@ -160,6 +161,34 @@ public interface NRService {
     @FormUrlEncoded
     @POST(NRConfig.URL_BANNER_LIST)
     Call<Result<BannerData>> getBannerList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取banner列表
+
+    @FormUrlEncoded
+    @POST(NRConfig.USER_THIRD_LOGIN)
+    Call<Result<UserInfo>> loginThird(@FieldMap Map<String, Object> map);//
+
+    @FormUrlEncoded
+    @POST(NRConfig.MY_COLLECT_DONATE)
+    Call<Result<RecData>> getCollectDonate(@FieldMap Map<String, Object> map);//
+
+    @FormUrlEncoded
+    @POST(NRConfig.MY_COLLECT_TIEZI)
+    Call<Result<YSHYData>> getCollectTiezi(@FieldMap Map<String, Object> map);//
+
+    @FormUrlEncoded
+    @POST(NRConfig.MY_COLLECT_ESSAY)
+    Call<Result<YSHYData>> getCollectEssay(@FieldMap Map<String, Object> map);//
+
+    @FormUrlEncoded
+    @POST(NRConfig.BOOK_GET_ORDERER)
+    Call<Result<OrderEntity>> getBookOrdererInfo(@FieldMap Map<String, Object> map);//
+
+    @FormUrlEncoded
+    @POST(NRConfig.BOOK_DELIVER)
+    Call<Result<Void>> deliverBook(@FieldMap Map<String, Object> map);//
+
+    @FormUrlEncoded
+    @POST(NRConfig.GET_ADDRESS_BY_ID)
+    Call<Result<AddressEntity>> getAddressById(@FieldMap Map<String, Object> map);//
 
     @FormUrlEncoded
     @POST(NRConfig.RANK_BOOKREVIEWS)
@@ -423,7 +452,7 @@ public interface NRService {
 
     @FormUrlEncoded
     @POST(NRConfig.URL_GET_ESSAY_LIST)
-    Call<Result<CollectEssayItem>> getEssayList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取援助列表
+    Call<Result<RecData>> getEssayList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取援助列表
 
     @FormUrlEncoded
     @POST(NRConfig.URL_SUBJECT_REPORT_LIST)

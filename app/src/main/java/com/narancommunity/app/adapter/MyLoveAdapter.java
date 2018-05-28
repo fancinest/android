@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
 import com.narancommunity.app.activity.index.BookDetailAct;
 import com.narancommunity.app.activity.mine.DeliverBookAct;
@@ -21,7 +22,7 @@ import com.narancommunity.app.entity.WishEntity;
  * FileName :
  */
 public class MyLoveAdapter extends ListBaseAdapter<WishEntity> {
-    OnItemClickListener listener;
+    MeItemInterface listener;
     int type;
 
     public MyLoveAdapter(Context context) {
@@ -29,7 +30,7 @@ public class MyLoveAdapter extends ListBaseAdapter<WishEntity> {
     }
 
 
-    public void setListener(OnItemClickListener listener) {
+    public void setListener(MeItemInterface listener) {
         this.listener = listener;
     }
 
@@ -100,18 +101,13 @@ public class MyLoveAdapter extends ListBaseAdapter<WishEntity> {
         tvOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (type == 0) {
-                    mContext.startActivity(new Intent(mContext, DeliverBookAct.class)
-                    .putExtra("data",entity));
-                } else mContext.startActivity(new Intent(mContext, BookDetailAct.class)
-                        .putExtra("bookId", entity.getOrderId()));
+                listener.OnItemClick(position);
             }
         });
         lnParent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mContext.startActivity(new Intent(mContext, BookDetailAct.class)
-                        .putExtra("bookId", entity.getOrderId()));
+                listener.OnDelClick(position);
             }
         });
     }

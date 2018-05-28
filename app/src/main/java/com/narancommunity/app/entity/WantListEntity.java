@@ -11,7 +11,7 @@ import java.util.List;
 
 public class WantListEntity implements Serializable{
     Integer pageNum, pageSize, totalCount, totalPageNum;
-    List<WantEntity> applys;
+    List<OrderEntity> applys;
 
     @Override
     public String toString() {
@@ -56,11 +56,11 @@ public class WantListEntity implements Serializable{
         this.totalPageNum = totalPageNum;
     }
 
-    public List<WantEntity> getApplys() {
+    public List<OrderEntity> getApplys() {
         return applys;
     }
 
-    public void setApplys(List<WantEntity> applys) {
+    public void setApplys(List<OrderEntity> applys) {
         this.applys = applys;
     }
 }

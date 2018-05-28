@@ -17,11 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 
-import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
-import com.narancommunity.app.adapter.FindLatestAdapter;
 import com.narancommunity.app.adapter.LoveAdapter;
 import com.narancommunity.app.adapter.OnItemClickListener;
 import com.narancommunity.app.common.LoadDialog;
@@ -29,7 +27,6 @@ import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.CompanyData;
 import com.narancommunity.app.entity.CompanyEntity;
-import com.narancommunity.app.entity.RecEntity;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
@@ -55,10 +52,10 @@ public class LoveFragment extends Fragment {
     ImageView iv;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView(R.id.iv_add_love)
-    ImageView ivAddLove;
-    @BindView(R.id.iv_search)
-    ImageView ivSearch;
+    @BindView(R.id.tv_add_love)
+    TextView tvAddLove;
+    //    @BindView(R.id.iv_search)
+//    ImageView ivSearch;
     @BindView(R.id.ln_top)
     LinearLayout top;
     @BindView(R.id.swipe_refresh)
@@ -226,15 +223,20 @@ public class LoveFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.iv_add_love, R.id.iv_search})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.iv_add_love:
-                startActivity(new Intent(getContext(), SettleDownAct.class));
-                break;
-            case R.id.iv_search:
-                startActivity(new Intent(getContext(), LoveSearchAct.class));
-                break;
-        }
+    @OnClick(R.id.tv_add_love)
+    public void onViewClicked() {
+        startActivity(new Intent(getContext(), SettleDownAct.class));
     }
+
+//    @OnClick({R.id.tv_add_love/*, R.id.iv_search*/})
+//    public void onViewClicked(View view) {
+//        switch (view.getId()) {
+//            case R.id.tv_add_love:
+//                startActivity(new Intent(getContext(), SettleDownAct.class));
+//                break;
+////            case R.id.iv_search:
+////                startActivity(new Intent(getContext(), LoveSearchAct.class));
+////                break;
+//        }
+//    }
 }

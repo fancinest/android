@@ -8,7 +8,7 @@ import java.io.Serializable;
  * FileName :
  */
 
-public class YSHYEntity implements Serializable{
+public class YSHYEntity implements Serializable {
     String contentBody, contentImg, contentTitle, contentType, createTime, recommendTime, accountNike, accountImg;
     Integer contentId, likeTimes, commentTimes, accountId, collectTimes;
 

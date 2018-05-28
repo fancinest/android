@@ -1,5 +1,6 @@
 package com.narancommunity.app.activity.mine;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,7 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.narancommunity.app.MApplication;
+import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
+import com.narancommunity.app.activity.index.BookDetailAct;
 import com.narancommunity.app.adapter.MyLoveAdapter;
 import com.narancommunity.app.adapter.MyWishAdapter;
 import com.narancommunity.app.adapter.OnItemClickListener;
@@ -20,6 +23,7 @@ import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.MyWishData;
+import com.narancommunity.app.entity.OrderEntity;
 import com.narancommunity.app.entity.WishEntity;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
@@ -32,13 +36,16 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import simplezxing.activity.CaptureActivity;
+
+import static android.app.Activity.RESULT_FIRST_USER;
 
 /**
  * Writer：fancy on 2018/5/21 15:49
  * Email：120760202@qq.com
  * FileName :
  */
-public class MyLoveFragment extends Fragment{
+public class MyLoveFragment extends Fragment {
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -142,7 +149,7 @@ public class MyLoveFragment extends Fragment{
         if (pageNum == 1)
             listData.clear();
         TOTAL_PAGE = data.getTotalPageNum();
-        if (data != null) {
+        if (data != null && data.getOrders() != null) {
             listData.addAll(data.getOrders());
             pageNum++;
         }
@@ -156,10 +163,19 @@ public class MyLoveFragment extends Fragment{
         adapter = new MyLoveAdapter(getContext());
         adapter.setDataList(listData);
         adapter.setType(type);
-        adapter.setListener(new OnItemClickListener() {
+        adapter.setListener(new MeItemInterface() {
             @Override
-            public void onItemClick(int position) {
+            public void OnItemClick(int position) {
+                if (type == 0) {
+                    getOrdererInfo(position);
+                } else startActivity(new Intent(getContext(), BookDetailAct.class)
+                        .putExtra("bookId", listData.get(position).getOrderId()));
+            }
 
+            @Override
+            public void OnDelClick(int position) {
+                startActivity(new Intent(getContext(), BookDetailAct.class)
+                        .putExtra("bookId", listData.get(position).getOrderId()));
             }
         });
         recyclerView.setLayoutManager(lmYSHY);
@@ -208,6 +224,47 @@ public class MyLoveFragment extends Fragment{
                 });
             }
         });
+    }
+
+    private void getOrdererInfo(final int position) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("accessToken", MApplication.getAccessToken());
+        map.put("orderId", listData.get(position).getOrderId());
+        NRClient.getBookOrdererInfo(map, new ResultCallback<Result<OrderEntity>>() {
+            @Override
+            public void onSuccess(Result<OrderEntity> result) {
+                LoadDialog.dismiss(getContext());
+                if (result != null && result.getData() != null) {
+                    startActivityForResult(new Intent(getContext(), DeliverBookAct.class)
+                            .putExtra("position", position)
+                            .putExtra("data", listData.get(position))
+                            .putExtra("address", result.getData()), RESULT_FIRST_USER);
+                }else Toaster.toast(getContext(),"");
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i("fancy", "子执行了1次");
+        if (resultCode == 10010 && requestCode == RESULT_FIRST_USER) {
+            int position = data.getIntExtra("position", 0);
+            Log.i("fancy", "删除执行了1次" + " position = " + position);
+            deleteItem(position);
+        }
+    }
+
+    private void deleteItem(int position) {
+        listData.remove(position);
+        adapter.setDataList(listData);
+        adapter.notifyDataSetChanged();
     }
 
     @Override

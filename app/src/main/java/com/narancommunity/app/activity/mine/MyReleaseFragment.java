@@ -15,6 +15,7 @@ import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
 import com.narancommunity.app.adapter.CommunityYSHYAdapter;
+import com.narancommunity.app.adapter.MyReleaseAdapter;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
@@ -43,8 +44,8 @@ public class MyReleaseFragment extends Fragment {
     RecyclerView recyclerView;
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
-    CommunityYSHYAdapter adapterYSHY;
-    CommunityYSHYAdapter adapterSHHZ;
+    MyReleaseAdapter adapterYSHY;
+    MyReleaseAdapter adapterSHHZ;
     List<YSHYEntity> list = new ArrayList<>();
     int pageSize = 5;
     int pageNum = 1;
@@ -142,7 +143,7 @@ public class MyReleaseFragment extends Fragment {
         if (type == 0) {
             final LinearLayoutManager lmYSHY = new LinearLayoutManager(getContext());
             lmYSHY.setOrientation(LinearLayoutManager.VERTICAL);
-            adapterYSHY = new CommunityYSHYAdapter(getContext(), list);
+            adapterYSHY = new MyReleaseAdapter(getContext(), list);
             adapterYSHY.setListener(new MeItemInterface() {
                 @Override
                 public void OnItemClick(int position) {
@@ -155,7 +156,6 @@ public class MyReleaseFragment extends Fragment {
                 }
             });
 
-            adapterYSHY.setIsMyFunction(true);
             adapterYSHY.setTag(true);
             recyclerView.setLayoutManager(lmYSHY);
             recyclerView.setAdapter(adapterYSHY);
@@ -163,7 +163,7 @@ public class MyReleaseFragment extends Fragment {
         } else if (type == 1) {
             final LinearLayoutManager lmSHHZ = new LinearLayoutManager(getContext());
             lmSHHZ.setOrientation(LinearLayoutManager.VERTICAL);
-            adapterSHHZ = new CommunityYSHYAdapter(getContext(), list);
+            adapterSHHZ = new MyReleaseAdapter(getContext(), list);
             adapterSHHZ.setListener(new MeItemInterface() {
                 @Override
                 public void OnItemClick(int position) {
@@ -175,7 +175,6 @@ public class MyReleaseFragment extends Fragment {
 
                 }
             });
-            adapterSHHZ.setIsMyFunction(true);
             adapterSHHZ.setTag(false);
             recyclerView.setLayoutManager(lmSHHZ);
             recyclerView.setAdapter(adapterSHHZ);
