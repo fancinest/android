@@ -7,24 +7,23 @@ import android.os.Environment;
 import android.util.Log;
 import android.util.Pair;
 
-import com.narancommunity.app.entity.AddressEntity;
-import com.narancommunity.app.net.AppConstants;
 import com.narancommunity.app.common.DBHelper;
 import com.narancommunity.app.common.Toaster;
+import com.narancommunity.app.entity.AddressEntity;
 import com.narancommunity.app.entity.UserInfo;
+import com.narancommunity.app.net.AppConstants;
 import com.snappydb.DB;
 import com.snappydb.SnappydbException;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
-//import com.umeng.commonsdk.UMConfigure;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cn.jpush.android.api.JPushInterface;
+
+//import com.umeng.commonsdk.UMConfigure;
 
 /**
  * Writer：fancy on 2018/1/4 14:17
@@ -67,11 +66,11 @@ public class MApplication extends Application {
          * 参数3:Push推送业务的secret
          */
         UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, "");
-        UMConfigure.init(this,"5a12384aa40fa3551f0001d1"
-                ,"umeng",UMConfigure.DEVICE_TYPE_PHONE,"");////58edcfeb310c93091c000be2 5965ee00734be40b580001a0
+        UMConfigure.init(this, "5a12384aa40fa3551f0001d1"
+                , "umeng", UMConfigure.DEVICE_TYPE_PHONE, "");////58edcfeb310c93091c000be2 5965ee00734be40b580001a0
 
         PlatformConfig.setWeixin("wxdc1e388c3822c80b", "3baf1193c85774b3fd9d18447d76cab0");
-        PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad","http://sns.whalecloud.com");
+        PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad", "http://sns.whalecloud.com");
         PlatformConfig.setQQZone("100424468", "KEYzWVR9DNIKBGozMn7");
 
         JPushInterface.setDebugMode(true);
@@ -250,6 +249,24 @@ public class MApplication extends Application {
         } catch (SnappydbException e) {
             e.printStackTrace();
         }
+    }
+
+    public static boolean isAuthorisedSuccess(Context context) {
+        boolean isAuthorised = false;
+        try {
+            DB snappyDb =
+                    DBHelper.getDB(instance);
+            boolean isExists = snappyDb.exists(AppConstants.USER_INFO);
+            if (isExists) {
+                String state = snappyDb.get(AppConstants.USER_INFO, UserInfo.class).getCertificationType();
+                if (state.equals("SUCCESS"))
+                    isAuthorised = true;
+            }
+            snappyDb.close();
+        } catch (SnappydbException e) {
+            e.printStackTrace();
+        }
+        return isAuthorised;
     }
 
     public static void logout(boolean isNeedReLogin) {

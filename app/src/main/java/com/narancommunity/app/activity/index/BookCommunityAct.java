@@ -18,10 +18,11 @@ import android.widget.PopupWindow;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.general.AuthoriseFirstAct;
 import com.narancommunity.app.activity.fragment.CommunitySonFragment;
 import com.narancommunity.app.common.CenteredToolbar;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -74,16 +75,14 @@ public class BookCommunityAct extends BaseActivity implements OnTabSelectListene
             @Override
             public void onClick(View v) {
                 // TODO
-                /**
-                 * 先判断是否已经实名认证
-                 * {@link AuthoriseFirstAct}
-                 */
-//                startActivity(new Intent(getContext(), DonateBookAct.class));
-                if (mPosition == 1)
-                    showPopView(ivRelease);
-                else
-                    startActivity(new Intent(getContext(), NeedBookAct.class)
-                            .putExtra("tag", 2));
+                if (MApplication.isAuthorisedSuccess(getContext())) {
+                    if (mPosition == 1)
+                        showPopView(ivRelease);
+                    else
+                        startActivity(new Intent(getContext(), NeedBookAct.class)
+                                .putExtra("tag", 2));
+                } else showPopView(ivRelease, "分享赠送陌生人\n实名认证更安全");
+
             }
         });
         vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -178,13 +177,14 @@ public class BookCommunityAct extends BaseActivity implements OnTabSelectListene
 
     }
 
+    @Override
     public void onResume() {
         super.onResume();
-//        MobclickAgent.onResume(this);
+        MobclickAgent.onResume(this);
     }
-
+    @Override
     public void onPause() {
         super.onPause();
-//        MobclickAgent.onPause(this);
+        MobclickAgent.onPause(this);
     }
 }

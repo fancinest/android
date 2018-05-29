@@ -30,12 +30,11 @@ import com.narancommunity.app.entity.NewsData;
 import com.narancommunity.app.entity.OrderData;
 import com.narancommunity.app.entity.OrderEntity;
 import com.narancommunity.app.entity.RecData;
-import com.narancommunity.app.entity.RecEntity;
 import com.narancommunity.app.entity.ShuzhaiData;
-import com.narancommunity.app.entity.WallListData;
 import com.narancommunity.app.entity.Stationery;
 import com.narancommunity.app.entity.UpdateFilesEntity;
 import com.narancommunity.app.entity.UserInfo;
+import com.narancommunity.app.entity.WallListData;
 import com.narancommunity.app.entity.WantListEntity;
 import com.narancommunity.app.entity.WeekEntity;
 import com.narancommunity.app.entity.WishDetailEntity;
@@ -146,6 +145,66 @@ public class NRClient {
     }
 
     //TODO 以此为基础
+
+    /**
+     * @param callback
+     * @return
+     */
+    public static Call confirmGetBook(Map<String, Object> baseData,
+                                      final ResultCallback<Result<String>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<String>> call = mService.confirmBook(baseData);
+        Callback<Result<String>> cbk = new Callback<Result<String>>() {
+
+            @Override
+            public void onResponse(Call<Result<String>> call,
+                                   Response<Result<String>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<String>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+    }
+
+    /**
+     * @param callback
+     * @return
+     */
+    public static Call getAuthoriseCode(Map<String, Object> baseData,
+                                        final ResultCallback<Result<String>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("accessToken", MApplication.getAccessToken());
+        Log.i("fancy", header.get("accessToken") + "");
+        Call<Result<String>> call = mService.getAuthoriseCode(baseData);
+        Callback<Result<String>> cbk = new Callback<Result<String>>() {
+
+            @Override
+            public void onResponse(Call<Result<String>> call,
+                                   Response<Result<String>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<String>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+    }
 
     /**
      * @param callback

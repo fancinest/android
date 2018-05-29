@@ -25,6 +25,7 @@ import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
 import com.snappydb.DB;
 import com.snappydb.SnappydbException;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,6 +72,17 @@ public class ModifyPsdAct extends BaseActivity {
 
         setBar(toolbar);
         toolbar.setTitle("修改密码");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @OnClick({R.id.tv_get_code, R.id.tv_go})

@@ -1,8 +1,6 @@
 package com.narancommunity.app.activity.general;
 
 import android.Manifest;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -14,10 +12,8 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
@@ -27,20 +23,18 @@ import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.SDCardUtils;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
-import com.narancommunity.app.entity.AddressEntity;
 import com.narancommunity.app.entity.UpdateFilesEntity;
 import com.narancommunity.app.net.AppConstants;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
-import com.yanzhenjie.alertdialog.AlertDialog;
+import com.umeng.analytics.MobclickAgent;
+import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.Rationale;
-import com.yanzhenjie.permission.RationaleListener;
+import com.yanzhenjie.permission.Permission;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +42,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 /**
  * Writer：fancy on 2018/1/4 14:57
@@ -78,6 +71,12 @@ public class AuthoriseSecondAct extends BaseActivity {
         map = (Map<String, Object>) getIntent().getSerializableExtra("data");
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
     boolean isNowFront = true;
 
     @OnClick({R.id.iv_front, R.id.iv_back, R.id.btn_submit})
@@ -92,6 +91,8 @@ public class AuthoriseSecondAct extends BaseActivity {
                 checkCamera();
                 break;
             case R.id.btn_submit:
+                map.put("cardPositive", frontPic);
+                map.put("cardOpposite", backPic);
                 NRClient.authorise(map, new ResultCallback<Result<Void>>() {
                     @Override
                     public void onFailure(Throwable throwable) {
@@ -223,38 +224,46 @@ public class AuthoriseSecondAct extends BaseActivity {
 
 
     private boolean checkCameraPermissions() {
-        return AndPermission.hasPermission(this, Manifest.permission.CAMERA);
+        return AndPermission.hasPermissions(this, Manifest.permission.CAMERA);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(getContext());
         AndPermission.with(this)
-                .requestCode(300)
-                .permission(
-                        Manifest.permission.CAMERA,
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                )
-                .rationale(rationaleListener).callback(this)
+                .runtime()
+                .permission(Permission.Group.CAMERA, Permission.Group.STORAGE)
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+
+                    }
+                }).onDenied(new Action<List<String>>() {
+            @Override
+            public void onAction(List<String> data) {
+
+            }
+        })
                 .start();
     }
 
-    RationaleListener rationaleListener = new RationaleListener() {
-        @Override
-        public void showRequestPermissionRationale(int requestCode, final Rationale rationale) {
-            AlertDialog.newBuilder(getContext()).setTitle("温馨提示")
-                    .setMessage("您已拒绝了打开相机的权限，没办法进行实名认证了，是否打开？")
-                    .setPositiveButton("好，给你", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            rationale.resume();
-                        }
-                    }).setNegativeButton("我拒绝", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    rationale.cancel();
-                }
-            }).show();
-        }
-    };
+//    RationaleListener rationaleListener = new RationaleListener() {
+//        @Override
+//        public void showRequestPermissionRationale(int requestCode, final Rationale rationale) {
+//            AlertDialog.newBuilder(getContext()).setTitle("温馨提示")
+//                    .setMessage("您已拒绝了打开相机的权限，没办法进行实名认证了，是否打开？")
+//                    .setPositiveButton("好，给你", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            rationale.resume();
+//                        }
+//                    }).setNegativeButton("我拒绝", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialogInterface, int i) {
+//                    rationale.cancel();
+//                }
+//            }).show();
+//        }
+//    };
 }

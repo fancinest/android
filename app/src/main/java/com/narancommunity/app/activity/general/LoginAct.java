@@ -28,6 +28,7 @@ import com.narancommunity.app.net.ResultCallback;
 import com.narancommunity.app.net.ServiceFactory;
 import com.snappydb.DB;
 import com.snappydb.SnappydbException;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -84,6 +85,17 @@ public class LoginAct extends BaseActivity {
         MApplication.putActivity("login", LoginAct.this);
 
         mShareAPI = UMShareAPI.get(getContext());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     UMShareAPI mShareAPI;
@@ -225,8 +237,13 @@ public class LoginAct extends BaseActivity {
             @Override
             public void onSuccess(Result<UserInfo> result) {
                 LoadDialog.dismiss(LoginAct.this);
-                Toaster.toast(LoginAct.this, "登录成功！");
                 saveUserInfo(result.getData());
+                if (result.getData().getCertificationType().equals("INITIAL")) {
+                    Toaster.toastLong(getContext(), "请先进行实名认证!");
+                    startActivity(new Intent(getContext(), AuthoriseFirstAct.class)
+                            .putExtra("isMustAuthorise", true));
+                } else
+                    Toaster.toast(LoginAct.this, "登录成功！");
                 MApplication.finishAllActivity();
                 finish();
             }

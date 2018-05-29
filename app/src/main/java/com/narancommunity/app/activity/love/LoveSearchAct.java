@@ -22,17 +22,13 @@ import android.widget.TextView;
 
 import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.index.NeedBookAct;
-import com.narancommunity.app.adapter.FindLatestAdapter;
 import com.narancommunity.app.adapter.LoveSearchAdapter;
 import com.narancommunity.app.adapter.OnItemClickListener;
 import com.narancommunity.app.common.DBHelper;
 import com.narancommunity.app.common.LoadDialog;
-import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.CompanyData;
 import com.narancommunity.app.entity.CompanyEntity;
-import com.narancommunity.app.entity.RecEntity;
 import com.narancommunity.app.entity.SearchHistoryEntity;
 import com.narancommunity.app.net.AppConstants;
 import com.narancommunity.app.net.NRClient;
@@ -40,6 +36,7 @@ import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
 import com.snappydb.DB;
 import com.snappydb.SnappydbException;
+import com.umeng.analytics.MobclickAgent;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -99,6 +96,18 @@ public class LoveSearchAct extends BaseActivity {
 
         getSearchHistoryList();
         setView();
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private void setView() {

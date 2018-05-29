@@ -79,6 +79,8 @@ public class Result<T> {
                 } else if (result.getCode().equals(AppConstants.CODE_AUTH_ERR)) {
                     MApplication.logout(true);
                     callback.onFailure(new Throwable(result.getMsg()));
+                } else if (result.getCode().equals(AppConstants.CODE_NEED_AUTHORISE)) {
+                    callback.onFailure(new Throwable("此操作需要实名认证哦！"));
                 } else
                     callback.onFailure(new Throwable(result.getMsg()));
             } else {

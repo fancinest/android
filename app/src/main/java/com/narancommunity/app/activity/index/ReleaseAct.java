@@ -19,6 +19,7 @@ import com.narancommunity.app.R;
 import com.narancommunity.app.activity.general.AuthoriseFirstAct;
 import com.narancommunity.app.activity.general.LoginAct;
 import com.narancommunity.app.common.Toaster;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -111,5 +112,17 @@ public class ReleaseAct extends BaseActivity {
         }
         if (mPop != null && !mPop.isShowing())
             mPop.showAtLocation(view, Gravity.CENTER, 0, 0);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

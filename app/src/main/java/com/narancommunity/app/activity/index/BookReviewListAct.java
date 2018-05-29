@@ -22,6 +22,7 @@ import com.narancommunity.app.entity.BookCommentData;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -162,5 +163,16 @@ public class BookReviewListAct extends BaseActivity {
     public void onViewClicked() {
         startActivity(new Intent(getContext(), AddBookCommentAct.class).putExtra("tag", 2)
                 .putExtra("bookId", bookId));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

@@ -4,21 +4,28 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.SoundEffectConstants;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.narancommunity.app.activity.general.AuthoriseFirstAct;
 import com.narancommunity.app.activity.index.DonateBookAct;
-import com.narancommunity.app.activity.index.ReleaseAct;
 import com.narancommunity.app.activity.love.LoveFragment;
 import com.narancommunity.app.activity.mine.MeFragment;
 import com.narancommunity.app.common.Toaster;
@@ -62,11 +69,13 @@ public class MainActivity extends AppCompatActivity {
         RadioGroup tabRdoGrp = findViewById(R.id.tab_rdo_grp);
         RadioButton home_tab = findViewById(R.id.home_tab);
 
-        ImageView iv_release = findViewById(R.id.iv_release);
+        final ImageView iv_release = findViewById(R.id.iv_release);
         iv_release.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, DonateBookAct.class));
+                if (MApplication.isAuthorisedSuccess(MainActivity.this)) {
+                    startActivity(new Intent(MainActivity.this, DonateBookAct.class));
+                } else showPopView(iv_release);
             }
         });
         home_tab.setChecked(true);
@@ -84,6 +93,78 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
         registerMessageReceiver();  // used for receive msg
     }
+
+    PopupWindow mPop;
+
+    private void showPopView(View view) {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View v = inflater.inflate(R.layout.pop_authorise, null);
+
+        if (mPop == null) {
+            mPop = new PopupWindow(v, LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            mPop.setFocusable(true);
+            mPop.setOutsideTouchable(true);
+            mPop.setBackgroundDrawable(new BitmapDrawable());
+            TextView tv_prompt= v.findViewById(R.id.tv_prompt);
+            tv_prompt.setText("分享赠送陌生人\n实名认证更安全");
+            Button go = v.findViewById(R.id.btn_go);
+            go.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    startActivity(new Intent(MainActivity.this, AuthoriseFirstAct.class));
+                }
+            });
+            v.findViewById(R.id.iv_close).setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View arg0) {
+                    mPop.dismiss();
+                }
+            });
+        }
+        mPop.setClippingEnabled(true);
+        if (mPop != null && !mPop.isShowing())
+            mPop.showAtLocation(view, Gravity.CENTER, 0, 0);
+    }
+
+//    PopupWindow mPop;
+//
+//    private void showPopView(View view) {
+//        LayoutInflater inflater = LayoutInflater.from(this);
+//        View v = inflater.inflate(R.layout.normal_pop, null);
+//
+//        if (mPop == null) {
+//            mPop = new PopupWindow(v, LinearLayout.LayoutParams.MATCH_PARENT,
+//                    LinearLayout.LayoutParams.WRAP_CONTENT);
+//            mPop.setFocusable(true);
+//            mPop.setOutsideTouchable(true);
+//            mPop.setBackgroundDrawable(new BitmapDrawable());
+//            TextView tv_dial = (TextView) v.findViewById(R.id.dial);
+//            tv_dial.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+//            tv_dial.setText("您尚实名认证，无法操作，是否去实名认证？");
+//            tv_dial.setTextColor(getResources().getColor(R.color.black));
+//            Button ok = v.findViewById(R.id.ok);
+//            ok.setText("去认证");
+//            ok.setTextColor(getResources().getColor(R.color.appBlue));
+//            ok.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View arg0) {
+//                    startActivity(new Intent(getApplicationContext(), AuthoriseFirstAct.class));
+//                    mPop.dismiss();
+//                }
+//            });
+//            v.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+//
+//                @Override
+//                public void onClick(View arg0) {
+//                    mPop.dismiss();
+//                }
+//            });
+//        }
+//        if (mPop != null && !mPop.isShowing())
+//            mPop.showAtLocation(view, Gravity.CENTER, 0, 0);
+//    }
 
     /**
      * 底部Tab选择监听

@@ -24,6 +24,7 @@ import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -141,6 +142,12 @@ public class SettingAct extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 }

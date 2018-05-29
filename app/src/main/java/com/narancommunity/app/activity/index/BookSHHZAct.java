@@ -39,6 +39,7 @@ import com.narancommunity.app.interfaces.CommentInterfaces;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -130,6 +131,17 @@ public class BookSHHZAct extends BaseActivity {
         setPopView();
         getData();
         getIsCollect();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private void setView() {
@@ -310,19 +322,29 @@ public class BookSHHZAct extends BaseActivity {
             case R.id.iv_one_pic:
                 break;
             case R.id.ln_collect:
-                if (!isCollect)
-                    addCollect();
-                else Toaster.toast(getContext(), "您已经收藏过了！");
+                if (MApplication.isAuthorisedSuccess(getContext())) {
+                    if (!isCollect)
+                        addCollect();
+                    else Toaster.toast(getContext(), "您已经收藏过了！");
+                } else showPopView(view, "分享赠送陌生人\n实名认证更安全");
                 break;
             case R.id.ln_comment:
-                startActivity(new Intent(getContext(), AddBookCommentAct.class)
-                        .putExtra("tag", 1));
+                if (MApplication.isAuthorisedSuccess(getContext())) {
+                    startActivity(new Intent(getContext(), AddBookCommentAct.class)
+                            .putExtra("tag", 1));
+                } else showPopView(view, "分享赠送陌生人\n实名认证更安全");
                 break;
             case R.id.ln_like:
+                if (MApplication.isAuthorisedSuccess(getContext())) {
+//                    startActivity(new Intent(getContext(), AddBookCommentAct.class)
+//                            .putExtra("tag", 1));
+                } else showPopView(view, "分享赠送陌生人\n实名认证更安全");
                 break;
             case R.id.btn_help:
-                startActivity(new Intent(getContext(), DonateBookAct.class)
-                        .putExtra("contentId", mData.getContentId()));
+                if (MApplication.isAuthorisedSuccess(getContext())) {
+                    startActivity(new Intent(getContext(), DonateBookAct.class)
+                            .putExtra("contentId", mData.getContentId()));
+                } else showPopView(view, "分享赠送陌生人\n实名认证更安全");
                 break;
             case R.id.ln_donater:
                 break;

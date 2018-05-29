@@ -34,6 +34,7 @@ import com.narancommunity.app.entity.ApplyDetailEntity;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -219,7 +220,14 @@ public class DonateWishDetailAct extends BaseActivity {
                 setDataView(result.getData());
             }
         });
+        MobclickAgent.onResume(this);
     }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
 
     private void setDataView(ApplyDetailEntity data) {
         if (data == null)

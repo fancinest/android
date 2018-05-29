@@ -22,6 +22,7 @@ public class AppConstants {
     public static final String IS_FIRST_INSTALL = "is_first_install";//是否是第一次安装
 
     public static final String CODE_SUCCESS = "0000";//	服务器响应成功
+    public static final String CODE_NEED_AUTHORISE = "6666";//	需要实名认证
     public static final String CODE_SYS_ERR = "E0000";//	系统异常
     public static final String CODE_VER_ERR = "E1000";//	您的验证码错误或已过期，请重新获取！
     public static final String CODE_AUTH_ERR = "E1001";//	用户验证错误

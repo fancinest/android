@@ -16,19 +16,20 @@ import android.widget.TextView;
 
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
-import com.narancommunity.app.net.AppConstants;
 import com.narancommunity.app.common.DBHelper;
 import com.narancommunity.app.common.LoadDialog;
-import com.narancommunity.app.net.NRClient;
-import com.narancommunity.app.net.NRConfig;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.UserInfo;
+import com.narancommunity.app.net.AppConstants;
+import com.narancommunity.app.net.NRClient;
+import com.narancommunity.app.net.NRConfig;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
 import com.narancommunity.app.net.ServiceFactory;
 import com.snappydb.DB;
 import com.snappydb.SnappydbException;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,12 +72,12 @@ public class RegisterAct extends AppCompatActivity {
 
     public void onResume() {
         super.onResume();
-//        MobclickAgent.onResume(this);
+        MobclickAgent.onResume(this);
     }
 
     public void onPause() {
         super.onPause();
-//        MobclickAgent.onPause(this);
+        MobclickAgent.onPause(this);
     }
 
     @Override

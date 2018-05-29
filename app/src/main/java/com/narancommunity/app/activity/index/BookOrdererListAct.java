@@ -26,6 +26,7 @@ import com.narancommunity.app.entity.OrderEntity;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -82,6 +83,13 @@ public class BookOrdererListAct extends BaseActivity {
     protected void onResume() {
         super.onResume();
         getOrderData();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private void getOrderData() {

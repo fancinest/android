@@ -15,6 +15,7 @@ import com.narancommunity.app.activity.fragment.RangeChengjiuFragment;
 import com.narancommunity.app.activity.fragment.RangeDaRenFragment;
 import com.narancommunity.app.activity.fragment.RangeRangeFragment;
 import com.narancommunity.app.common.CenteredToolbar;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -86,16 +87,18 @@ public class RangeAct extends BaseActivity implements OnTabSelectListener {
 
     }
 
-    public void onResume() {
+
+    @Override
+    protected void onResume() {
         super.onResume();
-//        MobclickAgent.onPageStart("");
+        MobclickAgent.onResume(this);
     }
 
-    public void onPause() {
+    @Override
+    protected void onPause() {
         super.onPause();
-//        MobclickAgent.onPageEnd("");
+        MobclickAgent.onPause(this);
     }
-
     @Override
     public void onTabSelect(int position) {
 

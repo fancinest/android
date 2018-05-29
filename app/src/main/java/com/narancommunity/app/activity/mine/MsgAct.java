@@ -1,6 +1,5 @@
 package com.narancommunity.app.activity.mine;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -9,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.narancommunity.app.BaseActivity;
-import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
 import com.narancommunity.app.adapter.AssistantAdapter;
@@ -18,13 +16,9 @@ import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.ItemDecoration.DividerItemDecoration;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
-import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.AssistantMissionEntity;
-import com.narancommunity.app.entity.WeekEntity;
 import com.narancommunity.app.entity.WeekRecEntity;
-import com.narancommunity.app.net.NRClient;
-import com.narancommunity.app.net.Result;
-import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,6 +70,13 @@ public class MsgAct extends BaseActivity {
     protected void onResume() {
         super.onResume();
         getData();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private void getData() {

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.narancommunity.app.R;
 import com.narancommunity.app.activity.picbroswer.photoview.HackyViewPager;
+import com.umeng.analytics.MobclickAgent;
 
 
 public class ImagePagerActivity extends FragmentActivity {
@@ -25,13 +26,13 @@ public class ImagePagerActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//		MobclickAgent.onResume(this);
+		MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//		MobclickAgent.onPause(this);
+		MobclickAgent.onPause(this);
     }
 
     @Override

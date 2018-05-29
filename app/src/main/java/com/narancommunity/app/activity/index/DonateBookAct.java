@@ -48,6 +48,7 @@ import com.narancommunity.app.net.AppConstants;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -528,15 +529,16 @@ public class DonateBookAct extends BaseActivity {
         });
     }
 
+    @Override
     public void onResume() {
         super.onResume();
-//        MobclickAgent.onResume(this);
+        MobclickAgent.onResume(this);
     }
 
     public void onPause() {
         super.onPause();
         Utils.hideSoftInput(this);
-//        MobclickAgent.onPause(this);
+        MobclickAgent.onPause(this);
     }
 
     private void donateBook(Map<String, Object> map) {

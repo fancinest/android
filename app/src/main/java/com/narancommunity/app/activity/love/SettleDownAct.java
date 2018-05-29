@@ -48,6 +48,7 @@ import com.narancommunity.app.net.AppConstants;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -64,8 +65,6 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import me.leefeng.citypicker.CityPicker;
-import me.leefeng.citypicker.CityPickerListener;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 /**
@@ -117,6 +116,18 @@ public class SettleDownAct extends BaseActivity {
         setSort();
         setGrid();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
 
     private void setSort() {
         tagFlowType.setAdapter(new TagAdapter<String>(sortArr) {

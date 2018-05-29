@@ -21,6 +21,7 @@ import com.narancommunity.app.entity.AddressEntity;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -143,14 +144,21 @@ public class AddressAct extends BaseActivity {
     protected void onResume() {
         super.onResume();
         getList();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @OnClick(R.id.btn_add)
     public void onViewClicked() {
-//        getContext().startActivity(new Intent(getContext(), EditAddressAct.class)
-//                .putExtra("flag", 0));
-
-        getContext().startActivity(new Intent(getContext(), AddAddressAct.class)
+        getContext().startActivity(new Intent(getContext(), EditAddressAct.class)
                 .putExtra("flag", 0));
+
+//        getContext().startActivity(new Intent(getContext(), AddAddressAct.class)
+//                .putExtra("flag", 0));
     }
 }

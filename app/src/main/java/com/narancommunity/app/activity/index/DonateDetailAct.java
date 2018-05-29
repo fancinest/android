@@ -52,6 +52,7 @@ import com.narancommunity.app.interfaces.CommentInterfaces;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -159,12 +160,19 @@ public class DonateDetailAct extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(getContext());
         getDetail();
         getWantList();
         getCommentList();
         getRelation();
         getCollectState();
         getFeedBack();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(getContext());
     }
 
     private void getFeedBack() {

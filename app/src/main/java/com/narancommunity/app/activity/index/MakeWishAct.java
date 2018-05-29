@@ -2,7 +2,6 @@ package com.narancommunity.app.activity.index;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -34,8 +33,8 @@ import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.mine.AddressAct;
 import com.narancommunity.app.activity.AskPaperAct;
+import com.narancommunity.app.activity.mine.AddressAct;
 import com.narancommunity.app.adapter.PicUploadAdapter;
 import com.narancommunity.app.adapter.StationeryAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
@@ -53,12 +52,10 @@ import com.narancommunity.app.net.AppConstants;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
-import com.yanzhenjie.alertdialog.AlertDialog;
+import com.umeng.analytics.MobclickAgent;
+import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.PermissionNo;
-import com.yanzhenjie.permission.PermissionYes;
-import com.yanzhenjie.permission.Rationale;
-import com.yanzhenjie.permission.RationaleListener;
+import com.yanzhenjie.permission.Permission;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -403,31 +400,40 @@ public class MakeWishAct extends BaseActivity {
     }
 
     private boolean checkGalleryPermissions() {
-        return AndPermission.hasPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        return AndPermission.hasPermissions(getContext(), Permission.Group.STORAGE);
     }
 
     private boolean checkCameraPermissions() {
-        return AndPermission.hasPermission(this, Manifest.permission.CAMERA);
+        return AndPermission.hasPermissions(getContext(), Manifest.permission.CAMERA);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         Utils.hideSoftInput(this);
+        MobclickAgent.onPause(getContext());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         AndPermission.with(this)
-                .requestCode(300)
-                .permission(
-                        Manifest.permission.CAMERA,
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                )
-                .rationale(rationaleListener).callback(this)
+                .runtime()
+                .permission(Permission.Group.CAMERA, Permission.Group.STORAGE)
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+
+                    }
+                }).onDenied(new Action<List<String>>() {
+            @Override
+            public void onAction(List<String> data) {
+
+            }
+        })
                 .start();
         getStationery();
+        MobclickAgent.onResume(getContext());
     }
 
     private void getStationery() {
@@ -456,35 +462,35 @@ public class MakeWishAct extends BaseActivity {
         stationeryAdapter.notifyDataSetChanged();
     }
 
-    RationaleListener rationaleListener = new RationaleListener() {
-        @Override
-        public void showRequestPermissionRationale(int requestCode, final Rationale rationale) {
-            AlertDialog.newBuilder(MakeWishAct.this).setTitle("温馨提示")
-                    .setMessage("你已拒绝过定位权限,是否授权")
-                    .setPositiveButton("好，给你", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            rationale.resume();
-                        }
-                    }).setNegativeButton("我拒绝", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    rationale.cancel();
-                }
-            }).show();
-        }
-    };
-
-    // 成功回调的方法，用注解即可，这里的300就是请求时的requestCode。
-    @PermissionYes(300)
-    private void getPermissionYes(List<String> grantedPermissions) {
-        // TODO 申请权限成功。
-    }
-
-    @PermissionNo(300)
-    private void getPermissionNo(List<String> deniedPermissions) {
-        // TODO 申请权限失败。
-    }
+//    RationaleListener rationaleListener = new RationaleListener() {
+//        @Override
+//        public void showRequestPermissionRationale(int requestCode, final Rationale rationale) {
+//            AlertDialog.newBuilder(MakeWishAct.this).setTitle("温馨提示")
+//                    .setMessage("你已拒绝过定位权限,是否授权")
+//                    .setPositiveButton("好，给你", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            rationale.resume();
+//                        }
+//                    }).setNegativeButton("我拒绝", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialogInterface, int i) {
+//                    rationale.cancel();
+//                }
+//            }).show();
+//        }
+//    };
+//
+//    // 成功回调的方法，用注解即可，这里的300就是请求时的requestCode。
+//    @PermissionYes(300)
+//    private void getPermissionYes(List<String> grantedPermissions) {
+//        // TODO 申请权限成功。
+//    }
+//
+//    @PermissionNo(300)
+//    private void getPermissionNo(List<String> deniedPermissions) {
+//        // TODO 申请权限失败。
+//    }
 
     @OnClick({R.id.ln_address, R.id.ctv_yes, R.id.ctv_no, R.id.ctv_yes_anonymous, R.id.ctv_no_anonymous
             , R.id.iv_refresh, R.id.tv_release, R.id.tv_select_address, R.id.ctv_no_clear, R.id.ctv_forget})

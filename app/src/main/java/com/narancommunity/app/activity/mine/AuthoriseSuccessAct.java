@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.CenteredToolbar;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,5 +27,17 @@ public class AuthoriseSuccessAct extends BaseActivity {
         ButterKnife.bind(this);
         setBar(toolbar);
         toolbar.setTitle("实名认证成功");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

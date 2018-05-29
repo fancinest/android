@@ -17,6 +17,7 @@ import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.Toaster;
+import com.umeng.analytics.MobclickAgent;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -120,5 +121,16 @@ public class ReportAct extends BaseActivity {
         }
         if (mPop != null && !mPop.isShowing())
             mPop.showAtLocation(view, Gravity.CENTER, 0, 0);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

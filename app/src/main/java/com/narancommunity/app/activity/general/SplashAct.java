@@ -19,6 +19,7 @@ import com.narancommunity.app.common.DBHelper;
 import com.narancommunity.app.net.AppConstants;
 import com.snappydb.DB;
 import com.snappydb.SnappydbException;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Wirter：fancy on 2017/3/1 10:44
@@ -90,12 +91,12 @@ public class SplashAct extends AppCompatActivity {
 
     public void onResume() {
         super.onResume();
-//        MobclickAgent.onResume(this);
+        MobclickAgent.onResume(this);
     }
 
     public void onPause() {
         super.onPause();
-//        MobclickAgent.onPause(this);
+        MobclickAgent.onPause(this);
     }
 
     private Runnable runnableStart = new Runnable() {

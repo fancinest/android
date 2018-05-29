@@ -27,6 +27,7 @@ import com.narancommunity.app.entity.WishDonateEntity;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.util.ArrayList;
@@ -124,6 +125,17 @@ public class WishDonateDetailAct extends BaseActivity {
         setView();
         lnTool.setVisibility(View.GONE);
         MApplication.putActivity("", getContext());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private void setView() {

@@ -31,6 +31,7 @@ import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
 import com.sunfusheng.marqueeview.MarqueeView;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -227,8 +228,14 @@ public class AixinBookHouseAct extends BaseActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private void getMarqueen() {

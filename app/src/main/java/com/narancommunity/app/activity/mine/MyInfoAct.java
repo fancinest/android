@@ -2,7 +2,6 @@ package com.narancommunity.app.activity.mine;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -13,10 +12,7 @@ import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -34,17 +30,16 @@ import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.SDCardUtils;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
-import com.narancommunity.app.entity.AddressEntity;
 import com.narancommunity.app.entity.UpdateFilesEntity;
 import com.narancommunity.app.entity.UserInfo;
 import com.narancommunity.app.net.AppConstants;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
-import com.yanzhenjie.alertdialog.AlertDialog;
+import com.umeng.analytics.MobclickAgent;
+import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.Rationale;
-import com.yanzhenjie.permission.RationaleListener;
+import com.yanzhenjie.permission.Permission;
 
 import java.io.File;
 import java.io.IOException;
@@ -112,6 +107,13 @@ public class MyInfoAct extends BaseActivity {
                 updateInfo(map);
             }
         });
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private void setInfo() {
@@ -382,45 +384,53 @@ public class MyInfoAct extends BaseActivity {
     }
 
     private boolean checkGalleryPermissions() {
-        return AndPermission.hasPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        return AndPermission.hasPermissions(getContext(), Permission.Group.STORAGE);
     }
 
     private boolean checkCameraPermissions() {
-        return AndPermission.hasPermission(this, Manifest.permission.CAMERA);
+        return AndPermission.hasPermissions(getContext(), Manifest.permission.CAMERA);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(getContext());
         setInfo();
         AndPermission.with(this)
-                .requestCode(300)
-                .permission(
-                        Manifest.permission.CAMERA,
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                )
-                .rationale(rationaleListener).callback(this)
+                .runtime()
+                .permission(Permission.Group.CAMERA, Permission.Group.STORAGE)
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+
+                    }
+                }).onDenied(new Action<List<String>>() {
+            @Override
+            public void onAction(List<String> data) {
+
+            }
+        })
                 .start();
     }
 
-    RationaleListener rationaleListener = new RationaleListener() {
-        @Override
-        public void showRequestPermissionRationale(int requestCode, final Rationale rationale) {
-            AlertDialog.newBuilder(getContext()).setTitle("温馨提示")
-                    .setMessage("你已拒绝过定位权限，沒有定位定位权限无法为你推荐附近的妹子，你看着办！")
-                    .setPositiveButton("好，给你", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            rationale.resume();
-                        }
-                    }).setNegativeButton("我拒绝", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    rationale.cancel();
-                }
-            }).show();
-        }
-    };
+//    RationaleListener rationaleListener = new RationaleListener() {
+//        @Override
+//        public void showRequestPermissionRationale(int requestCode, final Rationale rationale) {
+//            AlertDialog.newBuilder(getContext()).setTitle("温馨提示")
+//                    .setMessage("你已拒绝过定位权限，沒有定位定位权限无法为你推荐附近的妹子，你看着办！")
+//                    .setPositiveButton("好，给你", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            rationale.resume();
+//                        }
+//                    }).setNegativeButton("我拒绝", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialogInterface, int i) {
+//                    rationale.cancel();
+//                }
+//            }).show();
+//        }
+//    };
 
     private static final int GET_IMAGE_VIA_SDCARD = 1000;
     private static final int GET_IMAGE_VIA_CAMERA = 1001;

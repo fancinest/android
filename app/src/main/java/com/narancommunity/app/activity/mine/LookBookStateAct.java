@@ -17,10 +17,10 @@ import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.RangeSelectionManager;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -52,6 +52,18 @@ public class LookBookStateAct extends BaseActivity {
         toolbar.setTitle("查看借阅");
         setBar(toolbar);
         createCriterias();
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private void createCriterias() {

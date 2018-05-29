@@ -1,16 +1,11 @@
 package com.narancommunity.app.activity.love;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.SoundEffectConstants;
 import android.view.View;
@@ -23,18 +18,15 @@ import android.widget.TextView;
 import com.emilsjolander.components.StickyScrollViewItems.StickyScrollView;
 import com.joooonho.SelectableRoundedImageView;
 import com.narancommunity.app.BaseActivity;
-import com.narancommunity.app.PetFragment;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.index.BookCommunityAct;
-import com.narancommunity.app.activity.mine.MeFragment;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Utils;
-import com.narancommunity.app.entity.BookListData;
 import com.narancommunity.app.entity.CompanyEntity;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -107,6 +99,18 @@ public class CompanyDetailAct extends BaseActivity {
         getData();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
+
 
     private void setFragment() {
         homeTab.setChecked(true);
@@ -155,12 +159,6 @@ public class CompanyDetailAct extends BaseActivity {
         tvTel.setText("" + Utils.getValue(data.getPhone()));
         tvAddress.setText("" + Utils.getValue(data.getProvince()) + Utils.getValue(data.getCity()) + Utils.getValue(data.getCounty()));
         mLove.setView("" + Utils.getValue(data.getCompanyContent()));
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
     }
 
     private void setScroll() {

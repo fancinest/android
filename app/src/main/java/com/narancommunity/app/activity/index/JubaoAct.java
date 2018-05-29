@@ -9,6 +9,7 @@ import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.LoadDialog;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,5 +56,16 @@ public class JubaoAct extends BaseActivity {
             }
         }).start();
 //        NRClient.feedback();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

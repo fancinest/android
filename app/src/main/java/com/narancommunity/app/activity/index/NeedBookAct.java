@@ -40,6 +40,7 @@ import com.narancommunity.app.net.AppConstants;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 import java.io.IOException;
@@ -99,6 +100,18 @@ public class NeedBookAct extends BaseActivity {
 
         setView();
         setGrid();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        Utils.hideSoftInput(this);
+        MobclickAgent.onPause(this);
     }
 
     private void setView() {
@@ -420,17 +433,6 @@ public class NeedBookAct extends BaseActivity {
                 }
             }
         });
-    }
-
-    public void onResume() {
-        super.onResume();
-//        MobclickAgent.onResume(this);
-    }
-
-    public void onPause() {
-        super.onPause();
-        Utils.hideSoftInput(this);
-//        MobclickAgent.onPause(this);
     }
 
     private void releaseTopic() {

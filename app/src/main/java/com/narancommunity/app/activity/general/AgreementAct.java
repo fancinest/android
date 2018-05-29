@@ -8,6 +8,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.narancommunity.app.R;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,10 +58,10 @@ public class AgreementAct extends AppCompatActivity {
 
     public void onResume() {
         super.onResume();
-//        MobclickAgent.onResume(this);
+        MobclickAgent.onResume(this);
     }
     public void onPause() {
         super.onPause();
-//        MobclickAgent.onPause(this);
+        MobclickAgent.onPause(this);
     }
 }

@@ -4,20 +4,25 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.narancommunity.app.activity.general.AuthoriseFirstAct;
 import com.narancommunity.app.activity.index.ReportAct;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.ShareContent;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
@@ -215,5 +220,41 @@ public class BaseActivity extends AppCompatActivity {
                 break;
         }
         return index;
+    }
+
+
+    PopupWindow mPop;
+
+    public void showPopView(View view, String prompt) {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View v = inflater.inflate(R.layout.pop_authorise, null);
+
+        if (mPop == null) {
+            mPop = new PopupWindow(v, LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            mPop.setFocusable(true);
+            mPop.setOutsideTouchable(true);
+            mPop.setBackgroundDrawable(new BitmapDrawable());
+//            tv_prompt.setText("分享赠送陌生人\n实名认证更安全");
+            TextView tv_prompt = v.findViewById(R.id.tv_prompt);
+            tv_prompt.setText(prompt);
+            Button go = v.findViewById(R.id.btn_go);
+            go.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    startActivity(new Intent(getContext(), AuthoriseFirstAct.class));
+                }
+            });
+            v.findViewById(R.id.iv_close).setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View arg0) {
+                    mPop.dismiss();
+                }
+            });
+        }
+        mPop.setClippingEnabled(true);
+        if (mPop != null && !mPop.isShowing())
+            mPop.showAtLocation(view, Gravity.CENTER, 0, 0);
     }
 }

@@ -138,8 +138,10 @@ public class MeFragment extends Fragment {
 
         if (MApplication.getUserInfo(getContext()) != null &&
                 MApplication.getUserInfo(getContext()).getCertificationType().equals("SUCCESS")) {
-            tvAuthorise.setText("申请认证慈善使者");
-            Drawable drawable = getResources().getDrawable(R.mipmap.icon_renzhengcishanshizhe);
+//            tvAuthorise.setText("申请认证慈善使者");
+            tvAuthorise.setText("实名认证成功");
+            tvAuthorise.setTextColor(getResources().getColor(R.color.appBlue));
+            Drawable drawable = getResources().getDrawable(R.mipmap.icon_renzhengchenggong);
             tvAuthorise.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
 //                tvAuthorise.setBackgroundColor(getResources().getColor(R.color.login_gray));
         } else if (MApplication.getUserInfo(getContext()) != null &&
@@ -280,7 +282,7 @@ public class MeFragment extends Fragment {
             case 7://联系客服
                 break;
             case 8://关于那然
-                startActivity(new Intent(getContext(), LookBookStateAct.class));
+//                startActivity(new Intent(getContext(), LookBookStateAct.class));
                 break;
 
         }

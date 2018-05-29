@@ -28,6 +28,7 @@ import com.narancommunity.app.entity.AddressEntity;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -78,6 +79,11 @@ public class EditAddressAct extends BaseActivity {
             mCity = address.getCity();
             mCounty = address.getCounty();
             ctvDefault.setChecked(address.isDefault());
+        } else {
+//            double latitude = getIntent().getDoubleExtra("latitude", 0);
+//            double longitude = getIntent().getDoubleExtra("longitude", 0);
+//            String bigAddress = getIntent().getStringExtra("bigAddress");
+//            String smallAddress = getIntent().getStringExtra("smallAddress");
         }
         setBar(toolbar);
         toolbar.setTitle(getMyTitle(flag));
@@ -260,8 +266,15 @@ public class EditAddressAct extends BaseActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
         /**
          * 预先加载仿iOS滚轮实现的全部数据
          */

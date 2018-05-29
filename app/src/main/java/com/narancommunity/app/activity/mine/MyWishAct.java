@@ -11,8 +11,8 @@ import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.fragment.CommunitySonFragment;
 import com.narancommunity.app.common.CenteredToolbar;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -91,4 +91,16 @@ public class MyWishAct extends BaseActivity implements OnTabSelectListener {
         }
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
 }

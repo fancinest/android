@@ -3,6 +3,7 @@ package com.narancommunity.app.activity.love;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,14 +13,19 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
+import com.narancommunity.app.activity.general.AuthoriseFirstAct;
 import com.narancommunity.app.adapter.LoveAdapter;
 import com.narancommunity.app.adapter.OnItemClickListener;
 import com.narancommunity.app.common.LoadDialog;
@@ -225,7 +231,43 @@ public class LoveFragment extends Fragment {
 
     @OnClick(R.id.tv_add_love)
     public void onViewClicked() {
-        startActivity(new Intent(getContext(), SettleDownAct.class));
+        if (MApplication.isAuthorisedSuccess(getContext())) {
+            startActivity(new Intent(getContext(), SettleDownAct.class));
+        } else showPopView(tvAddLove);
+    }
+
+    PopupWindow mPop;
+
+    private void showPopView(View view) {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View v = inflater.inflate(R.layout.pop_authorise, null);
+
+        if (mPop == null) {
+            mPop = new PopupWindow(v, LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            mPop.setFocusable(true);
+            mPop.setOutsideTouchable(true);
+            mPop.setBackgroundDrawable(new BitmapDrawable());
+            TextView tv_prompt = v.findViewById(R.id.tv_prompt);
+            tv_prompt.setText("分享赠送陌生人\n实名认证更安全");
+            Button go = v.findViewById(R.id.btn_go);
+            go.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    startActivity(new Intent(getContext(), AuthoriseFirstAct.class));
+                }
+            });
+            v.findViewById(R.id.iv_close).setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View arg0) {
+                    mPop.dismiss();
+                }
+            });
+        }
+        mPop.setClippingEnabled(true);
+        if (mPop != null && !mPop.isShowing())
+            mPop.showAtLocation(view, Gravity.CENTER, 0, 0);
     }
 
 //    @OnClick({R.id.tv_add_love/*, R.id.iv_search*/})

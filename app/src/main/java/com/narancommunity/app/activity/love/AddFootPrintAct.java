@@ -20,6 +20,7 @@ import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -54,6 +55,18 @@ public class AddFootPrintAct extends BaseActivity {
         id = getIntent().getIntExtra("id", 0);
         toolbar.setTitle("添加足迹");
         setBar(toolbar);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private void addFoot() {

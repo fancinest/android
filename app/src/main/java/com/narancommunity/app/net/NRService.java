@@ -163,6 +163,14 @@ public interface NRService {
     Call<Result<BannerData>> getBannerList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取banner列表
 
     @FormUrlEncoded
+    @POST(NRConfig.BOOK_CONFIRM_GET)
+    Call<Result<String>> confirmBook(@FieldMap Map<String, Object> map);//
+
+    @FormUrlEncoded
+    @POST(NRConfig.USER_AUTHORISE_MOBILE_CODE)
+    Call<Result<String>> getAuthoriseCode(@FieldMap Map<String, Object> map);//
+
+    @FormUrlEncoded
     @POST(NRConfig.USER_THIRD_LOGIN)
     Call<Result<UserInfo>> loginThird(@FieldMap Map<String, Object> map);//
 

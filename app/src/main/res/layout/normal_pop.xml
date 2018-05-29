@@ -58,7 +58,7 @@
             android:paddingTop="30dp"
             android:text="确认提交该问题?"
             android:textColor="@color/color_333333"
-            android:textSize="14sp" />
+            android:textSize="13sp" />
 
         <View
             android:id="@+id/line"
@@ -84,7 +84,7 @@
                 android:singleLine="true"
                 android:text="取消"
                 android:textColor="@color/clickable_gray_dark"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <View
                 android:id="@+id/viewLine"
@@ -103,7 +103,7 @@
                 android:singleLine="true"
                 android:text="确定"
                 android:textColor="@color/clickable_gray_dark"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
 

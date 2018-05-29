@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -31,7 +30,6 @@ import com.narancommunity.app.common.DBHelper;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
-import com.narancommunity.app.entity.BookEntity;
 import com.narancommunity.app.entity.RecData;
 import com.narancommunity.app.entity.RecEntity;
 import com.narancommunity.app.entity.SearchHistoryEntity;
@@ -41,6 +39,7 @@ import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
 import com.snappydb.DB;
 import com.snappydb.SnappydbException;
+import com.umeng.analytics.MobclickAgent;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -49,7 +48,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -113,6 +111,17 @@ public class IndexSearchAct extends BaseActivity {
         getRecData(false);
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
     List<RecEntity> listRec = new ArrayList<>();
 

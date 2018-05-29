@@ -38,6 +38,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="com.narancommunity.app.MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -99,6 +100,18 @@
         <!--</intent-filter>-->
         <!--</activity>-->
         <!-- 微博-->
+        <activity
+            android:name=".activity.mine.SearchAddressAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.general.AddIDNumAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.general.VerifyMobileAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.mine.PushInfoAct"
             android:screenOrientation="portrait"

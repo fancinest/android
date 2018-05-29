@@ -37,6 +37,7 @@ import com.narancommunity.app.interfaces.CommentInterfaces;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,6 +109,17 @@ public class BookYSHYDetailAct extends BaseActivity {
         setView();
         setPopView();
         getData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private void getData() {
@@ -308,7 +320,7 @@ public class BookYSHYDetailAct extends BaseActivity {
 
     private void setPopView() {
         LayoutInflater inflater = LayoutInflater.from(this);
-        View v = inflater.inflate(R.layout.pop_function_new, null);
+        final View v = inflater.inflate(R.layout.pop_function_new, null);
 
         if (mPop == null) {
             mPop = new PopupWindow(v, LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -322,11 +334,15 @@ public class BookYSHYDetailAct extends BaseActivity {
                     Toaster.toast(getContext(), "点击赞");
                 }
             });
-            v.findViewById(R.id.iv_collect).setOnClickListener(new View.OnClickListener() {
+            final ImageView view = v.findViewById(R.id.iv_collect);
+            view.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View arg0) {
-                    addCollect();
+
+                    if (MApplication.isAuthorisedSuccess(getContext())) {
+                        addCollect();
+                    } else showPopView(view, "分享赠送陌生人\n实名认证更安全");
                 }
             });
             v.findViewById(R.id.iv_add_comment).setOnClickListener(new View.OnClickListener() {
@@ -334,11 +350,13 @@ public class BookYSHYDetailAct extends BaseActivity {
                 @Override
                 public void onClick(View arg0) {
 //                    showInputDialog(0, "");
-                    startActivity(new Intent(getContext(), AddBookCommentAct.class)
-                            .putExtra("tag", 0)
-                            .putExtra("bookId", mData.getContentId())
-                            .putExtra("commentedId", "")
-                            .putExtra("replyName", ""));
+                    if (MApplication.isAuthorisedSuccess(getContext())) {
+                        startActivity(new Intent(getContext(), AddBookCommentAct.class)
+                                .putExtra("tag", 0)
+                                .putExtra("bookId", mData.getContentId())
+                                .putExtra("commentedId", "")
+                                .putExtra("replyName", ""));
+                    } else showPopView(view, "分享赠送陌生人\n实名认证更安全");
                 }
             });
         }

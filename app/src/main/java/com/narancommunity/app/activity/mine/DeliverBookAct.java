@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -27,27 +26,21 @@ import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.LoadDialog;
-import com.narancommunity.app.common.SDCardUtils;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
-import com.narancommunity.app.entity.AddressEntity;
 import com.narancommunity.app.entity.OrderEntity;
 import com.narancommunity.app.entity.WishEntity;
-import com.narancommunity.app.entity.YSHYData;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 import simplezxing.activity.CaptureActivity;
 
 /**
@@ -107,9 +100,14 @@ public class DeliverBookAct extends BaseActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
-//        getOrdererInfo();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
 //    private void getOrdererInfo() {

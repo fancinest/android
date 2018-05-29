@@ -22,6 +22,7 @@ import com.narancommunity.app.entity.AddressEntity;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -76,6 +77,18 @@ public class StartFahuoAct extends BaseActivity {
         orderId = getIntent().getIntExtra("orderId",0);
 
         MApplication.putActivity("fahuo", getContext());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @OnClick({R.id.tv_select_address, R.id.ln_address, R.id.iv_scan, R.id.btn_go})

@@ -10,19 +10,8 @@ import android.support.v7.widget.OrientationHelper;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-
-import com.applikeysolutions.cosmocalendar.model.Day;
-import com.applikeysolutions.cosmocalendar.selection.criteria.BaseCriteria;
-import com.applikeysolutions.cosmocalendar.selection.criteria.WeekDayCriteria;
-import com.applikeysolutions.cosmocalendar.selection.criteria.month.CurrentMonthCriteria;
-import com.applikeysolutions.cosmocalendar.selection.criteria.month.NextMonthCriteria;
-import com.applikeysolutions.cosmocalendar.selection.criteria.month.PreviousMonthCriteria;
-import com.applikeysolutions.cosmocalendar.utils.SelectionType;
-import com.applikeysolutions.cosmocalendar.view.CalendarView;
-
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,6 +21,13 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.applikeysolutions.cosmocalendar.selection.criteria.BaseCriteria;
+import com.applikeysolutions.cosmocalendar.selection.criteria.WeekDayCriteria;
+import com.applikeysolutions.cosmocalendar.selection.criteria.month.CurrentMonthCriteria;
+import com.applikeysolutions.cosmocalendar.selection.criteria.month.NextMonthCriteria;
+import com.applikeysolutions.cosmocalendar.selection.criteria.month.PreviousMonthCriteria;
+import com.applikeysolutions.cosmocalendar.utils.SelectionType;
+import com.applikeysolutions.cosmocalendar.view.CalendarView;
 import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
@@ -45,6 +41,7 @@ import com.narancommunity.app.entity.BookInfo;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -139,6 +136,17 @@ public class OrderBookAct extends BaseActivity {
         mData = (BookInfo) getIntent().getSerializableExtra("data");
         setView();
         createCriterias();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private void createCriterias() {

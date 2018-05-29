@@ -1,16 +1,20 @@
 package com.narancommunity.app.net;
 
-import android.text.TextUtils;
-
-import java.util.HashMap;
-
 /**
  * 网络配置地址，动态地址需要这里配置
  */
 public class NRConfig {
     public static final String URL_BASE = "http://47.98.218.205:8082";
-    public static final String URL_RECORD = "http://47.98.218.205:8083";//记录用到的
+    public static final String URL_RECORD = "http://47.98.218.205:8085";//记录用到的
 
+    /**
+     * 确认收到书
+     */
+    public static final String BOOK_CONFIRM_GET = URL_BASE + "/api/book/apply/confirm";
+    /**
+     * 获取实名认证手机号验证码
+     */
+    public static final String USER_AUTHORISE_MOBILE_CODE = URL_BASE + "/api/account/certification/verifyCode";
     /**
      * 第三方登录
      */

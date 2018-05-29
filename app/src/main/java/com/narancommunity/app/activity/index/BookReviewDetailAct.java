@@ -28,6 +28,7 @@ import com.narancommunity.app.entity.Comments;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -99,6 +100,12 @@ public class BookReviewDetailAct extends BaseActivity {
     protected void onResume() {
         super.onResume();
         getData();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override

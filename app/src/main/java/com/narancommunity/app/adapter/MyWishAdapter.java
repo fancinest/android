@@ -2,25 +2,31 @@ package com.narancommunity.app.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.CardView;
+import android.graphics.drawable.BitmapDrawable;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.joooonho.SelectableRoundedImageView;
+import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.activity.index.BookDetailAct;
-import com.narancommunity.app.activity.mine.LookBookStateAct;
 import com.narancommunity.app.adapter.base.ListBaseAdapter;
 import com.narancommunity.app.adapter.base.SuperViewHolder;
+import com.narancommunity.app.common.LoadDialog;
+import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
-import com.narancommunity.app.entity.MyWishData;
-import com.narancommunity.app.entity.RecEntity;
 import com.narancommunity.app.entity.WishEntity;
+import com.narancommunity.app.net.NRClient;
+import com.narancommunity.app.net.Result;
+import com.narancommunity.app.net.ResultCallback;
 
-import butterknife.BindView;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Writer：fancy on 2017/8/30 17:17
@@ -70,7 +76,7 @@ public class MyWishAdapter extends ListBaseAdapter<WishEntity> {
 
         TextView tvDonator = holder.getView(R.id.tv_donator);
         TextView tvTitle = holder.getView(R.id.tv_title);
-        TextView tvOption = holder.getView(R.id.tv_option);
+        final TextView tvOption = holder.getView(R.id.tv_option);
         TextView tvContent = holder.getView(R.id.tv_content);
 
         tvContent.setText("" + Utils.getValue(entity.getOrderContent()));
@@ -96,7 +102,7 @@ public class MyWishAdapter extends ListBaseAdapter<WishEntity> {
         } else if (type == 1) {
             lnDonator.setVisibility(View.GONE);
             tvOption.setVisibility(View.VISIBLE);
-            tvOption.setText("查看");
+            tvOption.setText("确认收到");
         } else if (type == 2) {
             lnDonator.setVisibility(View.VISIBLE);
             tvOption.setVisibility(View.VISIBLE);
@@ -112,12 +118,70 @@ public class MyWishAdapter extends ListBaseAdapter<WishEntity> {
         tvOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (type == 1)
-                    mContext.startActivity(new Intent(mContext, LookBookStateAct.class)
-                            .putExtra("bookId", entity.getOrderId()));
-                else mContext.startActivity(new Intent(mContext, BookDetailAct.class)
+                if (type == 1) {
+                    showPopView(tvOption, entity.getOrderId(), position);
+//                    mContext.startActivity(new Intent(mContext, LookBookStateAct.class)
+//                            .putExtra("bookId", entity.getOrderId()));
+                } else mContext.startActivity(new Intent(mContext, BookDetailAct.class)
                         .putExtra("bookId", entity.getOrderId()));
             }
         });
+    }
+
+    void confirmGetBook(int orderId, final int position) {
+        LoadDialog.show(mContext);
+        Map<String, Object> map = new HashMap<>();
+        map.put("accessToken", MApplication.getAccessToken());
+        map.put("orderId", orderId);
+        NRClient.confirmGetBook(map, new ResultCallback<Result<String>>() {
+            @Override
+            public void onSuccess(Result<String> result) {
+                LoadDialog.dismiss(mContext);
+                Toaster.toast(mContext, "确认成功！");
+                remove(position);
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(mContext);
+                Utils.showErrorToast(mContext, throwable);
+            }
+        });
+    }
+
+    PopupWindow mPop;
+
+    private void showPopView(View view, final int orderId, final int position) {
+
+        LayoutInflater inflater = LayoutInflater.from(mContext);
+        View v = inflater.inflate(R.layout.normal_pop, null);
+
+        if (mPop == null) {
+            mPop = new PopupWindow(v, LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            mPop.setFocusable(true);
+            mPop.setOutsideTouchable(true);
+            mPop.setBackgroundDrawable(new BitmapDrawable());
+            TextView tv_dial = (TextView) v.findViewById(R.id.dial);
+            tv_dial.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+            tv_dial.setText("确认图书已经收到了吗？");
+            v.findViewById(R.id.ok).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    mPop.dismiss();
+                    confirmGetBook(orderId, position);
+                }
+            });
+            v.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View arg0) {
+                    mPop.dismiss();
+                }
+            });
+        }
+        if (mPop != null && !mPop.isShowing())
+            mPop.showAtLocation(view, Gravity.CENTER, 0, 0);
     }
 }

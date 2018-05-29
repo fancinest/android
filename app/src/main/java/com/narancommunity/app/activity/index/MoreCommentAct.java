@@ -23,6 +23,7 @@ import com.narancommunity.app.interfaces.CommentInterfaces;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,8 +75,14 @@ public class MoreCommentAct extends BaseActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private void getData() {

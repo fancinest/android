@@ -3,7 +3,6 @@ package com.narancommunity.app.activity.index;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 
 import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.MApplication;
@@ -15,12 +14,12 @@ import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
-import com.narancommunity.app.entity.OrderData;
 import com.narancommunity.app.entity.ShuzhaiData;
 import com.narancommunity.app.entity.ShuzhaiItem;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,6 +63,17 @@ public class ShuzhaiAct extends BaseActivity {
         setBar(toolbar);
         setView();
         getData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private void setView() {

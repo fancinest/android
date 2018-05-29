@@ -50,6 +50,7 @@ import com.narancommunity.app.interfaces.CommentInterfaces;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -212,6 +213,13 @@ public class BookDetailAct extends BaseActivity {
         super.onResume();
         getData();
         getLikeState();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     int pageNumRec = 1;
@@ -452,7 +460,7 @@ public class BookDetailAct extends BaseActivity {
         Map<String, Object> map = new HashMap<>();
         map.put("commentId", listComment.get(position).getCommentId());
         map.put("accessToken", MApplication.getAccessToken());
-        NRClient.likeBook(map, new ResultCallback<Result<Void>>() {
+        NRClient.likeComment(map, new ResultCallback<Result<Void>>() {
             @Override
             public void onFailure(Throwable throwable) {
                 LoadDialog.dismiss(getContext());
@@ -651,18 +659,24 @@ public class BookDetailAct extends BaseActivity {
             case R.id.tv_distance:
                 break;
             case R.id.ln_collect:
-                if (!isCollect)
-                    addCollect();
-                else Toaster.toast(getContext(), "您已收藏！");
+                if (MApplication.isAuthorisedSuccess(getContext())) {
+                    if (!isCollect)
+                        addCollect();
+                    else Toaster.toast(getContext(), "您已收藏！");
+                } else showPopView(btnOperate, "分享赠送陌生人\n实名认证更安全");
                 break;
             case R.id.btn_more:
                 startActivity(new Intent(getContext(), MoreCommentAct.class).putExtra("bookId", bookId));
                 break;
             case R.id.ln_comment:
-                addComment("", 0);
+                if (MApplication.isAuthorisedSuccess(getContext())) {
+                    addComment("", 0);
+                } else showPopView(btnOperate, "分享赠送陌生人\n实名认证更安全");
                 break;
             case R.id.ln_like:
-                likeBook();
+                if (MApplication.isAuthorisedSuccess(getContext())) {
+                    likeBook();
+                } else showPopView(btnOperate, "分享赠送陌生人\n实名认证更安全");
                 break;
             case R.id.ln_hot_switch:
                 pageNumRec++;
@@ -674,11 +688,13 @@ public class BookDetailAct extends BaseActivity {
                 }
                 break;
             case R.id.btn_operate:
-                if (orderStatus.equals("INITIAL") || orderStatus.equals("WAITING"))
-                    startActivity(new Intent(getContext(), OrderBookAct.class).putExtra("bookId", bookId)
-                            .putExtra("data", mData));
-                else
-                    iWantOrder();
+                if (MApplication.isAuthorisedSuccess(getContext())) {
+                    if (orderStatus.equals("INITIAL") || orderStatus.equals("WAITING"))
+                        startActivity(new Intent(getContext(), OrderBookAct.class).putExtra("bookId", bookId)
+                                .putExtra("data", mData));
+                    else
+                        iWantOrder();
+                } else showPopView(btnOperate, "分享赠送陌生人\n实名认证更安全");
                 break;
         }
     }

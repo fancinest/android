@@ -3,7 +3,6 @@ package com.narancommunity.app.activity.mine;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +19,7 @@ import com.narancommunity.app.entity.UserInfo;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -114,11 +114,15 @@ public class InfoEditAct extends BaseActivity {
         });
     }
 
+    @Override
     public void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
     }
-
+    @Override
     public void onPause() {
         super.onPause();
+        MobclickAgent.onPause(this);
     }
+
 }

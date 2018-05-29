@@ -19,6 +19,7 @@ import com.narancommunity.app.activity.general.AuthoriseFirstAct;
 import com.narancommunity.app.activity.fragment.BookSortSonFragment;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.CenteredToolbar;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -145,13 +146,14 @@ public class AixinBookShelfAct extends BaseActivity implements OnTabSelectListen
 
     }
 
+    @Override
     public void onResume() {
         super.onResume();
-//        MobclickAgent.onResume(this);
+        MobclickAgent.onResume(this);
     }
-
+    @Override
     public void onPause() {
         super.onPause();
-//        MobclickAgent.onPause(this);
+        MobclickAgent.onPause(this);
     }
 }
