@@ -116,10 +116,16 @@ public class BookDonateRangeFragment extends Fragment {
         }
     }
 
-    @Override
+
     public void onResume() {
         super.onResume();
         getData();
+//        MobclickAgent.onPageStart("BookDonateRangeFragment");
+    }
+
+    public void onPause() {
+        super.onPause();
+//        MobclickAgent.onPageEnd("BookDonateRangeFragment");
     }
 
     private void getData() {

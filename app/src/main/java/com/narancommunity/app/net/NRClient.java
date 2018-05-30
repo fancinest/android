@@ -12,7 +12,7 @@ import com.narancommunity.app.entity.AskPapers;
 import com.narancommunity.app.entity.AssistantEntity;
 import com.narancommunity.app.entity.BannerData;
 import com.narancommunity.app.entity.BookCommentData;
-import com.narancommunity.app.entity.BookDetail;
+import com.narancommunity.app.entity.BookDetailData;
 import com.narancommunity.app.entity.BookInfo;
 import com.narancommunity.app.entity.BookLendCardData;
 import com.narancommunity.app.entity.BookListData;
@@ -25,6 +25,7 @@ import com.narancommunity.app.entity.DonateDetailData;
 import com.narancommunity.app.entity.FootPrintData;
 import com.narancommunity.app.entity.GradeData;
 import com.narancommunity.app.entity.IsCollect;
+import com.narancommunity.app.entity.MsgData;
 import com.narancommunity.app.entity.MyWishData;
 import com.narancommunity.app.entity.NewsData;
 import com.narancommunity.app.entity.OrderData;
@@ -33,6 +34,7 @@ import com.narancommunity.app.entity.RecData;
 import com.narancommunity.app.entity.ShuzhaiData;
 import com.narancommunity.app.entity.Stationery;
 import com.narancommunity.app.entity.UpdateFilesEntity;
+import com.narancommunity.app.entity.UpdateInfo;
 import com.narancommunity.app.entity.UserInfo;
 import com.narancommunity.app.entity.WallListData;
 import com.narancommunity.app.entity.WantListEntity;
@@ -145,6 +147,58 @@ public class NRClient {
     }
 
     //TODO 以此为基础
+
+    /**
+     * @param callback
+     * @return
+     */
+    public static Call getMsgList(Map<String, Object> baseData, final ResultCallback<Result<MsgData>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        Call<Result<MsgData>> call = mService.getMsgList(baseData);
+        Callback<Result<MsgData>> cbk = new Callback<Result<MsgData>>() {
+
+            @Override
+            public void onResponse(Call<Result<MsgData>> call,
+                                   Response<Result<MsgData>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<MsgData>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+    }
+
+    /**
+     * @param callback
+     * @return
+     */
+    public static Call update(final ResultCallback<Result<UpdateInfo>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        Call<Result<UpdateInfo>> call = mService.update(new HashMap<String, Object>());
+        Callback<Result<UpdateInfo>> cbk = new Callback<Result<UpdateInfo>>() {
+
+            @Override
+            public void onResponse(Call<Result<UpdateInfo>> call,
+                                   Response<Result<UpdateInfo>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<UpdateInfo>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+    }
 
     /**
      * @param callback
@@ -2442,24 +2496,24 @@ public class NRClient {
      * @return
      */
     public static Call getBookDetail(Map<String, Object> baseData,
-                                     final ResultCallback<Result<BookDetail>> callback) {
+                                     final ResultCallback<Result<BookDetailData>> callback) {
 
         if (callback == null) throw new NullPointerException("callback == null");
         NRService mService = ServiceFactory.createNewService(NRService.class);
         HashMap<String, Object> header = new HashMap<>();
         header.put("accessToken", MApplication.getAccessToken());
         Log.i("fancy", header.get("accessToken") + "");
-        Call<Result<BookDetail>> call = mService.getBookDetail(header, baseData);
-        Callback<Result<BookDetail>> cbk = new Callback<Result<BookDetail>>() {
+        Call<Result<BookDetailData>> call = mService.getBookDetail(header, baseData);
+        Callback<Result<BookDetailData>> cbk = new Callback<Result<BookDetailData>>() {
 
             @Override
-            public void onResponse(Call<Result<BookDetail>> call,
-                                   Response<Result<BookDetail>> response) {
+            public void onResponse(Call<Result<BookDetailData>> call,
+                                   Response<Result<BookDetailData>> response) {
                 Result.onResponse(response, callback);
             }
 
             @Override
-            public void onFailure(Call<Result<BookDetail>> call, Throwable t) {
+            public void onFailure(Call<Result<BookDetailData>> call, Throwable t) {
                 Result.onFailure(t, callback);
             }
         };

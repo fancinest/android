@@ -14,7 +14,7 @@ import android.widget.ImageView;
 
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
-import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.activity.general.AuthoriseFirstAct;
 import com.narancommunity.app.activity.fragment.BookSortSonFragment;
 import com.narancommunity.app.R;

@@ -8,10 +8,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.index.AssistantDetailAct;
+import com.narancommunity.app.activity.index.LoveActionAct;
 import com.narancommunity.app.adapter.AssistantAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.LoadDialog;
@@ -133,7 +133,7 @@ public class MyAttendNewAct extends BaseActivity {
         adapter.setListener(new com.narancommunity.app.MeItemInterface() {
             @Override
             public void OnItemClick(int position) {
-                startActivity(new Intent(getContext(), AssistantDetailAct.class));
+                startActivity(new Intent(getContext(), LoveActionAct.class));
             }
 
             @Override

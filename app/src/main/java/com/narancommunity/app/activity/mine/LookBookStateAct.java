@@ -13,7 +13,7 @@ import com.applikeysolutions.cosmocalendar.selection.criteria.month.NextMonthCri
 import com.applikeysolutions.cosmocalendar.selection.criteria.month.PreviousMonthCriteria;
 import com.applikeysolutions.cosmocalendar.utils.SelectionType;
 import com.applikeysolutions.cosmocalendar.view.CalendarView;
-import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.RangeSelectionManager;

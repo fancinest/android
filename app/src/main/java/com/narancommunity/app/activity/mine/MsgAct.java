@@ -7,17 +7,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.narancommunity.app.BaseActivity;
-import com.narancommunity.app.MeItemInterface;
+import com.narancommunity.app.activity.general.BaseActivity;
+import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
-import com.narancommunity.app.adapter.AssistantAdapter;
-import com.narancommunity.app.adapter.WeekRecAdapter;
+import com.narancommunity.app.adapter.MsgAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
-import com.narancommunity.app.common.ItemDecoration.DividerItemDecoration;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
-import com.narancommunity.app.entity.AssistantMissionEntity;
-import com.narancommunity.app.entity.WeekRecEntity;
+import com.narancommunity.app.common.Utils;
+import com.narancommunity.app.entity.MsgData;
+import com.narancommunity.app.entity.MsgEntity;
+import com.narancommunity.app.net.NRClient;
+import com.narancommunity.app.net.Result;
+import com.narancommunity.app.net.ResultCallback;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -42,11 +44,9 @@ public class MsgAct extends BaseActivity {
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefresh;
 
-    public WeekRecAdapter mWeekAdapter;
-    public AssistantAdapter mAssistantAdapter;
+    public MsgAdapter adapter;
 
-    List<AssistantMissionEntity> listAssistantData = new ArrayList<>();
-    List<WeekRecEntity> listRecData = new ArrayList<>();
+    List<MsgEntity> listData = new ArrayList<>();
 
     int tag;
     int pageNum = 1;
@@ -64,12 +64,12 @@ public class MsgAct extends BaseActivity {
         setBar(toolbar);
         toolbar.setTitle("系统消息");
         setView();
+        getData();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        getData();
         MobclickAgent.onResume(this);
     }
 
@@ -80,26 +80,37 @@ public class MsgAct extends BaseActivity {
     }
 
     private void getData() {
-        Log.i("fancy", "当前位置：" + current_position);
         LoadDialog.show(getContext(), "数据加载中...");
         Map<String, Object> map = new HashMap<>();
-//        map.put("pageS",);
-//        map.put("accessToken", MApplication.getAccessToken(getContext()));
-//        map.put("pageNum", pageNum);
-//        map.put("pageSize", pageSize);
-//        NRClient.getWeekRecList(map, new ResultCallback<Result<WeekEntity>>() {
-//            @Override
-//            public void onFailure(Throwable throwable) {
-//                LoadDialog.dismiss(getContext());
-//                Utils.showErrorToast(getContext(), throwable);
-//            }
-//
-//            @Override
-//            public void onSuccess(Result<WeekEntity> result) {
-//                setRecListData(result.getData());
-//                LoadDialog.dismiss(getContext());
-//            }
-//        });
+        map.put("accessToken", MApplication.getAccessToken(getContext()));
+        map.put("pageNum", pageNum);
+        map.put("pageSize", pageSize);
+        NRClient.getMsgList(map, new ResultCallback<Result<MsgData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<MsgData> result) {
+                setData(result.getData());
+                LoadDialog.dismiss(getContext());
+            }
+        });
+    }
+
+    private void setData(MsgData data) {
+        if (pageNum == 1)
+            listData.clear();
+        if (data != null) {
+            if (data.getNewss() != null && data.getNewss().size() > 0) {
+                listData.addAll(data.getNewss());
+                pageNum++;
+                adapter.setDataList(listData);
+                adapter.notifyDataSetChanged();
+            }
+        } else Toaster.toast(getContext(), "暂无消息!");
     }
 
     private void setView() {
@@ -111,15 +122,16 @@ public class MsgAct extends BaseActivity {
                 recyclerView.post(new Runnable() {
                     @Override
                     public void run() {
+                        pageNum = 1;
                         getData();
                         swipeRefresh.setRefreshing(false);
                     }
                 });
             }
         });
-        DividerItemDecoration dividerItemDecoration =
-                new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
-        recyclerView.addItemDecoration(dividerItemDecoration);
+//        DividerItemDecoration dividerItemDecoration =
+//                new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
+//        recyclerView.addItemDecoration(dividerItemDecoration);
 
         final LinearLayoutManager linearLayout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayout);
@@ -131,19 +143,7 @@ public class MsgAct extends BaseActivity {
                 Log.i("fancy", "滑动时候的position：" + current_position);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     int lastVisibleItemPosition = linearLayout.findLastVisibleItemPosition();
-                    int myCount = 0;
-                    switch (tag) {
-                        case 0:
-                            myCount = mWeekAdapter.getItemCount();
-                            break;
-                        case 1:
-                            myCount = mAssistantAdapter.getItemCount();
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            break;
-                    }
+                    int myCount = adapter.getItemCount();
                     if (lastVisibleItemPosition + 1 == myCount) {
                         if (current_position < TOTAL_PAGE) {
                             current_position++;
@@ -160,19 +160,8 @@ public class MsgAct extends BaseActivity {
             }
         });
 
-        mWeekAdapter = new WeekRecAdapter(getContext(), listRecData, 0);
-        mWeekAdapter.setListener(new MeItemInterface() {
-            @Override
-            public void OnItemClick(int position) {
-                Toaster.toast(getContext(), "准备跳转");
-            }
-
-            @Override
-            public void OnDelClick(int position) {
-
-            }
-
-        });
-        recyclerView.setAdapter(mWeekAdapter);
+        adapter = new MsgAdapter(getContext());
+        adapter.setDataList(listData);
+        recyclerView.setAdapter(adapter);
     }
 }

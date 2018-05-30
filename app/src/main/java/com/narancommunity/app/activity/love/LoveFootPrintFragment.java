@@ -20,10 +20,8 @@ import com.narancommunity.app.adapter.CompanyFootAdapter;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
-import com.narancommunity.app.entity.CommentListEntity;
 import com.narancommunity.app.entity.FootPrintData;
 import com.narancommunity.app.entity.FootPrintEntity;
-import com.narancommunity.app.entity.RecEntity;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
@@ -144,11 +142,16 @@ public class LoveFootPrintFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-    @Override
     public void onResume() {
         super.onResume();
         pageNum = 1;
         getData();
+//        MobclickAgent.onPageStart("LoveFootPrintFragment");
+    }
+
+    public void onPause() {
+        super.onPause();
+//        MobclickAgent.onPageEnd("LoveFootPrintFragment");
     }
 
     int id;

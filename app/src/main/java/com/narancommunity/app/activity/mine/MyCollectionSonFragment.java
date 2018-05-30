@@ -16,8 +16,6 @@ import com.narancommunity.app.R;
 import com.narancommunity.app.adapter.CollectDonateAdapter;
 import com.narancommunity.app.adapter.CollectEssayAdapter;
 import com.narancommunity.app.adapter.CollectTieziAdapter;
-import com.narancommunity.app.adapter.FindLatestAdapter;
-import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.RecData;
@@ -107,6 +105,16 @@ public class MyCollectionSonFragment extends Fragment {
             }
             return rootView;
         }
+    }
+
+    public void onResume() {
+        super.onResume();
+//        MobclickAgent.onPageStart("MyCollectSonFragment");
+    }
+
+    public void onPause() {
+        super.onPause();
+//        MobclickAgent.onPageEnd("MyCollectSonFragment");
     }
 
     @Override
@@ -264,17 +272,6 @@ public class MyCollectionSonFragment extends Fragment {
             pageNum++;
         }
         essayAdapter.notifyDataSetChanged();
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
     }
 
 }

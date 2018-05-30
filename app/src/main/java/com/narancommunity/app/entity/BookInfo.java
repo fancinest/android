@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Writer：fancy on 2018/4/17 21:36
  * Email：120760202@qq.com
- * FileName : 图书详情页的信息，区别于BookDetail
+ * FileName : 图书详情页的信息，区别于{@link BookDetailData}
  */
 
 public class BookInfo implements Serializable{

@@ -29,11 +29,11 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.AskPaperAct;
+import com.narancommunity.app.activity.waste.AskPaperAct;
 import com.narancommunity.app.activity.mine.AddressAct;
 import com.narancommunity.app.adapter.PicUploadAdapter;
 import com.narancommunity.app.adapter.StationeryAdapter;

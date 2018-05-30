@@ -8,10 +8,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
+import com.narancommunity.app.activity.general.HtmlFiveAct;
 import com.narancommunity.app.adapter.AssistantAdapter;
 import com.narancommunity.app.adapter.WeekRecAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
@@ -24,6 +25,7 @@ import com.narancommunity.app.entity.AssistantMissionEntity;
 import com.narancommunity.app.entity.WeekEntity;
 import com.narancommunity.app.entity.WeekRecEntity;
 import com.narancommunity.app.net.NRClient;
+import com.narancommunity.app.net.NRConfig;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
 import com.umeng.analytics.MobclickAgent;
@@ -250,8 +252,13 @@ public class FindFourAct extends BaseActivity {
                 mWeekAdapter.setListener(new MeItemInterface() {
                     @Override
                     public void OnItemClick(int position) {
-                        startActivity(new Intent(getContext(), RecommDetailAct.class)
-                                .putExtra("data", listRecData.get(position)));
+                        startActivity(new Intent(getContext(), HtmlFiveAct.class)
+                                .putExtra("url", NRConfig.HTML_WEEK_REC +
+                                        "?contentId=" + listRecData.get(position).getContentId()
+                                        + "&accessToken=" + MApplication.getAccessToken())
+                                .putExtra("title", "每周推荐"));
+//                        startActivity(new Intent(getContext(), RecommDetailAct.class)
+//                                .putExtra("data", listRecData.get(position)));
                     }
 
                     @Override
@@ -267,7 +274,13 @@ public class FindFourAct extends BaseActivity {
                 mAssistantAdapter.setListener(new MeItemInterface() {
                     @Override
                     public void OnItemClick(int position) {
-                        startActivity(new Intent(getContext(), AssistantDetailAct.class));
+//                        ?accessToken=f82a5275e546408ba35c75e828af4467&activityid=8
+                        startActivity(new Intent(getContext(), HtmlFiveAct.class)
+                                .putExtra("url", NRConfig.HTML_AIXIN_WORK +
+                                        "?accessToken=" + MApplication.getAccessToken()
+                                        + "&activityid=" + listAssistantData.get(position).getActivityId())
+                                .putExtra("title", "爱心行动"));
+//                        startActivity(new Intent(getContext(), AssistantDetailAct.class));
                     }
 
                     @Override
@@ -303,7 +316,7 @@ public class FindFourAct extends BaseActivity {
             case 0:
                 return "每周推荐";
             case 1:
-                return "援助任务";
+                return "爱心行动";
             case 2:
                 return "专题报道";
             case 3:

@@ -20,21 +20,16 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.narancommunity.app.MApplication;
-import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
 import com.narancommunity.app.activity.index.BookDetailAct;
-import com.narancommunity.app.adapter.CommunityYSHYAdapter;
 import com.narancommunity.app.adapter.MyWishAdapter;
 import com.narancommunity.app.adapter.OnItemClickListener;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.RecyclerItemClickListener;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
-import com.narancommunity.app.entity.BookDetail;
 import com.narancommunity.app.entity.MyWishData;
 import com.narancommunity.app.entity.WishEntity;
-import com.narancommunity.app.entity.YSHYData;
-import com.narancommunity.app.entity.YSHYEntity;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
@@ -284,16 +279,14 @@ public class MyWishFragment extends Fragment {
         mPop.dismiss();
     }
 
-    @Override
     public void onResume() {
         super.onResume();
-//        MobclickAgent.onPageStart("SplashScreen");
+//        MobclickAgent.onPageStart("MyWishFragment");
     }
 
-    @Override
     public void onPause() {
         super.onPause();
-//        MobclickAgent.onPageEnd("SplashScreen");
+//        MobclickAgent.onPageEnd("MyWishFragment");
     }
 
     @Override

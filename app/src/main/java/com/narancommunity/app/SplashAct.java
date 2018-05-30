@@ -1,4 +1,4 @@
-package com.narancommunity.app.activity.general;
+package com.narancommunity.app;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -13,8 +13,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.narancommunity.app.MainActivity;
-import com.narancommunity.app.R;
+import com.narancommunity.app.activity.general.LoginAct;
 import com.narancommunity.app.common.DBHelper;
 import com.narancommunity.app.net.AppConstants;
 import com.snappydb.DB;
@@ -51,7 +50,11 @@ public class SplashAct extends AppCompatActivity {
                     DBHelper.getDB(this);
             boolean isFirst = snappyDb.exists(AppConstants.IS_FIRST_INSTALL);
             if (isFirst) {
-                mHandler.postDelayed(runnableMain, 1000);
+                boolean isLogin = MApplication.getAccessToken().equals("") ? false : true;
+                if (isLogin)
+                    mHandler.postDelayed(runnableMain, 1000);
+                else
+                    mHandler.postDelayed(runnableLogin, 1000);
             } else {
                 snappyDb.put(AppConstants.IS_FIRST_INSTALL, false);
                 mHandler.postDelayed(runnableStart, 1000);
@@ -99,10 +102,18 @@ public class SplashAct extends AppCompatActivity {
         MobclickAgent.onPause(this);
     }
 
+    private Runnable runnableLogin = new Runnable() {
+        @Override
+        public void run() {
+            startActivity(new Intent(SplashAct.this, LoginAct.class));
+            finish();
+        }
+    };
+
     private Runnable runnableStart = new Runnable() {
         @Override
         public void run() {
-//            startActivity(new Intent(SplashAct.this, StartViewAct.class));
+            startActivity(new Intent(SplashAct.this, StartViewAct.class));
             finish();
         }
     };

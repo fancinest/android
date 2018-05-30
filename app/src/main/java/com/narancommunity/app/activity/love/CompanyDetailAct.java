@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.emilsjolander.components.StickyScrollViewItems.StickyScrollView;
 import com.joooonho.SelectableRoundedImageView;
-import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.LoadDialog;

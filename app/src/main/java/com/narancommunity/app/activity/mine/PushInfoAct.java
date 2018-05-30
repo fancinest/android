@@ -3,7 +3,7 @@ package com.narancommunity.app.activity.mine;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.umeng.analytics.MobclickAgent;

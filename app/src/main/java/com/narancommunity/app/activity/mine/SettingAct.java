@@ -13,14 +13,14 @@ import android.widget.PopupWindow;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.activity.general.AppFeedbackAct;
+import com.narancommunity.app.activity.general.LoginAct;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
-import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
@@ -92,17 +92,24 @@ public class SettingAct extends BaseActivity {
             @Override
             public void onSuccess(Result<Void> result) {
                 LoadDialog.dismiss(getContext());
-                Toaster.toast(getContext(), "退出成功！");
-                MApplication.logout(false);
-                finish();
+                getOut();
             }
 
             @Override
             public void onFailure(Throwable throwable) {
                 LoadDialog.dismiss(getContext());
-                Utils.showErrorToast(getContext(), throwable);
+//                Utils.showErrorToast(getContext(), throwable);
+                //不管成功与否都退出
+                getOut();
             }
         });
+    }
+
+    private void getOut() {
+        Toaster.toast(getContext(), "退出成功！");
+        MApplication.logout(false);
+        startActivity(new Intent(getContext(), LoginAct.class));
+        finish();
     }
 
     PopupWindow mPop;

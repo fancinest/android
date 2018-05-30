@@ -9,11 +9,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.SoundEffectConstants;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -22,7 +20,6 @@ import com.joooonho.SelectableRoundedImageView;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.adapter.RangeListRangeAdapter;
-import com.narancommunity.app.common.ItemDecoration.DividerItemDecoration;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
@@ -272,5 +269,15 @@ public class RangeChengjiuFragment extends Fragment {
                 break;
         }
         return index;
+    }
+
+    public void onResume() {
+        super.onResume();
+//        MobclickAgent.onPageStart("RangeChengjiuFragment");
+    }
+
+    public void onPause() {
+        super.onPause();
+//        MobclickAgent.onPageEnd("RangeChengjiuFragment");
     }
 }

@@ -22,7 +22,6 @@ import com.joooonho.SelectableRoundedImageView;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.adapter.RangeListRangeAdapter;
-import com.narancommunity.app.common.ItemDecoration.DividerItemDecoration;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
@@ -93,6 +92,15 @@ public class RangeDaRenFragment extends Fragment {
         return fragment;
     }
 
+    public void onResume() {
+        super.onResume();
+//        MobclickAgent.onPageStart("BookSortSonFragment");
+    }
+
+    public void onPause() {
+        super.onPause();
+//        MobclickAgent.onPageEnd("BookSortSonFragment");
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

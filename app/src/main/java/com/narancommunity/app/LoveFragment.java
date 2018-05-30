@@ -1,4 +1,4 @@
-package com.narancommunity.app.activity.love;
+package com.narancommunity.app;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,9 +23,8 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.narancommunity.app.MApplication;
-import com.narancommunity.app.R;
 import com.narancommunity.app.activity.general.AuthoriseFirstAct;
+import com.narancommunity.app.activity.love.SettleDownAct;
 import com.narancommunity.app.adapter.LoveAdapter;
 import com.narancommunity.app.adapter.OnItemClickListener;
 import com.narancommunity.app.common.LoadDialog;
@@ -211,16 +210,14 @@ public class LoveFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    @Override
     public void onResume() {
         super.onResume();
-//        MobclickAgent.onPageStart("SplashScreen");
+//        MobclickAgent.onPageStart("LoveFragment");
     }
 
-    @Override
     public void onPause() {
         super.onPause();
-//        MobclickAgent.onPageEnd("SplashScreen");
+//        MobclickAgent.onPageEnd("LoveFragment");
     }
 
     @Override

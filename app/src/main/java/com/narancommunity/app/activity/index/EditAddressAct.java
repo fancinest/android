@@ -17,7 +17,7 @@ import com.lljjcoder.bean.ProvinceBean;
 import com.lljjcoder.citywheel.CityConfig;
 import com.lljjcoder.style.citylist.utils.CityListLoader;
 import com.lljjcoder.style.citypickerview.CityPickerView;
-import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.CenteredToolbar;
@@ -138,6 +138,17 @@ public class EditAddressAct extends BaseActivity {
 
     private void addAddress() {
         LoadDialog.show(this, "新增地址...");
+//        accessToken	是	string	登录标识
+//        mailId	否	long	地址ID(新增时填空)
+//        nowMail	是	Boolean	是否常用
+//        mailName	是	string	签收人
+//        mailPhone	是	string	签收电话
+//        province	是	string	省
+//        city	是	string	市
+//        county	是	string	区县
+//        mailAddress	是	string	签收地址
+//        ordinate	是	string	纵坐标
+//        abscissa	是	string	横坐标
         Map<String, Object> map = new HashMap<>();
         map.put("accessToken", MApplication.getAccessToken(getContext()));
         map.put("nowMail", ctvDefault.isChecked());
@@ -147,6 +158,8 @@ public class EditAddressAct extends BaseActivity {
         map.put("city", mCity);
         map.put("county", mCounty);
         map.put("mailAddress", etAddress.getText().toString());
+//        map.put("ordinate", "");
+//        map.put("abscissa", "");
         NRClient.addAddress(map, new ResultCallback<Result<Void>>() {
             @Override
             public void onFailure(Throwable throwable) {

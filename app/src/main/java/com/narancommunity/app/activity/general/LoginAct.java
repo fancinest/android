@@ -12,7 +12,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.narancommunity.app.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.DBHelper;
@@ -238,11 +237,11 @@ public class LoginAct extends BaseActivity {
             public void onSuccess(Result<UserInfo> result) {
                 LoadDialog.dismiss(LoginAct.this);
                 saveUserInfo(result.getData());
-                if (result.getData().getCertificationType().equals("INITIAL")) {
-                    Toaster.toastLong(getContext(), "请先进行实名认证!");
-                    startActivity(new Intent(getContext(), AuthoriseFirstAct.class)
-                            .putExtra("isMustAuthorise", true));
-                } else
+//                if (result.getData().getCertificationType().equals("INITIAL")) {
+//                    Toaster.toastLong(getContext(), "请先进行实名认证!");
+//                    startActivity(new Intent(getContext(), AuthoriseFirstAct.class)
+//                            .putExtra("isMustAuthorise", true));
+//                } else
                     Toaster.toast(LoginAct.this, "登录成功！");
                 MApplication.finishAllActivity();
                 finish();

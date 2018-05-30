@@ -29,7 +29,7 @@ import android.widget.TextView;
 import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.OnSureLisener;
 import com.codbking.widget.bean.DateType;
-import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
@@ -141,7 +141,7 @@ public class SettleDownAct extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.tv_create_time, R.id.tv_address, R.id.btn_do, R.id.iv_cover})
+    @OnClick({R.id.tv_create_time,/* R.id.tv_address,*/ R.id.btn_do, R.id.iv_cover})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_create_time:

@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.R;
 import com.narancommunity.app.adapter.BannerPagerAdapter;
 import com.narancommunity.app.adapter.BookListAdapter;

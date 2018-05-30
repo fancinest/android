@@ -1,4 +1,4 @@
-package com.narancommunity.app.activity.mine;
+package com.narancommunity.app;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,10 +19,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.joooonho.SelectableRoundedImageView;
-import com.narancommunity.app.MApplication;
-import com.narancommunity.app.R;
 import com.narancommunity.app.activity.general.AuthoriseFirstAct;
 import com.narancommunity.app.activity.general.LoginAct;
+import com.narancommunity.app.activity.mine.AddressAct;
+import com.narancommunity.app.activity.mine.AuthoriseSuccessAct;
+import com.narancommunity.app.activity.mine.MsgAct;
+import com.narancommunity.app.activity.mine.MyAttendNewAct;
+import com.narancommunity.app.activity.mine.MyCollectionAct;
+import com.narancommunity.app.activity.mine.MyInfoAct;
+import com.narancommunity.app.activity.mine.MyLoveAct;
+import com.narancommunity.app.activity.mine.MyReleaseAct;
+import com.narancommunity.app.activity.mine.MySignAct;
+import com.narancommunity.app.activity.mine.MyWishAct;
+import com.narancommunity.app.activity.mine.SettingAct;
 import com.narancommunity.app.adapter.MeFunctionAdapter;
 import com.narancommunity.app.common.ItemDecoration.GridItemDecoration;
 import com.narancommunity.app.common.Toaster;
@@ -110,6 +119,17 @@ public class MeFragment extends Fragment {
         return rootView;
     }
 
+    public void onResume() {
+        super.onResume();
+        setView();
+//        MobclickAgent.onPageStart("MeFragment");
+    }
+
+    public void onPause() {
+        super.onPause();
+//        MobclickAgent.onPageEnd("MeFragment");
+    }
+
     private void setView() {
         UserInfo userInfo = MApplication.getUserInfo(getContext());
         if (userInfo != null) {
@@ -125,12 +145,14 @@ public class MeFragment extends Fragment {
             tvNow.setText("" + now);
             Integer top = Utils.getValue(userInfo.getTopExperience());
             Integer love = Utils.getValue(userInfo.getNowLove());
-            tvLove.setText("" + love);
+            tvLove.setText("" + love + "/10000");
             if (top != 0) {
                 tvAll.setText("/" + top);
                 int percent = (int) getPercent(now, top);
                 pbExp.setProgress(percent);
             } else pbExp.setProgress(0);
+
+            pbLove.setProgress((int) getPercent(love, 10000));
         } else {
             tvName.setText("请登录");
             Utils.setImgF(getContext(), R.mipmap.zw_morentouxiang, ivIcon);
@@ -173,17 +195,17 @@ public class MeFragment extends Fragment {
     }
 
     String[] names = new String[]{"我的签到", "我的收藏", "我的参与", "我的爱心", "我的心愿", "我的发布",
-            "我的地址", "联系客服", "关于那然"};
+            "我的地址", /*"联系客服",*/ "关于那然"};
 
     private void setList() {
 
         list = new ArrayList<>();
         int[] ids = new int[]{R.mipmap.wode_btn_wodeqiandao, R.mipmap.wode_btn_wodeshoucang, R.mipmap.wode_btn_wocangyude,
                 R.mipmap.wode_btn_wosongchude, R.mipmap.wode_btn_woshoudaode, R.mipmap.wode_btn_wodefabu,
-                R.mipmap.wode_btn_wodedizhi, R.mipmap.wode_btn_lianxikefu, R.mipmap.wode_btn_guanyunaran,};
+                R.mipmap.wode_btn_wodedizhi,/* R.mipmap.wode_btn_lianxikefu,*/ R.mipmap.wode_btn_guanyunaran,};
         MeFunctionEntity entity;
 
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 8; i++) {
             entity = new MeFunctionEntity();
             entity.setId(ids[i]);
             entity.setName(names[i]);
@@ -298,17 +320,6 @@ public class MeFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        setView();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
     }
@@ -348,8 +359,11 @@ public class MeFragment extends Fragment {
                     startActivity(new Intent(getContext(), AuthoriseSuccessAct.class));
                 } else if (MApplication.getUserInfo(getContext()) != null &&
                         MApplication.getUserInfo(getContext()).getCertificationType().equals("FAIL")) {
+                    Toaster.toast(getContext(), "请重新提交认证信息!");
+                    startActivity(new Intent(getContext(), AuthoriseFirstAct.class));
                 } else if (MApplication.getUserInfo(getContext()) != null &&
                         MApplication.getUserInfo(getContext()).getCertificationType().equals("GOING")) {
+                    Toaster.toast(getContext(), "认证信息正在审核中!");
                 }
                 break;
             case R.id.ln_info:

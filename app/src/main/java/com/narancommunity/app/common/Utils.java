@@ -1,7 +1,6 @@
 package com.narancommunity.app.common;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -36,7 +35,6 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -759,6 +757,22 @@ public class Utils {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
             return "";
+        }
+    }
+
+    /**
+     * 获取软件版本号
+     * 1这种形式
+     */
+    public static int getAPPVersionCode(Context context) {
+        PackageManager pm = context.getPackageManager();//得到PackageManager对象
+        try {
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);//得到PackageInfo对象，封装了一些软件包的信息在里面
+            int appVersion = pi.versionCode;//获取清单文件中versionCode节点的值
+            return appVersion;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return 0;
         }
     }
 

@@ -225,16 +225,14 @@ public class CommunitySonFragment extends Fragment {
         });
     }
 
-    @Override
     public void onResume() {
         super.onResume();
-//        MobclickAgent.onPageStart("SplashScreen");
+//        MobclickAgent.onPageStart("CommunitySonFragment");
     }
 
-    @Override
     public void onPause() {
         super.onPause();
-//        MobclickAgent.onPageEnd("SplashScreen");
+//        MobclickAgent.onPageEnd("CommunitySonFragment");
     }
 
     @Override

@@ -1,15 +1,14 @@
-package com.narancommunity.app.activity;
+package com.narancommunity.app.activity.waste;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.Utils;
-import com.narancommunity.app.net.NRClient;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

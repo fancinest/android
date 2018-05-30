@@ -17,8 +17,6 @@ import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
 import com.narancommunity.app.activity.index.BookDetailAct;
 import com.narancommunity.app.adapter.MyLoveAdapter;
-import com.narancommunity.app.adapter.MyWishAdapter;
-import com.narancommunity.app.adapter.OnItemClickListener;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
@@ -36,7 +34,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import simplezxing.activity.CaptureActivity;
 
 import static android.app.Activity.RESULT_FIRST_USER;
 
@@ -72,6 +69,16 @@ public class MyLoveFragment extends Fragment {
     }
 
     View rootView;
+
+    public void onResume() {
+        super.onResume();
+//        MobclickAgent.onPageStart("MyLoveFragment");
+    }
+
+    public void onPause() {
+        super.onPause();
+//        MobclickAgent.onPageEnd("MyLoveFragment");
+    }
 
     @Nullable
     @Override
@@ -265,18 +272,6 @@ public class MyLoveFragment extends Fragment {
         listData.remove(position);
         adapter.setDataList(listData);
         adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-//        MobclickAgent.onPageStart("SplashScreen");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-//        MobclickAgent.onPageEnd("SplashScreen");
     }
 
     @Override

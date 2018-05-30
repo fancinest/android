@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
-import com.narancommunity.app.adapter.CommunityYSHYAdapter;
 import com.narancommunity.app.adapter.MyReleaseAdapter;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
@@ -129,7 +128,7 @@ public class MyReleaseFragment extends Fragment {
         if (pageNum == 1)
             list.clear();
         TOTAL_PAGE = data.getTotalPageNum();
-        if (data != null) {
+        if (data != null && data.getContents() != null && data.getContents().size() > 0) {
             list.addAll(data.getContents());
             pageNum++;
         }
@@ -225,16 +224,14 @@ public class MyReleaseFragment extends Fragment {
         });
     }
 
-    @Override
     public void onResume() {
         super.onResume();
-//        MobclickAgent.onPageStart("SplashScreen");
+//        MobclickAgent.onPageStart("MyReleaseFragment");
     }
 
-    @Override
     public void onPause() {
         super.onPause();
-//        MobclickAgent.onPageEnd("SplashScreen");
+//        MobclickAgent.onPageEnd("MyReleaseFragment");
     }
 
     @Override

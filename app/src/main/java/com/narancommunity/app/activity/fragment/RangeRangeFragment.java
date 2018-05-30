@@ -20,7 +20,6 @@ import com.joooonho.SelectableRoundedImageView;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.adapter.RangeListRangeAdapter;
-import com.narancommunity.app.common.ItemDecoration.DividerItemDecoration;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
@@ -113,6 +112,16 @@ public class RangeRangeFragment extends Fragment {
             }
             return rootView;
         }
+    }
+
+    public void onResume() {
+        super.onResume();
+//        MobclickAgent.onPageStart("RangeRangeFragment");
+    }
+
+    public void onPause() {
+        super.onPause();
+//        MobclickAgent.onPageEnd("RangeRangeFragment");
     }
 
     private void getData() {

@@ -32,7 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.CenteredToolbar;
@@ -41,7 +41,7 @@ import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.SDCardUtils;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
-import com.narancommunity.app.entity.BookDetail;
+import com.narancommunity.app.entity.BookDetailData;
 import com.narancommunity.app.entity.UpdateFilesEntity;
 import com.narancommunity.app.interfaces.PicLoadCallBack;
 import com.narancommunity.app.net.AppConstants;
@@ -355,7 +355,7 @@ public class DonateBookAct extends BaseActivity {
         LoadDialog.show(getContext(), "数据请求中,稍候！");
         Map<String, Object> map = new HashMap<>();
         map.put("isbn", code);
-        NRClient.getBookDetail(map, new ResultCallback<Result<BookDetail>>() {
+        NRClient.getBookDetail(map, new ResultCallback<Result<BookDetailData>>() {
             @Override
             public void onFailure(Throwable throwable) {
                 LoadDialog.dismiss(getContext());
@@ -363,7 +363,7 @@ public class DonateBookAct extends BaseActivity {
             }
 
             @Override
-            public void onSuccess(Result<BookDetail> result) {
+            public void onSuccess(Result<BookDetailData> result) {
                 LoadDialog.dismiss(getContext());
                 setBookDetail(result.getData());
                 bookId = Utils.getValue(result.getData().getBookId());
@@ -385,7 +385,7 @@ public class DonateBookAct extends BaseActivity {
         });
     }
 
-    private void setBookDetail(BookDetail data) {
+    private void setBookDetail(BookDetailData data) {
         if (data != null && data.getAuthor() != null) {
             String bookname = Utils.getValue(data.getTitle());
             if (bookname.equals(""))

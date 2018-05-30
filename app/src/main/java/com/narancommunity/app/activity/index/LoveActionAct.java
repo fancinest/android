@@ -6,7 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
 
-import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.Toaster;
@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
  * FileName :
  */
 
-public class AssistantDetailAct extends BaseActivity {
+public class LoveActionAct extends BaseActivity {
     @BindView(R.id.toolbar)
     CenteredToolbar toolbar;
     @BindView(R.id.wv)
@@ -33,7 +33,7 @@ public class AssistantDetailAct extends BaseActivity {
         setContentView(R.layout.act_assistan_detail);
         ButterKnife.bind(this);
         setBar(toolbar);
-        toolbar.setTitle("援助详情");
+        toolbar.setTitle("爱心行动");
     }
 
     @Override

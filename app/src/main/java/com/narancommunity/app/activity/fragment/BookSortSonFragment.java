@@ -110,6 +110,17 @@ public class BookSortSonFragment extends Fragment {
         });
     }
 
+    public void onResume() {
+        super.onResume();
+//        MobclickAgent.onPageStart("BookSortSonFragment");
+    }
+
+    public void onPause() {
+        super.onPause();
+//        MobclickAgent.onPageEnd("BookSortSonFragment");
+    }
+
+
     private void setBookData(RecData data) {
         if (pageNum == 1)
             list.clear();
@@ -174,18 +185,6 @@ public class BookSortSonFragment extends Fragment {
                 });
             }
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-//        MobclickAgent.onPageStart("SplashScreen");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-//        MobclickAgent.onPageEnd("SplashScreen");
     }
 
     @Override

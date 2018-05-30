@@ -37,7 +37,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.narancommunity.app.MainActivity"
+            android:name="com.narancommunity.app.SplashAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme">
             <intent-filter>
@@ -45,6 +45,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.narancommunity.app.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ImageTranslucentTheme" />
+
+        <activity
+            android:name="com.narancommunity.app.StartViewAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/ImageTranslucentTheme" />
 
         <!--<activity-->
         <!--android:name=".wxapi.WXEntryActivity"-->
@@ -100,6 +109,14 @@
         <!--</intent-filter>-->
         <!--</activity>-->
         <!-- 微博-->
+        <activity
+            android:name=".activity.mine.MsgDetailAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
+            android:name=".activity.general.HtmlFiveAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
             android:name=".activity.mine.SearchAddressAct"
             android:screenOrientation="portrait"
@@ -195,10 +212,6 @@
             android:theme="@style/ImageTranslucentTheme"></activity>
 
         <activity
-            android:name=".activity.general.SplashAct"
-            android:screenOrientation="portrait"
-            android:theme="@style/ImageTranslucentTheme"></activity>
-        <activity
             android:name=".activity.index.ReleaseSelectAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
@@ -206,7 +219,7 @@
         <!--android:name=".activity.NameAndAddressAct"-->
         <!--android:theme="@style/ImageTranslucentTheme"></activity>-->
         <activity
-            android:name=".activity.AskPaperAct"
+            android:name=".activity.waste.AskPaperAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
@@ -266,7 +279,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.index.AssistantDetailAct"
+            android:name=".activity.index.LoveActionAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity

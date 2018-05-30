@@ -8,7 +8,7 @@ import com.narancommunity.app.entity.AskPapers;
 import com.narancommunity.app.entity.AssistantEntity;
 import com.narancommunity.app.entity.BannerData;
 import com.narancommunity.app.entity.BookCommentData;
-import com.narancommunity.app.entity.BookDetail;
+import com.narancommunity.app.entity.BookDetailData;
 import com.narancommunity.app.entity.BookInfo;
 import com.narancommunity.app.entity.BookLendCardData;
 import com.narancommunity.app.entity.BookListData;
@@ -21,16 +21,18 @@ import com.narancommunity.app.entity.DonateDetailData;
 import com.narancommunity.app.entity.FootPrintData;
 import com.narancommunity.app.entity.GradeData;
 import com.narancommunity.app.entity.IsCollect;
+import com.narancommunity.app.entity.MsgData;
 import com.narancommunity.app.entity.MyWishData;
 import com.narancommunity.app.entity.NewsData;
 import com.narancommunity.app.entity.OrderData;
 import com.narancommunity.app.entity.OrderEntity;
 import com.narancommunity.app.entity.RecData;
 import com.narancommunity.app.entity.ShuzhaiData;
-import com.narancommunity.app.entity.WallListData;
 import com.narancommunity.app.entity.Stationery;
 import com.narancommunity.app.entity.UpdateFilesEntity;
+import com.narancommunity.app.entity.UpdateInfo;
 import com.narancommunity.app.entity.UserInfo;
+import com.narancommunity.app.entity.WallListData;
 import com.narancommunity.app.entity.WantListEntity;
 import com.narancommunity.app.entity.WeekEntity;
 import com.narancommunity.app.entity.WishDetailEntity;
@@ -161,6 +163,14 @@ public interface NRService {
     @FormUrlEncoded
     @POST(NRConfig.URL_BANNER_LIST)
     Call<Result<BannerData>> getBannerList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取banner列表
+
+    @FormUrlEncoded
+    @POST(NRConfig.MSG_LIST)
+    Call<Result<MsgData>> getMsgList(@FieldMap Map<String, Object> map);//
+
+    @FormUrlEncoded
+    @POST(NRConfig.UPDATE)
+    Call<Result<UpdateInfo>> update(@FieldMap Map<String, Object> map);//
 
     @FormUrlEncoded
     @POST(NRConfig.BOOK_CONFIRM_GET)
@@ -448,7 +458,7 @@ public interface NRService {
 
     @FormUrlEncoded
     @POST(NRConfig.URL_GET_BOOK_DETAIL)
-    Call<Result<BookDetail>> getBookDetail(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//扫描获取书库中的书的信息
+    Call<Result<BookDetailData>> getBookDetail(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//扫描获取书库中的书的信息
 
     @FormUrlEncoded
     @POST(NRConfig.URL_BOOK_LIST)

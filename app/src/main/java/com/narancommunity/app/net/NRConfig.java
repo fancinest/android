@@ -6,7 +6,24 @@ package com.narancommunity.app.net;
 public class NRConfig {
     public static final String URL_BASE = "http://47.98.218.205:8082";
     public static final String URL_RECORD = "http://47.98.218.205:8085";//记录用到的
+    public static final String URL_HTML = "http://192.168.3.59:8020";
+    /**
+     * H5页面地址1
+     */
+    public static final String HTML_WEEK_REC = URL_HTML + "/naran/tuijiandetail.html";
 
+    public static final String HTML_AIXIN_WORK = URL_HTML +"/naran/loveactiondetail.html";
+    public static final String HTML_QIANDAO = URL_HTML +"/naran/mineqiandao.html";
+
+
+    /**
+     * 消息列表
+     */
+    public static final String MSG_LIST = URL_BASE + "/api/news/page";
+    /**
+     * 更新
+     */
+    public static final String UPDATE = URL_BASE + "/api/version/check";
     /**
      * 确认收到书
      */

@@ -9,7 +9,7 @@ import android.support.v4.view.ViewPager;
 
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
-import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.R;
 import com.narancommunity.app.activity.fragment.RangeChengjiuFragment;
 import com.narancommunity.app.activity.fragment.RangeDaRenFragment;

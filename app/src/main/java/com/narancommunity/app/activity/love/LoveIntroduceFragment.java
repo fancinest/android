@@ -91,4 +91,14 @@ public class LoveIntroduceFragment extends Fragment {
         unbinder.unbind();
     }
 
+    public void onResume() {
+        super.onResume();
+//        MobclickAgent.onPageStart("LoveIntroduceFragment");
+    }
+
+    public void onPause() {
+        super.onPause();
+//        MobclickAgent.onPageEnd("LoveIntroduceFragment");
+    }
+
 }

@@ -3,17 +3,17 @@ package com.narancommunity.app.entity;
 /**
  * Writer：fancy on 2018/4/17 21:36
  * Email：120760202@qq.com
- * FileName :
+ * FileName : 区别于bookInfo对象
  */
 
-public class BookDetail {
+public class BookDetailData {
     String author, bookImg, isbn, publisher, summary, title, price;
     Integer bookId, pages;
     float average;
 
     @Override
     public String toString() {
-        return "BookDetail{" +
+        return "BookDetailData{" +
                 "author='" + author + '\'' +
                 ", bookImg='" + bookImg + '\'' +
                 ", isbn='" + isbn + '\'' +

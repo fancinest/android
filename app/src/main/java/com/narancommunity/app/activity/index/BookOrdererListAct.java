@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.narancommunity.app.BaseActivity;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.adapter.BookOrderListAdapter;
@@ -71,7 +71,7 @@ public class BookOrdererListAct extends BaseActivity {
         adapter.setListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                showPopView(recyclerView);
+//                showPopView(recyclerView);
             }
         });
         adapter.setDataList(listData);
