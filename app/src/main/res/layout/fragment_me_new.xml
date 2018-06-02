@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_eeeeee">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_eeeeee"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+        <!--android:descendantFocusability="blocksDescendants"-->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_eeeeee">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/wode_bj" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="26dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/iv_msg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="14dp"
+                        android:src="@mipmap/wode_btn_msg" />
+
+                    <ImageView
+                        android:id="@+id/iv_set"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="14dp"
+                        android:src="@mipmap/wode_btn_shezhi" />
+
+                </LinearLayout>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:background="@drawable/round_corner_white"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/ln_main"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:layout_marginLeft="24dp"
+                            android:layout_marginRight="24dp"
+                            android:layout_marginTop="20dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.joooonho.SelectableRoundedImageView
+                                android:id="@+id/iv_icon"
+                                android:layout_width="56dp"
+                                android:layout_height="56dp"
+                                android:src="@mipmap/ic_launcher"
+                                app:sriv_oval="true" />
+
+                            <LinearLayout
+                                android:id="@+id/ln_info"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="16dp"
+                                android:gravity="center_vertical"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tv_name"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:maxEms="8"
+                                    android:maxLength="8"
+                                    android:maxLines="1"
+                                    android:textColor="@color/color_666666"
+                                    android:textSize="16sp" />
+
+                                <TextView
+                                    android:id="@+id/tv_intro"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/color_999999"
+                                    android:textSize="12sp" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal"
+                                    android:visibility="gone">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="4dp"
+                                        android:layout_marginRight="6dp"
+                                        android:background="@drawable/round_corner_greenline"
+                                        android:paddingLeft="4dp"
+                                        android:paddingRight="4dp"
+                                        android:text="那然小白"
+                                        android:textSize="10sp" />
+
+                                    <RatingBar
+                                        android:id="@+id/rating"
+                                        style="@style/Custom_Ratingbar"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:theme="@style/RatingBar" />
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1px"
+                            android:layout_below="@id/ln_main"
+                            android:layout_marginTop="24dp"
+                            android:background="@color/color_eeeeee" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_below="@id/ln_main"
+                            android:layout_marginRight="24dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                android:layout_weight="1"
+                                android:gravity="left">
+
+                                <TextView
+                                    android:id="@+id/tv_id"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="40dp"
+                                    android:clickable="true"
+                                    android:drawablePadding="6dp"
+                                    android:gravity="center_vertical"
+                                    android:paddingLeft="24dp"
+                                    android:text="心愿海ID：无"
+                                    android:textColor="@color/color_666666"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                android:layout_weight="1"
+                                android:gravity="right">
+
+                                <TextView
+                                    android:id="@+id/tv_authorise"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="40dp"
+                                    android:clickable="true"
+                                    android:drawableLeft="@mipmap/icon_weirenzheng"
+                                    android:drawablePadding="6dp"
+                                    android:gravity="center_vertical"
+                                    android:paddingLeft="24dp"
+                                    android:text="申请实名认证"
+                                    android:textColor="@color/color_999999"
+                                    android:textSize="12sp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/color_dddddd" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:background="@color/white" />
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

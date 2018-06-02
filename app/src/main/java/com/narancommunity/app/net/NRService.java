@@ -13,6 +13,7 @@ import com.narancommunity.app.entity.BookInfo;
 import com.narancommunity.app.entity.BookLendCardData;
 import com.narancommunity.app.entity.BookListData;
 import com.narancommunity.app.entity.BookRelativeRecData;
+import com.narancommunity.app.entity.BookSortEntity;
 import com.narancommunity.app.entity.CommentDetail;
 import com.narancommunity.app.entity.CommentListEntity;
 import com.narancommunity.app.entity.CompanyData;
@@ -163,6 +164,10 @@ public interface NRService {
     @FormUrlEncoded
     @POST(NRConfig.URL_BANNER_LIST)
     Call<Result<BannerData>> getBannerList(@HeaderMap Map<String, Object> header, @FieldMap Map<String, Object> map);//获取banner列表
+
+    @FormUrlEncoded
+    @POST(NRConfig.BOOK_SORT)
+    Call<Result<List<BookSortEntity>>> getBookSort(@FieldMap Map<String, Object> map);//
 
     @FormUrlEncoded
     @POST(NRConfig.MSG_LIST)

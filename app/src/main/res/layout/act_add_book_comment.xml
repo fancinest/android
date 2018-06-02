@@ -29,6 +29,7 @@
         android:background="@color/white"
         android:gravity="left|top"
         android:hint="说点什么吧"
+        android:maxLength="3000"
         android:minHeight="274dp"
         android:padding="12dp"
         android:textColor="@color/color_999999"

@@ -13,14 +13,12 @@ import android.widget.TextView;
 
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.index.BookYSHYDetailAct;
+import com.narancommunity.app.activity.index.book.BookYSHYDetailAct;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.common.adapter.EasyRecyclerAdapter;
 import com.narancommunity.app.entity.YSHYEntity;
 
 import java.util.List;
-
-import butterknife.BindView;
 
 /**
  * Writer：fancy on 2018/3/12 17:12
@@ -64,12 +62,12 @@ public class CollectEssayAdapter extends EasyRecyclerAdapter<YSHYEntity> {
         if (pic.contains(",")) {
             String[] arrPic = pic.split(",", -1);
             setImgs(arrPic, hold.recyclerViewPic);
-            hold.ivOnePic.setVisibility(View.VISIBLE);
-            hold.recyclerViewPic.setVisibility(View.GONE);
-        } else {
-            Utils.setImgF(mContext, pic, hold.ivOnePic);
             hold.ivOnePic.setVisibility(View.GONE);
             hold.recyclerViewPic.setVisibility(View.VISIBLE);
+        } else {
+            Utils.setImgF(mContext, pic, hold.ivOnePic);
+            hold.ivOnePic.setVisibility(View.VISIBLE);
+            hold.recyclerViewPic.setVisibility(View.GONE);
         }
 
         hold.lnTool.setOnClickListener(new View.OnClickListener() {

@@ -14,8 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.joooonho.SelectableRoundedImageView;
@@ -54,37 +55,31 @@ import butterknife.OnClick;
  */
 
 public class MeFragment extends Fragment {
-    @BindView(R.id.tv_coin)
-    TextView tvCoin;
+
+    MeFunctionAdapter adapter;
+    List<MeFunctionEntity> list;
+    @BindView(R.id.iv_msg)
+    ImageView ivMsg;
+    @BindView(R.id.iv_set)
+    ImageView ivSet;
     @BindView(R.id.iv_icon)
     SelectableRoundedImageView ivIcon;
     @BindView(R.id.tv_name)
     TextView tvName;
     @BindView(R.id.tv_intro)
     TextView tvIntro;
-    @BindView(R.id.tv_now)
-    TextView tvNow;
-    @BindView(R.id.tv_all)
-    TextView tvAll;
+    @BindView(R.id.rating)
+    RatingBar rating;
+    @BindView(R.id.ln_info)
+    LinearLayout lnInfo;
+    @BindView(R.id.ln_main)
+    LinearLayout lnMain;
     @BindView(R.id.tv_id)
     TextView tvId;
-    @BindView(R.id.ln_exp)
-    LinearLayout lnExp;
-    @BindView(R.id.pb_exp)
-    ProgressBar pbExp;
-    @BindView(R.id.tv_love)
-    TextView tvLove;
-    @BindView(R.id.ln_love)
-    LinearLayout lnLove;
-    @BindView(R.id.pb_love)
-    ProgressBar pbLove;
     @BindView(R.id.tv_authorise)
     TextView tvAuthorise;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-
-    MeFunctionAdapter adapter;
-    List<MeFunctionEntity> list;
 
     public static MeFragment newInstance() {
 
@@ -111,7 +106,7 @@ public class MeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_me, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_me_new, container, false);
 
         ButterKnife.bind(this, rootView);
         setList();
@@ -141,18 +136,6 @@ public class MeFragment extends Fragment {
             tvIntro.setText(Utils.getValue(userInfo.getRemark()) + "");
 
             tvId.setText("心愿ID：" + userInfo.getAccountId());
-            Integer now = Utils.getValue(userInfo.getNowExperience());
-            tvNow.setText("" + now);
-            Integer top = Utils.getValue(userInfo.getTopExperience());
-            Integer love = Utils.getValue(userInfo.getNowLove());
-            tvLove.setText("" + love + "/10000");
-            if (top != 0) {
-                tvAll.setText("/" + top);
-                int percent = (int) getPercent(now, top);
-                pbExp.setProgress(percent);
-            } else pbExp.setProgress(0);
-
-            pbLove.setProgress((int) getPercent(love, 10000));
         } else {
             tvName.setText("请登录");
             Utils.setImgF(getContext(), R.mipmap.zw_morentouxiang, ivIcon);

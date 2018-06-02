@@ -1,15 +1,11 @@
 package com.narancommunity.app.adapter.card;
 
 import android.content.Context;
-import android.media.Image;
 import android.support.v4.view.PagerAdapter;
-import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
@@ -73,7 +69,7 @@ public class CardPagerAdapter extends PagerAdapter {
     private void bind(ShuzhaiItem item, View view, final int position) {
         ImageView img = view.findViewById(R.id.iv_content);
         ImageView share = view.findViewById(R.id.iv_share);
-        ImageView zan = view.findViewById(R.id.iv_content);
+        ImageView zan = view.findViewById(R.id.iv_like);
         String url = Utils.getValue(item.getContentImg());
         if (!url.equals(""))
             Utils.setImgSZ(mContext, url, img);

@@ -60,7 +60,7 @@
             android:id="@+id/iv_img"
             android:layout_width="match_parent"
             android:layout_height="156dp"
-            android:src="@mipmap/banner" />
+            android:src="@mipmap/bitmap_list" />
 
         <TextView
             android:id="@+id/tv_content"

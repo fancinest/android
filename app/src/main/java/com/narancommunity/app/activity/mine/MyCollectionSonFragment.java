@@ -3,14 +3,13 @@ package com.narancommunity.app.activity.mine;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.adapter.CollectDonateAdapter;
@@ -43,9 +42,11 @@ public class MyCollectionSonFragment extends Fragment {
     ArrayList<RecEntity> listDonateData = new ArrayList<>();
     ArrayList<YSHYEntity> listTieziData = new ArrayList<>();
     @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @BindView(R.id.swipe_refresh)
-    SwipeRefreshLayout swipeRefreshLayout;
+    XRecyclerView recyclerView;
+    @BindView(R.id.tv_no_data)
+    TextView tvNoData;
+    //    @BindView(R.id.swipe_refresh)
+//    SwipeRefreshLayout swipeRefreshLayout;
     int type = 0;
 
     public void setType(int type) {
@@ -124,47 +125,33 @@ public class MyCollectionSonFragment extends Fragment {
     }
 
     private void setView() {
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-                    Log.i("fancy", "最后的可见位置:" + lastVisibleItemPosition);
-                    if (lastVisibleItemPosition + 1 == getCount()) {
-                        if (pageNum <= TOTAL_PAGE) {
-                            getNetData();
-                        } else
-                            Toaster.toast(getContext(), "已无更多数据");
-                    }
+            public void onRefresh() {
+                pageNum = 1;
+                getNetData();
+            }
+
+            @Override
+            public void onLoadMore() {
+                if (pageNum <= TOTAL_PAGE) {
+                    getNetData();
+                } else {
+                    recyclerView.loadMoreComplete();
+                    recyclerView.refreshComplete();
+                    Toaster.toast(getContext(), "已无更多数据");
                 }
             }
         });
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-
-            @Override
-            public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(true);
-                recyclerView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        pageNum = 1;
-                        getNetData();
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                });
-            }
-        });
     }
 
-    private int getCount() {
-        if (type == 0)
-            return essayAdapter.getItemCount();
-        else if (type == 1)
-            return donateAdapter.getItemCount();
-        else return tieziAdapter.getItemCount();
-    }
+//    private int getCount() {
+//        if (type == 0)
+//            return essayAdapter.getItemCount();
+//        else if (type == 1)
+//            return donateAdapter.getItemCount();
+//        else return tieziAdapter.getItemCount();
+//    }
 
     int pageSize = 5;
     int pageNum = 1;
@@ -190,6 +177,8 @@ public class MyCollectionSonFragment extends Fragment {
             @Override
             public void onFailure(Throwable throwable) {
                 Utils.showErrorToast(getContext(), throwable);
+                recyclerView.loadMoreComplete();
+                recyclerView.refreshComplete();
             }
 
             @Override
@@ -208,8 +197,13 @@ public class MyCollectionSonFragment extends Fragment {
             listDonateData.addAll(data.getOrders());
             donateAdapter.setDataList(listDonateData);
             pageNum++;
+            tvNoData.setVisibility(View.GONE);
+        } else {
+            tvNoData.setVisibility(View.VISIBLE);
         }
         donateAdapter.notifyDataSetChanged();
+        recyclerView.loadMoreComplete();
+        recyclerView.refreshComplete();
     }
 
     private void getTieziData() {
@@ -222,6 +216,8 @@ public class MyCollectionSonFragment extends Fragment {
             @Override
             public void onFailure(Throwable throwable) {
                 Utils.showErrorToast(getContext(), throwable);
+                recyclerView.loadMoreComplete();
+                recyclerView.refreshComplete();
             }
 
             @Override
@@ -239,8 +235,13 @@ public class MyCollectionSonFragment extends Fragment {
         if (data != null && data.getContents() != null && data.getContents().size() > 0) {
             listTieziData.addAll(data.getContents());
             pageNum++;
+            tvNoData.setVisibility(View.GONE);
+        } else {
+            tvNoData.setVisibility(View.VISIBLE);
         }
         tieziAdapter.notifyDataSetChanged();
+        recyclerView.loadMoreComplete();
+        recyclerView.refreshComplete();
     }
 
     private void getEssayData() {
@@ -253,6 +254,8 @@ public class MyCollectionSonFragment extends Fragment {
             @Override
             public void onFailure(Throwable throwable) {
                 Utils.showErrorToast(getContext(), throwable);
+                recyclerView.loadMoreComplete();
+                recyclerView.refreshComplete();
             }
 
             @Override
@@ -270,8 +273,22 @@ public class MyCollectionSonFragment extends Fragment {
         if (data != null && data.getContents() != null && data.getContents().size() > 0) {
             listEssayData.addAll(data.getContents());
             pageNum++;
+            tvNoData.setVisibility(View.GONE);
+        } else {
+            tvNoData.setVisibility(View.VISIBLE);
         }
         essayAdapter.notifyDataSetChanged();
+        recyclerView.loadMoreComplete();
+        recyclerView.refreshComplete();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // any time,when you finish your activity or fragment,call this below
+        if (recyclerView != null) {
+            recyclerView.destroy(); // this will totally release XR's memory
+            recyclerView = null;
+        }
+    }
 }

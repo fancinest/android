@@ -12,9 +12,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.index.BookSHHZAct;
 import com.narancommunity.app.common.Toaster;
-import com.narancommunity.app.entity.BannerItem;
 import com.narancommunity.app.entity.Publicitys;
 import com.viewpagerindicator.IconPagerAdapter;
 
@@ -98,7 +96,7 @@ public class BannerPagerAdapter extends PagerAdapter implements IconPagerAdapter
             }
         });
         String url = getBannerList().get(position).getPublicityImg();
-        Glide.with(container.getContext()).load(url).placeholder(R.mipmap.banner).into(bannerImageView);
+        Glide.with(container.getContext()).load(url).placeholder(R.mipmap.bitmap_banner).into(bannerImageView);
         ((ViewPager) container).addView(bannerImageView, 0);
         return bannerImageView;
     }

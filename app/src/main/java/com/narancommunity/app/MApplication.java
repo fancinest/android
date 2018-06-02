@@ -70,12 +70,13 @@ public class MApplication extends Application {
                 , "tencent", UMConfigure.DEVICE_TYPE_PHONE, "");////58edcfeb310c93091c000be2 5965ee00734be40b580001a0
 
         PlatformConfig.setWeixin("wx742e4cb8ecc2ab6a", "3cb26f1a6f6454e4553d7df0a0f7168b");
-        PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad", "http://sns.whalecloud.com");
+        PlatformConfig.setSinaWeibo("448717741", "43de180aa4b10c7829786f77858d8678", "http://47.98.218.205:8082");
         PlatformConfig.setQQZone("100424468", "KEYzWVR9DNIKBGozMn7");
 
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
     }
+
 
     @Override
     public void onLowMemory() {
@@ -98,6 +99,20 @@ public class MApplication extends Application {
             if (activityList != null) {
                 for (Activity activity : activityList) {
                     activity.finish();
+                }
+                activityList.clear();
+            }
+        }
+    }
+
+    public static void finishAllExceptMainActivity() {
+        if (activityList != null) {
+            if (activityList != null) {
+                for (Activity activity : activityList) {
+                    if (activity instanceof MainActivity) {
+                        //不删除Main
+                    } else
+                        activity.finish();
                 }
                 activityList.clear();
             }
@@ -267,6 +282,32 @@ public class MApplication extends Application {
             e.printStackTrace();
         }
         return isAuthorised;
+    }
+
+    public static final String AUTH_INITIAL ="INITIAL";
+    public static final String AUTH_GOING ="GOING";
+    public static final String AUTH_SUCCESS ="SUCCESS";
+    public static final String AUTH_FAIL ="FAIL";
+
+    /**
+     * 获取认证状态
+     * @param context
+     * @return INITIAL - 未进行过认证  GOING  - 正在进行认证中  SUCCESS - 成功了  FAIL   -  认证失败，需要重新提交认证
+     */
+    public static String getAuthorisedState(Context context) {
+        String state = "";
+        try {
+            DB snappyDb =
+                    DBHelper.getDB(instance);
+            boolean isExists = snappyDb.exists(AppConstants.USER_INFO);
+            if (isExists) {
+                state = snappyDb.get(AppConstants.USER_INFO, UserInfo.class).getCertificationType();
+            } else state = "INITIAL";
+            snappyDb.close();
+        } catch (SnappydbException e) {
+            e.printStackTrace();
+        }
+        return state;
     }
 
     public static void logout(boolean isNeedReLogin) {

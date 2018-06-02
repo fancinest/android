@@ -4,15 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.index.BookDetailAct;
+import com.narancommunity.app.activity.index.book.BookDetailAct;
 import com.narancommunity.app.activity.mine.MyCollectionSonFragment;
 import com.narancommunity.app.adapter.BookListAdapter;
 import com.narancommunity.app.common.LoadDialog;
@@ -42,9 +42,11 @@ import butterknife.ButterKnife;
 public class BookSortSonFragment extends Fragment {
 
     @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @BindView(R.id.swipe_refresh)
-    SwipeRefreshLayout swipeRefreshLayout;
+    XRecyclerView recyclerView;
+    //    @BindView(R.id.swipe_refresh)
+//    SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.tv_no_data)
+    TextView tvNoData;
 
     BookListAdapter adapter;
     List<RecEntity> list = new ArrayList<>();
@@ -92,7 +94,7 @@ public class BookSortSonFragment extends Fragment {
 
     private void getData() {
         Map<String, Object> map = new HashMap<>();
-        map.put("bookClassify", bookType);
+        map.put("bookClassify", bookType == null ? "" : bookType);
         map.put("pageSize", pageSize);
         map.put("pageNum", pageNum);
         NRClient.getBookBySortList(map, new ResultCallback<Result<RecData>>() {
@@ -100,6 +102,8 @@ public class BookSortSonFragment extends Fragment {
             public void onFailure(Throwable throwable) {
                 LoadDialog.dismiss(getContext());
                 Utils.showErrorToast(getContext(), throwable);
+                recyclerView.loadMoreComplete();
+                recyclerView.refreshComplete();
             }
 
             @Override
@@ -128,10 +132,13 @@ public class BookSortSonFragment extends Fragment {
         if (data != null && data.getOrders() != null && data.getOrders().size() > 0) {
             list.addAll(data.getOrders());
             pageNum++;
+            tvNoData.setVisibility(View.GONE);
         } else {
-            Toaster.toast(getContext(), "暂无任何书籍");
+            tvNoData.setVisibility(View.VISIBLE);
         }
         adapter.notifyDataSetChanged();
+        recyclerView.loadMoreComplete();
+        recyclerView.refreshComplete();
     }
 
     private void setView() {
@@ -142,7 +149,6 @@ public class BookSortSonFragment extends Fragment {
         adapter.setListener(new com.narancommunity.app.MeItemInterface() {
             @Override
             public void OnItemClick(int position) {
-                Toaster.toast(getContext(), "准备跳转");
                 startActivity(new Intent(getContext(), BookDetailAct.class)
                         .putExtra("bookId", list.get(position).getOrderId()));
             }
@@ -154,35 +160,22 @@ public class BookSortSonFragment extends Fragment {
         });
         recyclerView.setAdapter(adapter);
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    int lastVisibleItemPosition = linearLayout.findLastVisibleItemPosition();
-                    if (lastVisibleItemPosition + 1 == adapter.getItemCount()) {
-                        if (pageNum <= TOTAL_PAGE) {
-                            getData();
-                        } else
-                            Toaster.toast(getContext(), "已无更多数据");
-                    }
-                }
-            }
-        });
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-
+        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(true);
-                recyclerView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        pageNum = 1;
-                        getData();
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                });
+                pageNum = 1;
+                getData();
+            }
+
+            @Override
+            public void onLoadMore() {
+                if (pageNum <= TOTAL_PAGE) {
+                    getData();
+                } else {
+                    recyclerView.loadMoreComplete();
+                    recyclerView.refreshComplete();
+                    Toaster.toast(getContext(), "已无更多数据");
+                }
             }
         });
     }

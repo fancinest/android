@@ -10,12 +10,17 @@ public class NRConfig {
     /**
      * H5页面地址1
      */
-    public static final String HTML_WEEK_REC = URL_HTML + "/naran/tuijiandetail.html";
+    public static final String HTML_WEEK_REC = URL_HTML + "/forMobile_h5/tuijiandetail.html";
 
-    public static final String HTML_AIXIN_WORK = URL_HTML +"/naran/loveactiondetail.html";
-    public static final String HTML_QIANDAO = URL_HTML +"/naran/mineqiandao.html";
+    public static final String HTML_AIXIN_WORK = URL_HTML +"/forMobile_h5/loveactiondetail.html";
+    public static final String HTML_QIANDAO = URL_HTML +"/forMobile_h5/mineqiandao.html";
+    public static final String HTML_REPORT = URL_HTML +"/forMobile_h5/specialreportdetail.html";
 
 
+    /**
+     * 书籍-分类（获取到之后展示爱心书架）
+     */
+    public static final String BOOK_SORT = URL_BASE + "/api/book/type";
     /**
      * 消息列表
      */

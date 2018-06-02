@@ -9,11 +9,9 @@ import android.support.v4.view.ViewPager;
 
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
-import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.fragment.RangeChengjiuFragment;
-import com.narancommunity.app.activity.fragment.RangeDaRenFragment;
-import com.narancommunity.app.activity.fragment.RangeRangeFragment;
+import com.narancommunity.app.activity.fragment.RangeDaRenFragmentNew;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.umeng.analytics.MobclickAgent;
 
@@ -37,11 +35,12 @@ public class RangeAct extends BaseActivity implements OnTabSelectListener {
     @BindView(R.id.vp)
     ViewPager vp;
 
-    private String[] mTitles = {"公益达人", "等级", "成就"};
+    private String[] mTitles = {"日榜", "周榜", "月榜", "总榜"};
     private ArrayList<Fragment> mFragments = new ArrayList<>();
-    RangeDaRenFragment firstFrag = RangeDaRenFragment.newInstance();
-    RangeRangeFragment secondFrag = RangeRangeFragment.newInstance();
-    RangeChengjiuFragment thirdFrag = RangeChengjiuFragment.newInstance();
+    RangeDaRenFragmentNew firstFrag = RangeDaRenFragmentNew.newInstance();
+    RangeDaRenFragmentNew secondFrag = RangeDaRenFragmentNew.newInstance();
+    RangeDaRenFragmentNew thirdFrag = RangeDaRenFragmentNew.newInstance();
+    RangeDaRenFragmentNew fourthFrag = RangeDaRenFragmentNew.newInstance();
 
 
     @Override
@@ -53,9 +52,14 @@ public class RangeAct extends BaseActivity implements OnTabSelectListener {
         setBar(toolbar);
         toolbar.setTitle("公益榜");
 
+        firstFrag.setType(0);
         mFragments.add(firstFrag);
+        secondFrag.setType(1);
         mFragments.add(secondFrag);
+        thirdFrag.setType(2);
         mFragments.add(thirdFrag);
+        fourthFrag.setType(3);
+        mFragments.add(fourthFrag);
 
         Collections.addAll(mFragments);
         vp.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
@@ -99,6 +103,7 @@ public class RangeAct extends BaseActivity implements OnTabSelectListener {
         super.onPause();
         MobclickAgent.onPause(this);
     }
+
     @Override
     public void onTabSelect(int position) {
 

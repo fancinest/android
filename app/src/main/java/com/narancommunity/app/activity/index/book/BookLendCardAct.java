@@ -1,4 +1,4 @@
-package com.narancommunity.app.activity.index;
+package com.narancommunity.app.activity.index.book;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

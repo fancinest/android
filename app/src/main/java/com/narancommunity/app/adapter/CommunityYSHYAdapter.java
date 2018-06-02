@@ -13,8 +13,8 @@ import android.widget.TextView;
 import com.joooonho.SelectableRoundedImageView;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.index.BookSHHZAct;
-import com.narancommunity.app.activity.index.BookYSHYDetailAct;
+import com.narancommunity.app.activity.index.book.BookSHHZAct;
+import com.narancommunity.app.activity.index.book.BookYSHYDetailAct;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.common.adapter.EasyRecyclerAdapter;
 import com.narancommunity.app.entity.YSHYEntity;
@@ -66,7 +66,7 @@ public class CommunityYSHYAdapter extends EasyRecyclerAdapter<YSHYEntity> {
             if (!"".equals(url)) {
                 Utils.setImgF(mContext, url, hold.ivIcon);
             } else
-                Utils.setImgF(mContext, R.mipmap.zw_morentouxiang, hold.ivIcon);
+                Utils.setImgF(mContext, R.mipmap.bitmap_shequliebiao, hold.ivIcon);
             hold.lnTop.setVisibility(View.VISIBLE);
             hold.tvName.setText(Utils.getValue(item.getAccountNike()));
             hold.tvTimes.setText(Utils.dateDiff(Utils.stringTimeToMillion(item.getCreateTime())) + "");

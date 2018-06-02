@@ -1,6 +1,7 @@
 package com.narancommunity.app.activity.general;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -9,7 +10,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,16 +20,20 @@ import android.widget.ImageView;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.CenteredToolbar;
+import com.narancommunity.app.common.DBHelper;
 import com.narancommunity.app.common.ImageUtils;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.SDCardUtils;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.UpdateFilesEntity;
+import com.narancommunity.app.entity.UserInfo;
 import com.narancommunity.app.net.AppConstants;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
+import com.snappydb.DB;
+import com.snappydb.SnappydbException;
 import com.umeng.analytics.MobclickAgent;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
@@ -68,6 +75,62 @@ public class AuthoriseSecondAct extends BaseActivity {
 
         toolbar.setTitle("上传身份证");
         map = (Map<String, Object>) getIntent().getSerializableExtra("data");
+        AndPermission.with(this)
+                .runtime()
+                .permission(Permission.Group.CAMERA, Permission.Group.STORAGE)
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+
+                    }
+                }).onDenied(new Action<List<String>>() {
+            @Override
+            public void onAction(List<String> data) {
+
+            }
+        }).start();
+
+    }
+
+    /**
+     * 显示提示信息
+     */
+    private void showMissingPermissionDialog(final boolean isCamera) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("提示");
+        builder.setMessage("当前应用缺少必要权限。请点击\"设置\"-\"权限\"-打开所需权限。");
+
+        // 拒绝, 退出应用
+        builder.setNegativeButton("取消",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ;
+                    }
+                });
+
+        builder.setPositiveButton("去设置",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 跳转至当前应用的权限设置页面
+                        startAppSettings();
+                    }
+                });
+
+        builder.setCancelable(false);
+
+        builder.show();
+    }
+
+    /**
+     * 启动应用的设置
+     */
+    private void startAppSettings() {
+        Intent intent = new Intent(
+                Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.setData(Uri.parse("package:" + getPackageName()));
+        startActivity(intent);
     }
 
     @Override
@@ -102,12 +165,31 @@ public class AuthoriseSecondAct extends BaseActivity {
                     @Override
                     public void onSuccess(Result<Void> result) {
                         LoadDialog.dismiss(getContext());
+                        UserInfo info = MApplication.getUserInfo(getContext());
+                        info.setCertificationType("GOING");
+                        saveUserInfo(info);
                         Toaster.toastLong(getContext(), "提交成功，请耐心等待审核");
-                        MApplication.finishAllActivity();
+                        MApplication.finishAllExceptMainActivity();
                         finish();
                     }
                 });
                 break;
+        }
+    }
+
+    /**
+     * 保存用户信息
+     *
+     * @param data
+     */
+    private void saveUserInfo(UserInfo data) {
+        try {
+            DB snappyDb =
+                    DBHelper.getDB(this);
+            snappyDb.put(AppConstants.USER_INFO, data);
+            snappyDb.close();
+        } catch (SnappydbException e) {
+            e.printStackTrace();
         }
     }
 
@@ -127,7 +209,7 @@ public class AuthoriseSecondAct extends BaseActivity {
             //TODO 详细的时候需要写
             startActivityForResult(intent, GET_IMAGE_VIA_CAMERA);
         } else {
-            Toaster.toast(getContext(), "您未给我们打开相机的权限，没办法愉快的玩耍了！");
+            showMissingPermissionDialog(true);
         }
     }
 
@@ -230,21 +312,6 @@ public class AuthoriseSecondAct extends BaseActivity {
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(getContext());
-        AndPermission.with(this)
-                .runtime()
-                .permission(Permission.Group.CAMERA, Permission.Group.STORAGE)
-                .onGranted(new Action<List<String>>() {
-                    @Override
-                    public void onAction(List<String> data) {
-
-                    }
-                }).onDenied(new Action<List<String>>() {
-            @Override
-            public void onAction(List<String> data) {
-
-            }
-        })
-                .start();
     }
 
 //    RationaleListener rationaleListener = new RationaleListener() {

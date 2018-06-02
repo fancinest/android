@@ -49,7 +49,7 @@ public class AuthoriseFirstAct extends BaseActivity {
     @BindView(R.id.et_detail_address)
     EditText etDetailAddress;
 
-//    String mProvince = "", mCounty = "", mCity = "";
+    //    String mProvince = "", mCounty = "", mCity = "";
 //    RelativeLayout selectDate, selectTime;
 //    CustomDatePicker customDatePicker1, customDatePicker2;
     boolean isMustAuthorise;
@@ -109,10 +109,11 @@ public class AuthoriseFirstAct extends BaseActivity {
                     Toaster.toastLong(getContext(), "身份证号码长度为18位哦");
                     return;
                 }
-                if (tvMobile.getText().toString().equals("")) {
+                if (tvMobile.getText().toString().equals("") || code.equals("")) {
                     Toaster.toast(getContext(), "请先验证手机号");
                     return;
                 }
+
                 Map<String, Object> map = new HashMap<>();
                 map.put("accessToken", MApplication.getAccessToken(getContext()));
                 map.put("name", tvName.getText().toString());

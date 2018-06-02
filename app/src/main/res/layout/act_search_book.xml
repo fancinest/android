@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -14,35 +15,56 @@
         android:orientation="horizontal"
         android:paddingTop="26dp">
 
-        <EditText
-            android:id="@+id/et_search"
-            android:layout_width="wrap_content"
-            android:layout_height="34dp"
-            android:layout_centerInParent="true"
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_weight="1"
-            android:background="@drawable/round_corner_color_search"
-            android:drawableLeft="@mipmap/topnav_btn_sousuo_gray"
-            android:drawablePadding="8dp"
-            android:hint="搜索"
-            android:imeActionLabel="搜索"
-            android:imeOptions="actionSearch"
-            android:maxLength="20"
-            android:paddingBottom="8dp"
-            android:paddingLeft="12dp"
-            android:paddingTop="8dp"
-            android:singleLine="true"
-            android:textColor="@color/color_999999"
-            android:textColorHint="@color/color_999999"
-            android:textSize="14sp" />
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/round_corner_color_search"
+                android:drawableLeft="@mipmap/topnav_btn_sousuo_gray"
+                android:drawablePadding="8dp"
+                android:hint="搜索"
+                android:imeActionLabel="搜索"
+                android:imeOptions="actionSearch"
+                android:maxLength="20"
+                android:paddingBottom="8dp"
+                android:paddingLeft="12dp"
+                android:paddingTop="8dp"
+                android:singleLine="true"
+                android:textColor="@color/color_999999"
+                android:textColorHint="@color/color_999999"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/iv_clear_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:paddingBottom="4dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="16dp"
+                android:paddingTop="4dp"
+                android:src="@mipmap/tanchuang_cha_gray"
+                android:visibility="gone"
+                tool:visibility="visible" />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="18dp"
-            android:layout_marginRight="18dp"
+            android:paddingBottom="4dp"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:paddingTop="4dp"
             android:text="取消"
             android:textColor="#363636"
             android:textSize="14sp" />
@@ -89,7 +111,7 @@
 
     <include layout="@layout/include_relation_rec" />
 
-    <android.support.v7.widget.RecyclerView
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
         android:id="@+id/recyclerView_result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.narancommunity.app.MApplication;
+import com.narancommunity.app.MainActivity;
 import com.narancommunity.app.R;
 import com.narancommunity.app.common.DBHelper;
 import com.narancommunity.app.common.LoadDialog;
@@ -81,7 +82,6 @@ public class LoginAct extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_login);
         ButterKnife.bind(this);
-        MApplication.putActivity("login", LoginAct.this);
 
         mShareAPI = UMShareAPI.get(getContext());
     }
@@ -91,6 +91,7 @@ public class LoginAct extends BaseActivity {
         super.onResume();
         MobclickAgent.onResume(this);
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -242,8 +243,8 @@ public class LoginAct extends BaseActivity {
 //                    startActivity(new Intent(getContext(), AuthoriseFirstAct.class)
 //                            .putExtra("isMustAuthorise", true));
 //                } else
-                    Toaster.toast(LoginAct.this, "登录成功！");
-                MApplication.finishAllActivity();
+                Toaster.toast(LoginAct.this, "登录成功！");
+                startActivity(new Intent(getContext(), MainActivity.class));
                 finish();
             }
 
@@ -268,7 +269,7 @@ public class LoginAct extends BaseActivity {
                 LoadDialog.dismiss(LoginAct.this);
                 Toaster.toast(LoginAct.this, "登录成功！");
                 saveUserInfo(result.getData());
-                MApplication.finishAllActivity();
+                startActivity(new Intent(getContext(), MainActivity.class));
                 finish();
             }
 

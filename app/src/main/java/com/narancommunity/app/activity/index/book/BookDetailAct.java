@@ -1,4 +1,4 @@
-package com.narancommunity.app.activity.index;
+package com.narancommunity.app.activity.index.book;
 
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
@@ -219,6 +219,7 @@ public class BookDetailAct extends BaseActivity {
     @Override
     public void onPause() {
         super.onPause();
+        mPop.dismiss();
         MobclickAgent.onPause(this);
     }
 
@@ -336,7 +337,13 @@ public class BookDetailAct extends BaseActivity {
             tvDesc.setText(Utils.getValue(data.getOrderContent()) + "");
             tvName.setText(Utils.getValue(data.getOrderTitle()) + "");
             tvWriter.setText(Utils.getValue(data.getOrderAuthor()) + "");
-            tvWatcher.setText(Utils.getValue(data.getRecipientNike()) + "正在借阅中...");
+            if ("INITIAL".equals(data.getOrderStatus())) {
+                ivWatcher.setVisibility(View.GONE);
+                tvWatcher.setText("目前无人阅读");
+            } else {
+                ivWatcher.setVisibility(View.VISIBLE);
+                tvWatcher.setText(Utils.getValue(data.getRecipientNike()) + "正在借阅中...");
+            }
             rating.setRating(Float.parseFloat(Utils.getValue(average)) / 2);
             tvDonater.setText(Utils.getValue(data.getInitiatorNike()) + "");
             tvPublisher.setText(Utils.getValue(data.getPublisher()) + "");
@@ -346,6 +353,10 @@ public class BookDetailAct extends BaseActivity {
             tvWishComment.setText(Utils.getValue(data.getCommentTimes()) + "");
             tvWishLike.setText(Utils.getValue(data.getLikeTimes()) + "");
             tvPages.setText(Utils.getValue(data.getPages()) + "页");
+            String add = Utils.getValue(data.getMailAddress());
+            if (add.equals(""))
+                tvDistance.setText("未知");
+            else tvDistance.setText(add);
         }
     }
 
@@ -367,6 +378,7 @@ public class BookDetailAct extends BaseActivity {
             }
         });
     }
+
 
     private void setOrdererData(OrderData data) {
         listOrder.clear();
@@ -637,6 +649,7 @@ public class BookDetailAct extends BaseActivity {
 
     @OnClick({R.id.iv_lend_card, R.id.iv_donater, R.id.tv_donater, R.id.tv_shuping, R.id.iv_watcher, R.id.tv_watcher, R.id.tv_distance, R.id.ln_collect, R.id.ln_comment, R.id.ln_like, R.id.ln_hot_switch, R.id.btn_operate, R.id.btn_more, R.id.tv_desc})
     public void onViewClicked(View view) {
+        String state = MApplication.getAuthorisedState(getContext());
         switch (view.getId()) {
             case R.id.tv_desc:
                 showDesc();
@@ -659,24 +672,42 @@ public class BookDetailAct extends BaseActivity {
             case R.id.tv_distance:
                 break;
             case R.id.ln_collect:
-                if (MApplication.isAuthorisedSuccess(getContext())) {
+                if (state.equals(MApplication.AUTH_INITIAL)) {
+                    showPopView(lnCollect, "分享赠送陌生人\n实名认证更安全");
+                } else if (state.equals(MApplication.AUTH_FAIL)) {
+                    showPopView(lnCollect, "您的实名认证失败，无法操作，是否重新提交？");
+                } else if (state.equals(MApplication.AUTH_SUCCESS)) {
                     if (!isCollect)
                         addCollect();
                     else Toaster.toast(getContext(), "您已收藏！");
-                } else showPopView(btnOperate, "分享赠送陌生人\n实名认证更安全");
+                } else if (state.equals(MApplication.AUTH_GOING)) {
+                    Toaster.toastLong(getContext(), "您尚未通过实名认证,请等待认证完成再操作！");
+                }
                 break;
             case R.id.btn_more:
                 startActivity(new Intent(getContext(), MoreCommentAct.class).putExtra("bookId", bookId));
                 break;
             case R.id.ln_comment:
-                if (MApplication.isAuthorisedSuccess(getContext())) {
+                if (state.equals(MApplication.AUTH_INITIAL)) {
+                    showPopView(lnCollect, "分享赠送陌生人\n实名认证更安全");
+                } else if (state.equals(MApplication.AUTH_FAIL)) {
+                    showPopView(lnCollect, "您的实名认证失败，无法操作，是否重新提交？");
+                } else if (state.equals(MApplication.AUTH_SUCCESS)) {
                     addComment("", 0);
-                } else showPopView(btnOperate, "分享赠送陌生人\n实名认证更安全");
+                } else if (state.equals(MApplication.AUTH_GOING)) {
+                    Toaster.toastLong(getContext(), "您尚未通过实名认证,请等待认证完成再操作！");
+                }
                 break;
             case R.id.ln_like:
-                if (MApplication.isAuthorisedSuccess(getContext())) {
+                if (state.equals(MApplication.AUTH_INITIAL)) {
+                    showPopView(lnCollect, "分享赠送陌生人\n实名认证更安全");
+                } else if (state.equals(MApplication.AUTH_FAIL)) {
+                    showPopView(lnCollect, "您的实名认证失败，无法操作，是否重新提交？");
+                } else if (state.equals(MApplication.AUTH_SUCCESS)) {
                     likeBook();
-                } else showPopView(btnOperate, "分享赠送陌生人\n实名认证更安全");
+                } else if (state.equals(MApplication.AUTH_GOING)) {
+                    Toaster.toastLong(getContext(), "您尚未通过实名认证,请等待认证完成再操作！");
+                }
                 break;
             case R.id.ln_hot_switch:
                 pageNumRec++;
@@ -688,13 +719,19 @@ public class BookDetailAct extends BaseActivity {
                 }
                 break;
             case R.id.btn_operate:
-                if (MApplication.isAuthorisedSuccess(getContext())) {
+                if (state.equals(MApplication.AUTH_INITIAL)) {
+                    showPopView(lnCollect, "分享赠送陌生人\n实名认证更安全");
+                } else if (state.equals(MApplication.AUTH_FAIL)) {
+                    showPopView(lnCollect, "您的实名认证失败，无法操作，是否重新提交？");
+                } else if (state.equals(MApplication.AUTH_SUCCESS)) {
                     if (orderStatus.equals("INITIAL") || orderStatus.equals("WAITING"))
-                        startActivity(new Intent(getContext(), OrderBookAct.class).putExtra("bookId", bookId)
+                        startActivity(new Intent(getContext(), BorrowBookAct.class).putExtra("bookId", bookId)
                                 .putExtra("data", mData));
                     else
                         iWantOrder();
-                } else showPopView(btnOperate, "分享赠送陌生人\n实名认证更安全");
+                } else if (state.equals(MApplication.AUTH_GOING)) {
+                    Toaster.toastLong(getContext(), "您尚未通过实名认证,请等待认证完成再操作！");
+                }
                 break;
         }
     }
@@ -822,6 +859,7 @@ public class BookDetailAct extends BaseActivity {
 
     private void showPop() {
         if (mPop != null && !mPop.isShowing()) {
+            mPop.dismiss();
             mPop.showAtLocation(btnOperate, Gravity.BOTTOM | Gravity.RIGHT, 0, 0);
         }
     }
@@ -829,6 +867,8 @@ public class BookDetailAct extends BaseActivity {
     PopupWindow mPop;
 
     private void setPopView() {
+        if (mPop != null)
+            mPop.dismiss();
         LayoutInflater inflater = LayoutInflater.from(this);
         View v = inflater.inflate(R.layout.pop_function_new, null);
 

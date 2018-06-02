@@ -139,7 +139,6 @@
                 <TextView
                     android:layout_width="76dp"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@mipmap/input_icon_bitian"
                     android:drawablePadding="4dp"
                     android:text="页数"
                     android:textColor="@color/color_333333"
@@ -171,7 +170,6 @@
                 <TextView
                     android:layout_width="76dp"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@mipmap/input_icon_bitian"
                     android:drawablePadding="4dp"
                     android:text="价格"
                     android:textColor="@color/color_333333"
@@ -203,7 +201,6 @@
                 <TextView
                     android:layout_width="76dp"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@mipmap/input_icon_bitian"
                     android:drawablePadding="4dp"
                     android:text="出版社"
                     android:textColor="@color/color_333333"
@@ -236,7 +233,6 @@
                 <TextView
                     android:layout_width="76dp"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@mipmap/input_icon_bitian"
                     android:drawablePadding="4dp"
                     android:text="简介"
                     android:textColor="@color/color_333333"
@@ -308,16 +304,33 @@
                     android:textColor="@color/color_333333"
                     android:textSize="15sp" />
 
-                <com.zhy.view.flowlayout.TagFlowLayout
-                    android:id="@+id/tagFlow_type"
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:background="@color/white"
-                    android:textColor="@color/color_333333"
-                    android:textColorHint="@color/color_999999"
-                    android:textSize="15sp"
-                    app:max_select="1" />
+                    android:orientation="vertical">
+
+                    <com.zhy.view.flowlayout.TagFlowLayout
+                        android:id="@+id/tagFlow_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:textColor="@color/color_333333"
+                        android:textColorHint="@color/color_999999"
+                        android:textSize="15sp"
+                        app:max_select="1" />
+
+                    <TextView
+                        android:id="@+id/tv_press_get"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="8dp"
+                        android:paddingTop="8dp"
+                        android:text="点击获取分类" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <View
@@ -365,7 +378,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@color/appBlue"
-        android:text="赠出"
+        android:text="发布"
         android:textColor="@color/white"
         android:textSize="17sp" />
 

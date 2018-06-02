@@ -110,6 +110,10 @@
         <!--</activity>-->
         <!-- 微博-->
         <activity
+            android:name=".activity.index.RangeAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/ImageTranslucentTheme"></activity>
+        <activity
             android:name=".activity.mine.MsgDetailAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
@@ -227,7 +231,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.index.HelpItAct"
+            android:name=".activity.index.book.HelpItAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
@@ -235,7 +239,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.index.MoreCommentAct"
+            android:name=".activity.index.book.MoreCommentAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
@@ -295,11 +299,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.index.AixinBookHouseAct"
+            android:name=".activity.index.book.AixinBookHouseAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.index.AixinBookShelfAct"
+            android:name=".activity.index.book.AixinBookShelfAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
@@ -307,23 +311,23 @@
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.index.BookDetailAct"
+            android:name=".activity.index.book.BookDetailAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.index.BookLendCardAct"
+            android:name=".activity.index.book.BookLendCardAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.index.BookReviewListAct"
+            android:name=".activity.index.book.BookReviewListAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.index.AddBookCommentAct"
+            android:name=".activity.index.book.AddBookCommentAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.index.BookReviewDetailAct"
+            android:name=".activity.index.book.BookReviewDetailAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
@@ -331,35 +335,35 @@
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.index.RangeBookAct"
+            android:name=".activity.index.book.RangeBookAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.index.SearchBookAct"
+            android:name=".activity.index.book.SearchBookAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.index.NeedBookAct"
+            android:name=".activity.index.book.NeedBookAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.index.BookCommunityAct"
+            android:name=".activity.index.book.BookCommunityAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.index.BookYSHYDetailAct"
+            android:name=".activity.index.book.BookYSHYDetailAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.index.BookSHHZAct"
+            android:name=".activity.index.book.BookSHHZAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.index.BookOrdererListAct"
+            android:name=".activity.index.book.BookOrdererListAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.index.OrderBookAct"
+            android:name=".activity.index.book.BorrowBookAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
 
@@ -368,7 +372,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity
-            android:name=".activity.index.ShuzhaiAct"
+            android:name=".activity.index.book.ShuzhaiAct"
             android:screenOrientation="portrait"
             android:theme="@style/ImageTranslucentTheme"></activity>
         <activity

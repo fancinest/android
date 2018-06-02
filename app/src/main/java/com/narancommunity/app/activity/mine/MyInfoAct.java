@@ -21,9 +21,9 @@ import com.codbking.widget.DatePickDialog;
 import com.codbking.widget.OnSureLisener;
 import com.codbking.widget.bean.DateType;
 import com.joooonho.SelectableRoundedImageView;
-import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.ImageUtils;
 import com.narancommunity.app.common.LoadDialog;
@@ -107,6 +107,21 @@ public class MyInfoAct extends BaseActivity {
                 updateInfo(map);
             }
         });
+        AndPermission.with(this)
+                .runtime()
+                .permission(Permission.Group.CAMERA, Permission.Group.STORAGE)
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+
+                    }
+                }).onDenied(new Action<List<String>>() {
+            @Override
+            public void onAction(List<String> data) {
+
+            }
+        })
+                .start();
     }
 
 
@@ -396,21 +411,6 @@ public class MyInfoAct extends BaseActivity {
         super.onResume();
         MobclickAgent.onResume(getContext());
         setInfo();
-        AndPermission.with(this)
-                .runtime()
-                .permission(Permission.Group.CAMERA, Permission.Group.STORAGE)
-                .onGranted(new Action<List<String>>() {
-                    @Override
-                    public void onAction(List<String> data) {
-
-                    }
-                }).onDenied(new Action<List<String>>() {
-            @Override
-            public void onAction(List<String> data) {
-
-            }
-        })
-                .start();
     }
 
 //    RationaleListener rationaleListener = new RationaleListener() {

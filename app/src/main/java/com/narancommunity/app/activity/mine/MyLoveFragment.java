@@ -4,18 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.index.BookDetailAct;
+import com.narancommunity.app.activity.index.book.BookDetailAct;
 import com.narancommunity.app.adapter.MyLoveAdapter;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
@@ -45,9 +45,11 @@ import static android.app.Activity.RESULT_FIRST_USER;
 public class MyLoveFragment extends Fragment {
 
     @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @BindView(R.id.swipe_refresh)
-    SwipeRefreshLayout swipeRefreshLayout;
+    XRecyclerView recyclerView;
+    //    @BindView(R.id.swipe_refresh)
+//    SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.tv_no_data)
+    TextView tvNoData;
     MyLoveAdapter adapter;
     List<WishEntity> listData = new ArrayList<>();
     int pageSize = 5;
@@ -119,6 +121,8 @@ public class MyLoveFragment extends Fragment {
                 public void onFailure(Throwable throwable) {
                     LoadDialog.dismiss(getContext());
                     Utils.showErrorToast(getContext(), throwable);
+                    recyclerView.loadMoreComplete();
+                    recyclerView.refreshComplete();
                 }
             });
         } else if (type == 1) {
@@ -133,6 +137,8 @@ public class MyLoveFragment extends Fragment {
                 public void onFailure(Throwable throwable) {
                     LoadDialog.dismiss(getContext());
                     Utils.showErrorToast(getContext(), throwable);
+                    recyclerView.loadMoreComplete();
+                    recyclerView.refreshComplete();
                 }
             });
         } else if (type == 2) {
@@ -147,6 +153,8 @@ public class MyLoveFragment extends Fragment {
                 public void onFailure(Throwable throwable) {
                     LoadDialog.dismiss(getContext());
                     Utils.showErrorToast(getContext(), throwable);
+                    recyclerView.loadMoreComplete();
+                    recyclerView.refreshComplete();
                 }
             });
         }
@@ -156,12 +164,17 @@ public class MyLoveFragment extends Fragment {
         if (pageNum == 1)
             listData.clear();
         TOTAL_PAGE = data.getTotalPageNum();
-        if (data != null && data.getOrders() != null) {
+        if (data != null && data.getOrders() != null && data.getOrders() != null) {
             listData.addAll(data.getOrders());
             pageNum++;
+            tvNoData.setVisibility(View.GONE);
+        } else {
+            tvNoData.setVisibility(View.VISIBLE);
         }
         adapter.setDataList(listData);
         adapter.notifyDataSetChanged();
+        recyclerView.loadMoreComplete();
+        recyclerView.refreshComplete();
     }
 
     private void setView() {
@@ -188,49 +201,26 @@ public class MyLoveFragment extends Fragment {
         recyclerView.setLayoutManager(lmYSHY);
         recyclerView.setAdapter(adapter);
         recyclerView.setBackgroundColor(getResources().getColor(R.color.white));
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    LinearLayoutManager linearLayoutManager;
-                    if (layoutManager instanceof LinearLayoutManager) {
-                        linearLayoutManager = (LinearLayoutManager) layoutManager;
-                        int lastVisibleItemPosition = 0;
-                        if (type == 0) {
-                            lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
-                            Log.i("fancy", "最后的可见位置:" + lastVisibleItemPosition);
-                        } else {
-                            lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
-                            Log.i("fancy", "最后的可见位置:" + lastVisibleItemPosition);
-                        }
-                        if (lastVisibleItemPosition + 1 == listData.size()) {
-                            if (pageNum <= TOTAL_PAGE) {
-                                getData();
-                            } else
-                                Toaster.toast(getContext(), "已无更多数据");
-                        }
-                    }
+            public void onRefresh() {
+                pageNum = 1;
+                getData();
+            }
+
+            @Override
+            public void onLoadMore() {
+                if (pageNum <= TOTAL_PAGE) {
+                    getData();
+                } else {
+                    recyclerView.loadMoreComplete();
+                    recyclerView.refreshComplete();
+                    Toaster.toast(getContext(), "已无更多数据");
                 }
             }
         });
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-
-            @Override
-            public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(true);
-                recyclerView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        pageNum = 1;
-                        getData();
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                });
-            }
-        });
     }
 
     private void getOrdererInfo(final int position) {
@@ -246,7 +236,7 @@ public class MyLoveFragment extends Fragment {
                             .putExtra("position", position)
                             .putExtra("data", listData.get(position))
                             .putExtra("address", result.getData()), RESULT_FIRST_USER);
-                }else Toaster.toast(getContext(),"");
+                } else Toaster.toast(getContext(), "");
             }
 
             @Override
@@ -277,5 +267,9 @@ public class MyLoveFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (recyclerView != null) {
+            recyclerView.destroy(); // this will totally release XR's memory
+            recyclerView = null;
+        }
     }
 }

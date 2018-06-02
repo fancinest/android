@@ -21,10 +21,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.activity.mine.AddressAct;
 import com.narancommunity.app.adapter.PicUploadAdapter;
 import com.narancommunity.app.adapter.StationeryAdapter;
@@ -154,6 +154,22 @@ public class IWantAct extends BaseActivity {
         toolbar.setTitle("发起申请");
         setView();
         setGrid();
+
+        AndPermission.with(this)
+                .runtime()
+                .permission(Permission.Group.CAMERA, Permission.Group.STORAGE)
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+
+                    }
+                }).onDenied(new Action<List<String>>() {
+            @Override
+            public void onAction(List<String> data) {
+
+            }
+        })
+                .start();
     }
 
     private void setView() {
@@ -582,21 +598,6 @@ public class IWantAct extends BaseActivity {
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
-        AndPermission.with(this)
-                .runtime()
-                .permission(Permission.Group.CAMERA, Permission.Group.STORAGE)
-                .onGranted(new Action<List<String>>() {
-                    @Override
-                    public void onAction(List<String> data) {
-
-                    }
-                }).onDenied(new Action<List<String>>() {
-            @Override
-            public void onAction(List<String> data) {
-
-            }
-        })
-                .start();
         getStationery();
     }
 

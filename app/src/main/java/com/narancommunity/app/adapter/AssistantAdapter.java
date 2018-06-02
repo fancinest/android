@@ -1,7 +1,6 @@
 package com.narancommunity.app.adapter;
 
 import android.content.Context;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +16,6 @@ import com.narancommunity.app.common.adapter.EasyRecyclerAdapter;
 import com.narancommunity.app.entity.AssistantMissionEntity;
 
 import java.util.List;
-
-import butterknife.BindView;
 
 /**
  * Writer：fancy on 2017/12/26 15:15
@@ -48,12 +45,9 @@ public class AssistantAdapter extends EasyRecyclerAdapter<AssistantMissionEntity
         final MyViewHolder hold = (MyViewHolder) (holder);
 
         final AssistantMissionEntity item = getList().get(position);
-//        hold.tv_name.setText(Utils.getValue(item.getName()) + "");
-//        int url = item.getId();
-//        hold.iv_pic.setImageResource(url);
-//        Utils.setImgF(mContext, url, hold.iv_pic);
         hold.tvTitle.setText("" + Utils.getValue(item.getActivityTitle()));
         hold.tvShare.setText("" + Utils.getValue(item.getShareTimes()));
+        hold.tvApply.setText("" + Utils.getValue(item.getRealApplyTimes()));
         hold.tvTime.setText(Utils.dateDiff(Utils.stringTimeToMillion(item.getCreateTime())) + "");
         String url = Utils.getValue(item.getActivityImg());
         if (null != url && !"".equals(url)) {
@@ -87,8 +81,7 @@ public class AssistantAdapter extends EasyRecyclerAdapter<AssistantMissionEntity
 
         ImageView ivBg;
         TextView tvShare;
-        TextView tvComment;
-        TextView tvCollect;
+        TextView tvApply;
         TextView tvTime;
 
         public MyViewHolder(View itemView) {
@@ -97,8 +90,7 @@ public class AssistantAdapter extends EasyRecyclerAdapter<AssistantMissionEntity
             tvTitle = itemView.findViewById(R.id.tv_title);
             ivBg = itemView.findViewById(R.id.iv_bg);
             tvShare = itemView.findViewById(R.id.tv_share);
-            tvComment = itemView.findViewById(R.id.tv_comment);
-            tvCollect = itemView.findViewById(R.id.tv_collect);
+            tvApply = itemView.findViewById(R.id.tv_apply);
             tvTime = itemView.findViewById(R.id.tv_time);
         }
     }

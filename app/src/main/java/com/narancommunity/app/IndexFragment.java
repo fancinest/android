@@ -3,6 +3,7 @@ package com.narancommunity.app;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,16 +15,18 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.narancommunity.app.activity.index.AixinBookHouseAct;
+import com.narancommunity.app.activity.index.book.AixinBookHouseAct;
 import com.narancommunity.app.activity.index.FindFourAct;
 import com.narancommunity.app.activity.index.IndexSearchAct;
 import com.narancommunity.app.activity.index.RangeAct;
@@ -37,7 +40,6 @@ import com.narancommunity.app.common.ObservableScrollView;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.BannerData;
-import com.narancommunity.app.entity.BannerItem;
 import com.narancommunity.app.entity.BookListData;
 import com.narancommunity.app.entity.NewsData;
 import com.narancommunity.app.entity.Publicitys;
@@ -94,6 +96,8 @@ public class IndexFragment extends Fragment {
     TextView tvSearch;
     @BindView(R.id.view_bg)
     View viewBg;
+    @BindView(R.id.tv_bottom)
+    TextView tvBottom;
     @BindView(R.id.scrollView)
     ObservableScrollView scrollView;
 
@@ -350,7 +354,9 @@ public class IndexFragment extends Fragment {
         listBookData.clear();
         if (data != null && data.getOrders() != null && data.getTotalCount() > 0) {
             listBookData.addAll(data.getOrders());
+            tvBottom.setVisibility(View.VISIBLE);
         } else {
+            tvBottom.setVisibility(View.GONE);
             Toaster.toast(getContext(), "没有发布！");
         }
         latestAdapter.setDataList(listBookData);
@@ -364,7 +370,7 @@ public class IndexFragment extends Fragment {
         sortAdapter.setListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-
+                showNoPrompt();
             }
         });
         recyclerViewSort.setLayoutManager(lm_sort);
@@ -381,17 +387,29 @@ public class IndexFragment extends Fragment {
         sortAdapter.notifyDataSetChanged();
     }
 
-    private void setData() {
-        BannerItem item1 = new BannerItem();
-        BannerItem item2 = new BannerItem();
-        BannerItem item3 = new BannerItem();
-        BannerItem item4 = new BannerItem();
-        List<BannerItem> list = new ArrayList<>();
-        list.add(item1);
-        list.add(item2);
-        list.add(item3);
-        list.add(item4);
-//        setBannerData(list);
+    PopupWindow mPop;
+
+    private void showNoPrompt() {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View v = inflater.inflate(R.layout.pop_soon_up, null);
+
+        if (mPop == null) {
+            mPop = new PopupWindow(v, LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            mPop.setFocusable(true);
+            mPop.setOutsideTouchable(true);
+            mPop.setBackgroundDrawable(new BitmapDrawable());
+
+            v.findViewById(R.id.iv_close).setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View arg0) {
+                    mPop.dismiss();
+                }
+            });
+        }
+        if (mPop != null && !mPop.isShowing())
+            mPop.showAtLocation(lnBook, Gravity.CENTER, 0, 0);
     }
 
     private void setBannerData(List<Publicitys> data) {

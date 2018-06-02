@@ -24,7 +24,7 @@
             android:layout_width="80dp"
             android:layout_height="120dp"
             android:scaleType="centerCrop"
-            android:src="@mipmap/bg" />
+            android:src="@mipmap/bitmap_book" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -133,7 +133,10 @@
                 android:layout_alignParentBottom="true"
                 android:drawableLeft="@mipmap/list_icon_weizhi"
                 android:drawablePadding="4dp"
+                android:ellipsize="end"
                 android:gravity="bottom"
+                android:maxLength="12"
+                android:maxLines="1"
                 android:text="2km"
                 android:textColor="@color/color_999999"
                 android:textSize="12sp" />

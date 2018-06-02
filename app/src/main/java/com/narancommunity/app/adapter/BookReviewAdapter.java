@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.joooonho.SelectableRoundedImageView;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.index.AddBookCommentAct;
+import com.narancommunity.app.activity.index.book.AddBookCommentAct;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.common.adapter.EasyRecyclerAdapter;
 import com.narancommunity.app.entity.BookComment;

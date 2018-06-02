@@ -1,24 +1,16 @@
 package com.narancommunity.app.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v7.widget.CardView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.joooonho.SelectableRoundedImageView;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.index.BookDetailAct;
 import com.narancommunity.app.adapter.base.ListBaseAdapter;
 import com.narancommunity.app.adapter.base.SuperViewHolder;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.CompanyEntity;
-import com.narancommunity.app.entity.RecEntity;
-
-import butterknife.BindView;
 
 /**
  * Writer：fancy on 2017/8/30 17:17
@@ -71,7 +63,7 @@ public class LoveSearchAdapter extends ListBaseAdapter<CompanyEntity> {
         if (!"".equals(Utils.getValue(entity.getCompanyImg()))) {
             Utils.setImgF(mContext, entity.getCompanyImg(), ivLogo);
         } else {
-            Utils.setImgF(mContext, R.mipmap.bg, ivLogo);
+            Utils.setImgF(mContext, R.mipmap.bitmap_book, ivLogo);
         }
         lnItem.setOnClickListener(new View.OnClickListener() {
             @Override

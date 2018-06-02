@@ -13,8 +13,8 @@ import android.widget.TextView;
 import com.joooonho.SelectableRoundedImageView;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.index.BookSHHZAct;
-import com.narancommunity.app.activity.index.BookYSHYDetailAct;
+import com.narancommunity.app.activity.index.book.BookSHHZAct;
+import com.narancommunity.app.activity.index.book.BookYSHYDetailAct;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.common.adapter.EasyRecyclerAdapter;
 import com.narancommunity.app.entity.YSHYEntity;
@@ -61,7 +61,7 @@ public class MyReleaseAdapter extends EasyRecyclerAdapter<YSHYEntity> {
         if (!"".equals(url)) {
             Utils.setImgF(mContext, url, hold.ivIcon);
         } else
-            Utils.setImgF(mContext, R.mipmap.zw_morentouxiang, hold.ivIcon);
+            Utils.setImgF(mContext, R.mipmap.bitmap_shequliebiao, hold.ivIcon);
         hold.tvContent.setTextColor(mContext.getResources().getColor(R.color.black));
         hold.tvTitle.setVisibility(View.GONE);
         hold.tvTitle.setVisibility(View.VISIBLE);
@@ -77,7 +77,7 @@ public class MyReleaseAdapter extends EasyRecyclerAdapter<YSHYEntity> {
             hold.ivImg.setVisibility(View.VISIBLE);
         } else if ("".equals(pic)) {
             hold.ivImg.setVisibility(View.GONE);
-            Utils.setImgF(mContext, R.mipmap.zw_morentouxiang, hold.ivImg);
+            Utils.setImgF(mContext, R.mipmap.bitmap_shequliebiao, hold.ivImg);
         }
         hold.tvContent.setText(Utils.getValue(item.getContentBody()));
         hold.lnParent.setOnClickListener(new View.OnClickListener() {

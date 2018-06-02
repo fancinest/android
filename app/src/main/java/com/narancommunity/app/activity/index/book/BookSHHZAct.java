@@ -1,4 +1,4 @@
-package com.narancommunity.app.activity.index;
+package com.narancommunity.app.activity.index.book;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +24,7 @@ import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
+import com.narancommunity.app.activity.index.DonateBookAct;
 import com.narancommunity.app.adapter.CommentAdapter;
 import com.narancommunity.app.adapter.EssayPicAdapter;
 import com.narancommunity.app.adapter.OnItemClickListener;
@@ -138,6 +139,7 @@ public class BookSHHZAct extends BaseActivity {
         super.onResume();
         MobclickAgent.onResume(this);
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -318,33 +320,59 @@ public class BookSHHZAct extends BaseActivity {
 
     @OnClick({R.id.iv_one_pic, R.id.ln_collect, R.id.ln_comment, R.id.ln_like, R.id.btn_help, R.id.ln_donater, R.id.btn_more})
     public void onViewClicked(View view) {
+        String state = MApplication.getAuthorisedState(getContext());
         switch (view.getId()) {
             case R.id.iv_one_pic:
                 break;
             case R.id.ln_collect:
-                if (MApplication.isAuthorisedSuccess(getContext())) {
+                if (state.equals(MApplication.AUTH_INITIAL)) {
+                    showPopView(lnCollect, "分享赠送陌生人\n实名认证更安全");
+                } else if (state.equals(MApplication.AUTH_FAIL)) {
+                    showPopView(lnCollect, "您的实名认证失败，无法操作，是否重新提交？");
+                } else if (state.equals(MApplication.AUTH_SUCCESS)) {
                     if (!isCollect)
                         addCollect();
                     else Toaster.toast(getContext(), "您已经收藏过了！");
-                } else showPopView(view, "分享赠送陌生人\n实名认证更安全");
+                } else if (state.equals(MApplication.AUTH_GOING)) {
+                    Toaster.toastLong(getContext(), "您尚未通过实名认证,请等待认证完成再操作！");
+                }
+
                 break;
             case R.id.ln_comment:
-                if (MApplication.isAuthorisedSuccess(getContext())) {
+                if (state.equals(MApplication.AUTH_INITIAL)) {
+                    showPopView(lnCollect, "分享赠送陌生人\n实名认证更安全");
+                } else if (state.equals(MApplication.AUTH_FAIL)) {
+                    showPopView(lnCollect, "您的实名认证失败，无法操作，是否重新提交？");
+                } else if (state.equals(MApplication.AUTH_SUCCESS)) {
                     startActivity(new Intent(getContext(), AddBookCommentAct.class)
                             .putExtra("tag", 1));
-                } else showPopView(view, "分享赠送陌生人\n实名认证更安全");
+                } else if (state.equals(MApplication.AUTH_GOING)) {
+                    Toaster.toastLong(getContext(), "您尚未通过实名认证,请等待认证完成再操作！");
+                }
                 break;
             case R.id.ln_like:
-                if (MApplication.isAuthorisedSuccess(getContext())) {
-//                    startActivity(new Intent(getContext(), AddBookCommentAct.class)
-//                            .putExtra("tag", 1));
-                } else showPopView(view, "分享赠送陌生人\n实名认证更安全");
+                if (state.equals(MApplication.AUTH_INITIAL)) {
+                    showPopView(lnCollect, "分享赠送陌生人\n实名认证更安全");
+                } else if (state.equals(MApplication.AUTH_FAIL)) {
+                    showPopView(lnCollect, "您的实名认证失败，无法操作，是否重新提交？");
+                } else if (state.equals(MApplication.AUTH_SUCCESS)) {
+                    //TODO
+                    likeIt();
+                } else if (state.equals(MApplication.AUTH_GOING)) {
+                    Toaster.toastLong(getContext(), "您尚未通过实名认证,请等待认证完成再操作！");
+                }
                 break;
             case R.id.btn_help:
-                if (MApplication.isAuthorisedSuccess(getContext())) {
+                if (state.equals(MApplication.AUTH_INITIAL)) {
+                    showPopView(lnCollect, "分享赠送陌生人\n实名认证更安全");
+                } else if (state.equals(MApplication.AUTH_FAIL)) {
+                    showPopView(lnCollect, "您的实名认证失败，无法操作，是否重新提交？");
+                } else if (state.equals(MApplication.AUTH_SUCCESS)) {
                     startActivity(new Intent(getContext(), DonateBookAct.class)
                             .putExtra("contentId", mData.getContentId()));
-                } else showPopView(view, "分享赠送陌生人\n实名认证更安全");
+                } else if (state.equals(MApplication.AUTH_GOING)) {
+                    Toaster.toastLong(getContext(), "您尚未通过实名认证,请等待认证完成再操作！");
+                }
                 break;
             case R.id.ln_donater:
                 break;
@@ -353,6 +381,25 @@ public class BookSHHZAct extends BaseActivity {
                         .putExtra("tag", 1));
                 break;
         }
+    }
+
+    private void likeIt() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("accessToken", MApplication.getAccessToken());
+        map.put("contentId", mData.getContentId());
+        NRClient.likeEssay(map, new ResultCallback<Result<Void>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<Void> result) {
+                LoadDialog.dismiss(getContext());
+                Toaster.toast(getContext(), "点赞成功");
+            }
+        });
     }
 
     private void addCollect() {

@@ -1,4 +1,4 @@
-package com.narancommunity.app.activity.index;
+package com.narancommunity.app.activity.index.book;
 
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
@@ -17,11 +17,12 @@ import android.widget.PopupWindow;
 
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
-import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.activity.fragment.CommunitySonFragment;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.common.CenteredToolbar;
+import com.narancommunity.app.common.Toaster;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -74,14 +75,19 @@ public class BookCommunityAct extends BaseActivity implements OnTabSelectListene
         ivRelease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO
-                if (MApplication.isAuthorisedSuccess(getContext())) {
+                if (MApplication.getAuthorisedState(getContext()).equals(MApplication.AUTH_INITIAL)) {
+                    showPopView(ivRelease, "分享赠送陌生人\n实名认证更安全");
+                } else if (MApplication.getAuthorisedState(getContext()).equals(MApplication.AUTH_FAIL)) {
+                    showPopView(ivRelease, "您尚未通过实名认证\n是否前往？");
+                } else if (MApplication.getAuthorisedState(getContext()).equals(MApplication.AUTH_SUCCESS)) {
                     if (mPosition == 1)
                         showPopView(ivRelease);
                     else
                         startActivity(new Intent(getContext(), NeedBookAct.class)
                                 .putExtra("tag", 2));
-                } else showPopView(ivRelease, "分享赠送陌生人\n实名认证更安全");
+                } else if (MApplication.getAuthorisedState(getContext()).equals(MApplication.AUTH_GOING)) {
+                    Toaster.toastLong(getContext(), "您尚未通过实名认证,请等待认证完成再操作！");
+                }
 
             }
         });
@@ -182,6 +188,7 @@ public class BookCommunityAct extends BaseActivity implements OnTabSelectListene
         super.onResume();
         MobclickAgent.onResume(this);
     }
+
     @Override
     public void onPause() {
         super.onPause();

@@ -10,7 +10,8 @@ import java.io.Serializable;
 
 public class AssistantMissionEntity implements Serializable {
     //    {"activityId":8,"activityImg":"1516262858889_341.jpg","activityTitle":"测试7","commentTimes":0,"createTime":"2018-01-29 16:03:23","realApplyTimes":120,"shareTimes":2}
-    Integer activityId, commentTimes, realApplyTimes, shareTimes;//
+    Integer activityId, commentTimes, realApplyTimes, shareTimes, collectionTimes, likeTimes;
+    ;//
     String activityImg, activityTitle, createTime;
 
     @Override
@@ -20,10 +21,28 @@ public class AssistantMissionEntity implements Serializable {
                 ", commentTimes=" + commentTimes +
                 ", realApplyTimes=" + realApplyTimes +
                 ", shareTimes=" + shareTimes +
+                ", collectionTimes=" + collectionTimes +
+                ", likeTimes=" + likeTimes +
                 ", activityImg='" + activityImg + '\'' +
                 ", activityTitle='" + activityTitle + '\'' +
                 ", createTime='" + createTime + '\'' +
                 '}';
+    }
+
+    public Integer getCollectionTimes() {
+        return collectionTimes;
+    }
+
+    public void setCollectionTimes(Integer collectionTimes) {
+        this.collectionTimes = collectionTimes;
+    }
+
+    public Integer getLikeTimes() {
+        return likeTimes;
+    }
+
+    public void setLikeTimes(Integer likeTimes) {
+        this.likeTimes = likeTimes;
     }
 
     public Integer getActivityId() {

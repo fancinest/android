@@ -6,15 +6,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.model.LatLng;
 import com.narancommunity.app.R;
 import com.narancommunity.app.adapter.base.ListBaseAdapter;
 import com.narancommunity.app.adapter.base.SuperViewHolder;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.OrderEntity;
-
-import java.math.BigDecimal;
 
 /**
  * Writer：fancy on 2017/8/30 17:17
@@ -71,13 +68,16 @@ public class BookOrderListAdapter extends ListBaseAdapter<OrderEntity> {
         });
 
 //        longitude = 121.19, latitude =32.23
-        LatLng startLatlng = new LatLng(32.26, 121.19);
-        LatLng endLatlng = new LatLng(30.43, 120.3);
-        float distance = AMapUtils.calculateLineDistance(startLatlng, endLatlng);
-        BigDecimal bd = new BigDecimal(distance);
-        String df = bd.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString();
-        tvDistance.setText("" + (Float.parseFloat(df) / 1000) + "km");
-
+//        LatLng startLatlng = new LatLng(32.26, 121.19);
+//        LatLng endLatlng = new LatLng(30.43, 120.3);
+//        float distance = AMapUtils.calculateLineDistance(startLatlng, endLatlng);
+//        BigDecimal bd = new BigDecimal(distance);
+//        String df = bd.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString();
+//        tvDistance.setText("" + (Float.parseFloat(df) / 1000) + "km");
+        String address = Utils.getValue(entity.getMailAddress());
+        if (address.equals(""))
+            address = "未知";
+        tvDistance.setText("" + address);
 
 //        double aaaa = getDistance(latlng1, latlng);
 //        float distance1 = (float) Math.abs(aaaa);

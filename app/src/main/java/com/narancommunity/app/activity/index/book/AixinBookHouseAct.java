@@ -1,4 +1,4 @@
-package com.narancommunity.app.activity.index;
+package com.narancommunity.app.activity.index.book;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,8 +12,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.R;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.adapter.BannerPagerAdapter;
 import com.narancommunity.app.adapter.BookListAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
@@ -22,6 +22,7 @@ import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.BannerData;
+import com.narancommunity.app.entity.BookSortEntity;
 import com.narancommunity.app.entity.NewsData;
 import com.narancommunity.app.entity.Publicitys;
 import com.narancommunity.app.entity.RecData;
@@ -101,6 +102,7 @@ public class AixinBookHouseAct extends BaseActivity {
 
     int pageNumHot = 1, pageNumRec = 1;
     int maxPageHot = 1, maxPageRec = 1;
+    ArrayList<BookSortEntity> listNextData = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -119,7 +121,31 @@ public class AixinBookHouseAct extends BaseActivity {
         getBanner();
         getHotData(false);
         getRecData(false);
+        getBookSort(false);
     }
+
+    private void getBookSort(final boolean isGoNext) {
+        if (isGoNext)
+            LoadDialog.show(getContext());
+        Map<String, Object> map = new HashMap<>();
+        NRClient.getBookSort(map, new ResultCallback<Result<List<BookSortEntity>>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<List<BookSortEntity>> result) {
+                LoadDialog.dismiss(getContext());
+                listNextData.addAll(result.getData());
+                if (isGoNext)
+                    startActivity(new Intent(getContext(), AixinBookShelfAct.class)
+                            .putExtra("sort", listNextData));
+            }
+        });
+    }
+
 
     private void getHotData(boolean isShowProgress) {
         if (isShowProgress)
@@ -232,6 +258,7 @@ public class AixinBookHouseAct extends BaseActivity {
         super.onResume();
         MobclickAgent.onResume(this);
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -335,7 +362,11 @@ public class AixinBookHouseAct extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ln_find:
-                startActivity(new Intent(getContext(), AixinBookShelfAct.class));
+                if (listNextData.size() > 0)
+                    startActivity(new Intent(getContext(), AixinBookShelfAct.class)
+                            .putExtra("sort", listNextData));
+                else
+                    getBookSort(true);
                 break;
             case R.id.ln_rank:
                 startActivity(new Intent(getContext(), RangeBookAct.class));

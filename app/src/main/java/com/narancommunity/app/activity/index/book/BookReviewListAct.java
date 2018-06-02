@@ -1,17 +1,18 @@
-package com.narancommunity.app.activity.index;
+package com.narancommunity.app.activity.index.book;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.narancommunity.app.activity.general.BaseActivity;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.adapter.BookReviewAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.LoadDialog;
@@ -42,11 +43,13 @@ public class BookReviewListAct extends BaseActivity {
     @BindView(R.id.toolbar)
     CenteredToolbar toolbar;
     @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
+    XRecyclerView recyclerView;
     @BindView(R.id.iv_release)
     ImageView ivRelease;
-    @BindView(R.id.swipe_refresh)
-    SwipeRefreshLayout swipeRefreshLayout;
+    //    @BindView(R.id.swipe_refresh)
+//    SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.tv_no_data)
+    TextView tvNoData;
 
     BookReviewAdapter adapter;
     List<BookComment> list = new ArrayList<>();
@@ -82,6 +85,8 @@ public class BookReviewListAct extends BaseActivity {
             public void onFailure(Throwable throwable) {
                 LoadDialog.dismiss(getContext());
                 Utils.showErrorToast(getContext(), throwable);
+                recyclerView.loadMoreComplete();
+                recyclerView.refreshComplete();
             }
 
             @Override
@@ -99,10 +104,13 @@ public class BookReviewListAct extends BaseActivity {
         if (data != null && data.getReviews() != null && data.getReviews().size() > 0) {
             list.addAll(data.getReviews());
             pageNum++;
+            tvNoData.setVisibility(View.GONE);
         } else {
-            Toaster.toast(getContext(), "暂无任何评论");
+            tvNoData.setVisibility(View.VISIBLE);
         }
         adapter.notifyDataSetChanged();
+        recyclerView.loadMoreComplete();
+        recyclerView.refreshComplete();
     }
 
     private void setView() {
@@ -124,36 +132,22 @@ public class BookReviewListAct extends BaseActivity {
                         .putExtra("data", list.get(position)).putExtra("bookId", bookId));
             }
         });
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    int lastVisibleItemPosition = lm_latest.findLastVisibleItemPosition();
-                    if (lastVisibleItemPosition + 1 == adapter.getItemCount()) {
-                        if (pageNum <= TOTAL_PAGE) {
-                            getData();
-                        } else
-                            Toaster.toast(getContext(), "已无更多数据");
-                    }
-                }
-            }
-        });
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-
+        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(true);
-                recyclerView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        pageNum = 1;
-                        getData();
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                });
+                pageNum = 1;
+                getData();
+            }
+
+            @Override
+            public void onLoadMore() {
+                if (pageNum <= TOTAL_PAGE) {
+                    getData();
+                } else {
+                    recyclerView.loadMoreComplete();
+                    recyclerView.refreshComplete();
+                    Toaster.toast(getContext(), "已无更多数据");
+                }
             }
         });
     }
@@ -170,9 +164,19 @@ public class BookReviewListAct extends BaseActivity {
         super.onResume();
         MobclickAgent.onResume(this);
     }
+
     @Override
     public void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (recyclerView != null) {
+            recyclerView.destroy(); // this will totally release XR's memory
+            recyclerView = null;
+        }
     }
 }

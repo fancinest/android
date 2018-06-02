@@ -49,7 +49,7 @@ public class BookListAdapter extends EasyRecyclerAdapter<RecEntity> {
         if (!url.equals("")) {
             Utils.setImgF(getContext(), url, hold.ivPic);
         } else {
-            Utils.setImgF(getContext(), "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523510281803&di=d1eaf4c7d74e69730bf5889169cae5e7&imgtype=jpg&src=http%3A%2F%2Fimg3.imgtn.bdimg.com%2Fit%2Fu%3D3994969733%2C336727888%26fm%3D214%26gp%3D0.jpg", hold.ivPic);
+            Utils.setImgF(getContext(), R.mipmap.bitmap_book, hold.ivPic);
         }
         hold.tvName.setText(Utils.getValue(item.getOrderTitle()) + "");
 

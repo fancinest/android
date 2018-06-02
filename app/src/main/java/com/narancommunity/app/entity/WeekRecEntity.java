@@ -8,16 +8,16 @@ import java.io.Serializable;
  * FileName :
  */
 
-public class WeekRecEntity implements Serializable{
-//    "contentBody": "我很好！！！我很好！！！我很好！！！我很好！！！我很好！！！我很好！！！我很好！！！我很好！！！我很好！！！",
+public class WeekRecEntity implements Serializable {
+    //    "contentBody": "我很好！！！我很好！！！我很好！！！我很好！！！我很好！！！我很好！！！我很好！！！我很好！！！我很好！！！",
 //            "contentId": 12,
 //            "contentImg": "http://orkypu4y4.bkt.clouddn.com/home1.png",
 //            "contentTitle": "yyyyyyy怎么样？",
 //            "contentType": "WEEKLY",
 //            "createTime": "2018-01-03 16:05:39",
 //            "recommendTime": "01月第二周"
-    String contentBody,contentImg,contentTitle,contentType,createTime,recommendTime;
-    Integer contentId;
+    String contentBody, contentImg, contentTitle, contentType, createTime, recommendTime;
+    Integer contentId, collectionTimes, commentTimes, likeTimes;
 
     @Override
     public String toString() {
@@ -29,7 +29,34 @@ public class WeekRecEntity implements Serializable{
                 ", createTime='" + createTime + '\'' +
                 ", recommendTime='" + recommendTime + '\'' +
                 ", contentId=" + contentId +
+                ", collectionTimes=" + collectionTimes +
+                ", commentTimes=" + commentTimes +
+                ", likeTimes=" + likeTimes +
                 '}';
+    }
+
+    public Integer getCollectionTimes() {
+        return collectionTimes;
+    }
+
+    public void setCollectionTimes(Integer collectionTimes) {
+        this.collectionTimes = collectionTimes;
+    }
+
+    public Integer getCommentTimes() {
+        return commentTimes;
+    }
+
+    public void setCommentTimes(Integer commentTimes) {
+        this.commentTimes = commentTimes;
+    }
+
+    public Integer getLikeTimes() {
+        return likeTimes;
+    }
+
+    public void setLikeTimes(Integer likeTimes) {
+        this.likeTimes = likeTimes;
     }
 
     public String getContentBody() {

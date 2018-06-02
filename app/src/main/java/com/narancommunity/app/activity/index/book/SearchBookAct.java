@@ -1,4 +1,4 @@
-package com.narancommunity.app.activity.index;
+package com.narancommunity.app.activity.index.book;
 
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -21,8 +23,9 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.narancommunity.app.activity.general.BaseActivity;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.narancommunity.app.R;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.adapter.BookListAdapter;
 import com.narancommunity.app.adapter.FindLatestAdapter;
 import com.narancommunity.app.adapter.OnItemClickListener;
@@ -45,6 +48,7 @@ import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +81,7 @@ public class SearchBookAct extends BaseActivity {
     @BindView(R.id.ln_hot_switch)
     LinearLayout lnHotSwitch;
     @BindView(R.id.recyclerView_result)
-    RecyclerView recyclerViewResult;
+    XRecyclerView recyclerViewResult;
     @BindView(R.id.recyclerView_rec)
     RecyclerView recyclerViewRec;
     @BindView(R.id.ln_no_result)
@@ -90,6 +94,8 @@ public class SearchBookAct extends BaseActivity {
     RelativeLayout lnNeedHelp;
     @BindView(R.id.ln_rec)
     LinearLayout lnRec;
+    @BindView(R.id.iv_clear_input)
+    ImageView ivClearInput;
     List<String> listHistory = new ArrayList<>();
     BookListAdapter adapterRec;
 
@@ -116,6 +122,7 @@ public class SearchBookAct extends BaseActivity {
         super.onResume();
         MobclickAgent.onResume(this);
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -167,12 +174,35 @@ public class SearchBookAct extends BaseActivity {
                             .hideSoftInputFromWindow(getContext().getCurrentFocus()
                                     .getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                     //进行搜索操作的方法，在该方法中可以加入mEditSearchUser的非空判断
-                    String key = etSearch.getText().toString();
+
+                    String key = etSearch.getText().toString().trim();
+                    if (key.equals("")) {
+                        Toaster.toast(getContext(), "请输入搜索关键字");
+                        return false;
+                    }
                     addToHistoryList(key);
-                    goSearch(key);
+                    searchBook(key);
                     return false;
                 }
                 return false;
+            }
+        });
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0)
+                    ivClearInput.setVisibility(View.VISIBLE);
+                else ivClearInput.setVisibility(View.GONE);
             }
         });
         tvTitle.setText("借阅热榜单");
@@ -222,7 +252,8 @@ public class SearchBookAct extends BaseActivity {
         } catch (SnappydbException e) {
             e.printStackTrace();
         }
-        getSearchHistoryList();
+        rlHistoryView.setVisibility(View.GONE);
+//        getSearchHistoryList();
     }
 
     private void addToHistoryList(String s) {
@@ -273,7 +304,9 @@ public class SearchBookAct extends BaseActivity {
     }
 
     private void setHistory() {
-        tagHistory.setAdapter(new TagAdapter<String>(Utils.listToArray(listHistory)) {
+        List<String> reverseList = listHistory;
+        Collections.reverse(reverseList);
+        tagHistory.setAdapter(new TagAdapter<String>(Utils.listToArray(reverseList)) {
             @Override
             public View getView(FlowLayout parent, int position, String s) {
                 TextView tv = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.item_tag_search_item,
@@ -285,73 +318,139 @@ public class SearchBookAct extends BaseActivity {
         tagHistory.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
             public boolean onTagClick(View view, int position, FlowLayout parent) {
-                //TODO
                 String key = listHistory.get(position);
-                goSearch(key);
+                etSearch.setText(key);
+                Utils.hideSoftInput(getContext());
+                searchBook(key);
                 return true;
             }
         });
     }
 
-    private void goSearch(String key) {
-        Toaster.toast(getContext(), "开始搜索");
-        if (key.equals("红楼梦")) {
-            //有结果的话
+    int pageSize = 20;
+    int pageNum = 1;
+    private int TOTAL_PAGE = 1;
+
+    private void searchBook(String key) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("bookClassify", "");
+        map.put("pageSize", pageSize);
+        map.put("pageNum", pageNum);
+        map.put("filter", key);
+        NRClient.getBookBySortList(map, new ResultCallback<Result<RecData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+                recyclerViewResult.refreshComplete();
+                recyclerViewResult.loadMoreComplete();
+                setNoBook();
+            }
+
+            @Override
+            public void onSuccess(Result<RecData> result) {
+                LoadDialog.dismiss(getContext());
+                setBookList(result.getData());
+                recyclerViewResult.refreshComplete();
+                recyclerViewResult.loadMoreComplete();
+            }
+        });
+    }
+
+    private void setNoBook() {
+        listResult.clear();
+        rlHistoryView.setVisibility(View.GONE);
+        lnRec.setVisibility(View.GONE);
+        lnHotSwitch.setVisibility(View.GONE);
+        recyclerViewResult.setVisibility(View.GONE);
+        lnNoResult.setVisibility(View.VISIBLE);
+        lnNeedHelp.setVisibility(View.VISIBLE);
+    }
+
+    private void setBookList(RecData data) {
+        if (pageNum == 1)
+            listResult.clear();
+        TOTAL_PAGE = data.getTotalPageNum();
+        if (data != null && data.getOrders() != null && data.getOrders().size() > 0) {
             rlHistoryView.setVisibility(View.GONE);
             lnRec.setVisibility(View.GONE);
             lnHotSwitch.setVisibility(View.GONE);
             recyclerViewResult.setVisibility(View.VISIBLE);
             lnNoResult.setVisibility(View.GONE);
             lnNeedHelp.setVisibility(View.GONE);
+            listResult.addAll(data.getOrders());
+            pageNum++;
+            if (adapter == null) {
+                final LinearLayoutManager lm_latest = new LinearLayoutManager(getContext());
+                lm_latest.setOrientation(LinearLayoutManager.VERTICAL);
+                adapter = new FindLatestAdapter(getContext());
+                adapter.setListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
 
-            setDataToView();
-        } else {
-            //没结果的话
-            rlHistoryView.setVisibility(View.GONE);
-            lnRec.setVisibility(View.GONE);
-            lnHotSwitch.setVisibility(View.GONE);
-            recyclerViewResult.setVisibility(View.GONE);
-            lnNoResult.setVisibility(View.VISIBLE);
-            lnNeedHelp.setVisibility(View.VISIBLE);
+                    }
+                });
+                recyclerViewResult.setLayoutManager(lm_latest);
+                recyclerViewResult.setAdapter(adapter);
+                recyclerViewResult.setNestedScrollingEnabled(false);
+                adapter.isSearch(true);
+                recyclerViewResult.setLoadingListener(new XRecyclerView.LoadingListener() {
+                    @Override
+                    public void onRefresh() {
+                        pageNum = 1;
+                        searchBook(etSearch.getText().toString());
+                    }
+
+                    @Override
+                    public void onLoadMore() {
+                        if (pageNum <= TOTAL_PAGE)
+                            searchBook(etSearch.getText().toString());
+                        else {
+//                            View noData = LayoutInflater.from(getContext()).inflate(R.layout.view_no_data,null);
+//                            recyclerViewResult.setFootView(noData, new CustomFooterViewCallBack() {
+//                                @Override
+//                                public void onLoadingMore(View yourFooterView) {
+//
+//                                }
+//
+//                                @Override
+//                                public void onLoadMoreComplete(View yourFooterView) {
+//
+//                                }
+//
+//                                @Override
+//                                public void onSetNoMore(View yourFooterView, boolean noMore) {
+//
+//                                }
+//                            });
+                            recyclerViewResult.loadMoreComplete();
+                            recyclerViewResult.refreshComplete();
+                            Toaster.toast(getContext(), "已无更多数据");
+                        }
+                    }
+                });
+
+            }
+            adapter.setDataList(listResult);
+            adapter.notifyDataSetChanged();
+
+        } else setNoBook();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // any time,when you finish your activity or fragment,call this below
+        if (recyclerViewResult != null) {
+            recyclerViewResult.destroy(); // this will totally release XR's memory
+            recyclerViewResult = null;
         }
     }
 
     FindLatestAdapter adapter;
     List<RecEntity> listResult = new ArrayList<>();
 
-    private void setDataToView() {
-        RecEntity book;
-        listResult.clear();
-        for (int i = 0; i < 10; i++) {
-            book = new RecEntity();
-            book.setOrderContent("《红楼梦》，中国古典四大名著之首，清代作家曹雪芹创作的章回体长篇小说");
-            book.setOrderAuthor("曹雪芹");
-            book.setOrderTitle("红楼梦");
-            book.setOrderImgs("https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=cd0275550b24ab18f41be96554938da8/0b46f21fbe096b636940ce230e338744ebf8ac6c.jpg");
-            listResult.add(book);
-        }
-
-        if (adapter == null) {
-            final LinearLayoutManager lm_latest = new LinearLayoutManager(getContext());
-            lm_latest.setOrientation(LinearLayoutManager.VERTICAL);
-            adapter = new FindLatestAdapter(getContext());
-            adapter.setListener(new OnItemClickListener() {
-                @Override
-                public void onItemClick(int position) {
-
-                }
-            });
-            recyclerViewResult.setLayoutManager(lm_latest);
-            recyclerViewResult.setAdapter(adapter);
-            recyclerViewResult.setNestedScrollingEnabled(false);
-            adapter.isSearch(true);
-
-            adapter.setDataList(listResult);
-        }
-        adapter.notifyDataSetChanged();
-    }
-
-    @OnClick({R.id.tv_cancel, R.id.iv_clear, R.id.ln_need_help})
+    @OnClick({R.id.tv_cancel, R.id.iv_clear, R.id.ln_need_help, R.id.iv_clear_input})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_cancel:
@@ -363,7 +462,22 @@ public class SearchBookAct extends BaseActivity {
             case R.id.ln_need_help:
                 startActivity(new Intent(getContext(), NeedBookAct.class).putExtra("tag", 0));
                 break;
+            case R.id.iv_clear_input:
+                etSearch.setText("");
+                ivClearInput.setVisibility(View.GONE);
+                pageNum = 1;
+                listResult.clear();
+                setLastView();
+                break;
         }
+    }
+
+    private void setLastView() {
+        rlHistoryView.setVisibility(View.VISIBLE);
+        lnRec.setVisibility(View.VISIBLE);
+        lnNoResult.setVisibility(View.GONE);
+        lnNeedHelp.setVisibility(View.GONE);
+        recyclerViewResult.setVisibility(View.GONE);
     }
 
     PopupWindow mPop;

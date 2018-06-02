@@ -1,7 +1,6 @@
 package com.narancommunity.app.adapter;
 
 import android.content.Context;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +17,6 @@ import com.narancommunity.app.common.adapter.EasyRecyclerAdapter;
 import com.narancommunity.app.entity.WeekRecEntity;
 
 import java.util.List;
-
-import butterknife.BindView;
 
 /**
  * Writer：fancy on 2017/12/26 15:15
@@ -69,13 +66,16 @@ public class WeekRecAdapter extends EasyRecyclerAdapter<WeekRecEntity> {
             String url = item.getContentImg();
             if (url != null && !url.equals("")) {
                 Utils.setImgF(mContext, url, hold.ivImg);
-            }
+            } else Utils.setImgF(mContext, R.mipmap.bitmap_list, hold.ivImg);
             hold.tvWeek.setText(Utils.getValue(item.getRecommendTime()) + "");
         } else if (tag == 2) {
+            hold.tvCollect.setText("" + Utils.getValue(item.getCollectionTimes()));
+            hold.tvComment.setText("" + Utils.getValue(item.getCommentTimes()));
+            hold.tvLike.setText("" + Utils.getValue(item.getLikeTimes()));
             String url = item.getContentImg();
             if (url != null && !url.equals("")) {
                 Utils.setImgF(mContext, url, hold.ivImg);
-            }
+            } else Utils.setImgF(mContext, R.mipmap.bitmap_list, hold.ivImg);
         }
         hold.lnParent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,7 +104,7 @@ public class WeekRecAdapter extends EasyRecyclerAdapter<WeekRecEntity> {
         TextView tvContent;
 
         RelativeLayout rlPic;
-        TextView tvShare;
+        TextView tvLike;
         TextView tvComment;
         TextView tvCollect;
 
@@ -121,7 +121,7 @@ public class WeekRecAdapter extends EasyRecyclerAdapter<WeekRecEntity> {
             } else {
                 ivImg = itemView.findViewById(R.id.iv_bg);
                 rlPic = itemView.findViewById(R.id.rl_pic);
-                tvShare = itemView.findViewById(R.id.tv_share);
+                tvLike = itemView.findViewById(R.id.tv_like);
                 tvComment = itemView.findViewById(R.id.tv_comment);
                 tvCollect = itemView.findViewById(R.id.tv_collect);
             }

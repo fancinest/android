@@ -1,17 +1,17 @@
-package com.narancommunity.app.activity.index;
+package com.narancommunity.app.activity.index.book;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
-import com.narancommunity.app.activity.general.BaseActivity;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.adapter.CommentAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.LoadDialog;
@@ -43,17 +43,19 @@ public class MoreCommentAct extends BaseActivity {
     @BindView(R.id.toolbar)
     CenteredToolbar toolbar;
     @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @BindView(R.id.swipe_refresh)
-    SwipeRefreshLayout swipeRefreshLayout;
+    XRecyclerView recyclerView;
+//    @BindView(R.id.swipe_refresh)
+//    SwipeRefreshLayout swipeRefreshLayout;
 
+    @BindView(R.id.tv_no_data)
+    TextView tvNoData;
     CommentAdapter adapter;
     List<CommentEntity> list = new ArrayList<>();
     Integer bookId = 0;
     int pageSize = 5;
     int pageNum = 1;
     private int TOTAL_PAGE = 1;
-    int tag ;
+    int tag;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,6 +81,7 @@ public class MoreCommentAct extends BaseActivity {
         super.onResume();
         MobclickAgent.onResume(this);
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -102,6 +105,8 @@ public class MoreCommentAct extends BaseActivity {
             public void onFailure(Throwable throwable) {
                 LoadDialog.dismiss(getContext());
                 Utils.showErrorToast(getContext(), throwable);
+                recyclerView.loadMoreComplete();
+                recyclerView.refreshComplete();
             }
         });
     }
@@ -123,6 +128,8 @@ public class MoreCommentAct extends BaseActivity {
             public void onFailure(Throwable throwable) {
                 LoadDialog.dismiss(getContext());
                 Utils.showErrorToast(getContext(), throwable);
+                recyclerView.loadMoreComplete();
+                recyclerView.refreshComplete();
             }
         });
     }
@@ -134,8 +141,13 @@ public class MoreCommentAct extends BaseActivity {
         if (data != null && data.getComments() != null && data.getComments().size() > 0) {
             list.addAll(data.getComments());
             pageNum++;
+            tvNoData.setVisibility(View.GONE);
+        } else {
+            tvNoData.setVisibility(View.VISIBLE);
         }
         adapter.notifyDataSetChanged();
+        recyclerView.loadMoreComplete();
+        recyclerView.refreshComplete();
     }
 
 
@@ -161,7 +173,6 @@ public class MoreCommentAct extends BaseActivity {
 
             @Override
             public void OnAnswer(int id, String name) {
-//                showInputDialog(id, name);
                 startActivity(new Intent(getContext(), AddBookCommentAct.class)
                         .putExtra("tag", 1).putExtra("bookId", bookId)
                         .putExtra("commentedId", id)
@@ -180,49 +191,45 @@ public class MoreCommentAct extends BaseActivity {
             }
         }, bookId);
         recyclerView.setAdapter(adapter);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    int lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
-                    Log.i("fancy", "最后的可见位置:" + lastVisibleItemPosition);
-                    if (lastVisibleItemPosition + 1 == adapter.getItemCount()) {
-                        if (pageNum <= TOTAL_PAGE) {
-                            if (tag == 0) {
-                                getData();
-                            } else if (tag == 1) {
-                                getEssayData();
-                            }
-                        } else
-                            Toaster.toast(getContext(), "已无更多数据");
-                    }
-                }
-            }
-        });
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-
+        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(true);
-                recyclerView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        pageNum = 1;
-                        if (tag == 0) {
-                            getData();
-                        } else if (tag == 1) {
-                            getEssayData();
-                        }
-                        swipeRefreshLayout.setRefreshing(false);
+                pageNum = 1;
+                if (tag == 0) {
+                    getData();
+                } else if (tag == 1) {
+                    getEssayData();
+                }
+            }
+
+            @Override
+            public void onLoadMore() {
+                if (pageNum <= TOTAL_PAGE) {
+                    if (tag == 0) {
+                        getData();
+                    } else if (tag == 1) {
+                        getEssayData();
                     }
-                });
+                } else {
+                    recyclerView.loadMoreComplete();
+                    recyclerView.refreshComplete();
+                    Toaster.toast(getContext(), "已无更多数据");
+                }
             }
         });
     }
 
     private void clickLike(int position) {
         //TODO 点赞
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (recyclerView != null) {
+            recyclerView.destroy(); // this will totally release XR's memory
+            recyclerView = null;
+        }
     }
 }

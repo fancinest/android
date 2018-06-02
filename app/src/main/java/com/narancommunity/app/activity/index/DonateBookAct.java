@@ -2,6 +2,7 @@ package com.narancommunity.app.activity.index;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,8 +16,6 @@ import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.util.TypedValue;
@@ -32,9 +31,13 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.narancommunity.app.activity.general.BaseActivity;
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.ImageUtils;
 import com.narancommunity.app.common.LoadDialog;
@@ -42,20 +45,29 @@ import com.narancommunity.app.common.SDCardUtils;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.BookDetailData;
+import com.narancommunity.app.entity.BookSortEntity;
 import com.narancommunity.app.entity.UpdateFilesEntity;
+import com.narancommunity.app.entity.UserInfo;
 import com.narancommunity.app.interfaces.PicLoadCallBack;
 import com.narancommunity.app.net.AppConstants;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
 import com.umeng.analytics.MobclickAgent;
+import com.yanzhenjie.permission.Action;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.Permission;
+import com.yanzhenjie.permission.Rationale;
+import com.yanzhenjie.permission.RequestExecutor;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,17 +114,24 @@ public class DonateBookAct extends BaseActivity {
     EditText etEvaluate;
     @BindView(R.id.btn_want)
     Button btnDonate;
+    @BindView(R.id.tv_press_get)
+    TextView tvPressGet;
 
     String fileName = "";//上传图片的地址
-    Integer bookId;//书籍ID，有ID就不用传图片了
+    Integer bookId = 0;//书籍ID，有ID就不用传图片了
     String isbnCode = "";
     String average = "";//平均分
 
     String[] bookCondition = new String[]{"全新", "九成新 ", "七成新", "六成新以下"};
     String[] bookRelCondition = new String[]{"ALL_NEW", "NINE_NEW ", "SEVEN_NEW", "SIX_NEW"};
-    String[] bookType = new String[]{"教育教科", "文学小说", "人文社科", "童书绘本", "成功励志", "生活艺术", "金融经管", "其他书籍"};
-    String[] realType = new String[]{"BOOK_EDUCATION", "BOOK_NOVEL", "BOOK_HUMANITY", "BOOK_CHILD", "BOOK_SUCCESS", "BOOK_LIFE", "BOOK_FINANCE", "BOOK_OTHER"};
+//    String[] bookType = new String[]{"教育教科", "文学小说", "人文社科", "童书绘本", "成功励志", "生活艺术", "金融经管", "其他书籍"};
+//    String[] realType = new String[]{"BOOK_EDUCATION", "BOOK_NOVEL", "BOOK_HUMANITY", "BOOK_CHILD", "BOOK_SUCCESS", "BOOK_LIFE", "BOOK_FINANCE", "BOOK_OTHER"};
+
+    String[] bookType;
+    String[] realType;
     int contentId;//表示书荒互助的文章ID,普通的时候是0
+
+//    List<BookSortEntity> listSort = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -124,6 +143,121 @@ public class DonateBookAct extends BaseActivity {
 
         contentId = getIntent().getIntExtra("contentId", 0);
         setView();
+
+        getTypeSort();
+        getPermission();
+    }
+
+    void getTypeSort() {
+        Map<String, Object> map = new HashMap<>();
+        NRClient.getBookSort(map, new ResultCallback<Result<List<BookSortEntity>>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+            }
+
+            @Override
+            public void onSuccess(Result<List<BookSortEntity>> result) {
+                LoadDialog.dismiss(getContext());
+                setSort(result.getData());
+            }
+        });
+    }
+
+    private void setSort(List<BookSortEntity> listSort) {
+        if (listSort == null || listSort.size() < 0) {
+            tvPressGet.setVisibility(View.VISIBLE);
+            return;
+        }
+        tvPressGet.setVisibility(View.GONE);
+        bookType = new String[listSort.size()];
+        realType = new String[listSort.size()];
+        for (int i = 0; i < listSort.size(); i++) {
+            bookType[i] = listSort.get(i).getClassifyName();
+            realType[i] = listSort.get(i).getClassifyValue();
+        }
+        tagFlowType.setAdapter(new TagAdapter<String>(bookType) {
+            @Override
+            public View getView(FlowLayout parent, int position, String s) {
+                TextView tv = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.item_tag_wrap,
+                        tagFlowType, false);
+                tv.setText(s);
+                return tv;
+            }
+        });
+    }
+
+    String province = "", city = "", county = "";
+
+    private void startLocation() {
+        AMapLocationClient mLocationClient;
+        //初始化定位
+        mLocationClient = new AMapLocationClient(getApplicationContext());
+        //设置定位回调监听，这里要实现AMapLocationListener接口，AMapLocationListener接口只有onLocationChanged方法可以实现，用于接收异步返回的定位结果，参数是AMapLocation类型。
+        mLocationClient.setLocationListener(new AMapLocationListener() {
+            @Override
+            public void onLocationChanged(AMapLocation aMapLocation) {
+                if (aMapLocation != null) {
+                    if (aMapLocation.getErrorCode() == 0) {
+                        //定位成功回调信息，设置相关消息
+                        aMapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见官方定位类型表
+                        aMapLocation.getLatitude();//获取纬度
+                        aMapLocation.getLongitude();//获取经度
+                        aMapLocation.getAccuracy();//获取精度信息
+                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Date date = new Date(aMapLocation.getTime());
+                        df.format(date);//定位时间
+                        aMapLocation.getAddress();//地址，如果option中设置isNeedAddress为false，则没有此结果，网络定位结果中会有地址信息，GPS定位不返回地址信息。
+                        aMapLocation.getCountry();//国家信息
+                        aMapLocation.getProvince();//省信息
+                        aMapLocation.getCity();//城市信息
+                        aMapLocation.getDistrict();//城区信息
+                        aMapLocation.getStreet();//街道信息
+                        aMapLocation.getStreetNum();//街道门牌号信息
+                        aMapLocation.getCityCode();//城市编码
+                        aMapLocation.getAdCode();//地区编码
+                        UserInfo info = MApplication.getUserInfo(getContext());
+                        if (aMapLocation.getProvince().equals("")) {
+                            info.setCounty(aMapLocation.getAddress());
+                            county = aMapLocation.getAddress();
+                        } else {
+                            info.setProvince(aMapLocation.getProvince());
+                            info.setCity(aMapLocation.getCity());
+                            info.setCounty(aMapLocation.getDistrict());
+                            province = aMapLocation.getProvince();
+                            city = aMapLocation.getCity();
+                            county = aMapLocation.getDistrict();
+                        }
+                        Log.i("fancy", "定位信息:" + aMapLocation.getAddress() + " \n或者" + aMapLocation.getProvince() + aMapLocation.getCity());
+                    } else {
+                        //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+                        Log.e("AmapError", "location Error, ErrCode:"
+                                + aMapLocation.getErrorCode() + ", errInfo:"
+                                + aMapLocation.getErrorInfo());
+//                        Toast.makeText(getApplicationContext(), "定位失败", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
+        //初始化定位参数
+        AMapLocationClientOption mLocationOption = new AMapLocationClientOption();
+        //设置定位模式为Hight_Accuracy高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Battery_Saving);
+        //设置是否返回地址信息（默认返回地址信息）
+        mLocationOption.setNeedAddress(true);
+        //设置是否只定位一次,默认为false
+        mLocationOption.setOnceLocation(true);
+        //设置是否强制刷新WIFI，默认为强制刷新
+        mLocationOption.setWifiActiveScan(true);
+        //设置是否允许模拟位置,默认为false，不允许模拟位置
+        mLocationOption.setMockEnable(true);
+        //设置定位间隔,单位毫秒,默认为2000ms
+        mLocationOption.setInterval(2000);
+        //给定位客户端对象设置定位参数
+        mLocationClient.setLocationOption(mLocationOption);
+        //启动定位
+        mLocationClient.startLocation();
     }
 
     private void setView() {
@@ -132,16 +266,6 @@ public class DonateBookAct extends BaseActivity {
             public View getView(FlowLayout parent, int position, String s) {
                 TextView tv = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.item_tag_wrap,
                         tagFlowCondition, false);
-                tv.setText(s);
-                return tv;
-            }
-        });
-
-        tagFlowType.setAdapter(new TagAdapter<String>(bookType) {
-            @Override
-            public View getView(FlowLayout parent, int position, String s) {
-                TextView tv = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.item_tag_wrap,
-                        tagFlowType, false);
                 tv.setText(s);
                 return tv;
             }
@@ -171,11 +295,14 @@ public class DonateBookAct extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.ln_pic, R.id.btn_want})
+    @OnClick({R.id.ln_pic, R.id.btn_want, R.id.tv_press_get})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ln_pic:
                 showPhotoDialog();
+                break;
+            case R.id.tv_press_get:
+                getTypeSort();
                 break;
             case R.id.btn_want:
                 if (fileName.equals("")) {
@@ -199,26 +326,26 @@ public class DonateBookAct extends BaseActivity {
                     Toaster.toast(getContext(), "请填写作者！");
                     return;
                 }
-                if (pages.equals("")) {
-                    etPages.requestFocus();
-                    Toaster.toast(getContext(), "请填写页数！");
-                    return;
-                }
-                if (price.equals("")) {
-                    etPrice.requestFocus();
-                    Toaster.toast(getContext(), "请填写价格！");
-                    return;
-                }
-                if (publisher.equals("")) {
-                    etPublisher.requestFocus();
-                    Toaster.toast(getContext(), "请填写出版社！");
-                    return;
-                }
-                if (desc.equals("")) {
-                    etDesc.requestFocus();
-                    Toaster.toast(getContext(), "请填写描述！");
-                    return;
-                }
+//                if (pages.equals("")) {
+//                    etPages.requestFocus();
+//                    Toaster.toast(getContext(), "请填写页数！");
+//                    return;
+//                }
+//                if (price.equals("")) {
+//                    etPrice.requestFocus();
+//                    Toaster.toast(getContext(), "请填写价格！");
+//                    return;
+//                }
+//                if (publisher.equals("")) {
+//                    etPublisher.requestFocus();
+//                    Toaster.toast(getContext(), "请填写出版社！");
+//                    return;
+//                }
+//                if (desc.equals("")) {
+//                    etDesc.requestFocus();
+//                    Toaster.toast(getContext(), "请填写描述！");
+//                    return;
+//                }
                 String condition = getCondition();
                 String sort = getSort();
                 if (condition.equals("")) {
@@ -229,7 +356,6 @@ public class DonateBookAct extends BaseActivity {
                     Toaster.toast(getContext(), "请选择书籍分类！");
                     return;
                 }
-
                 Map<String, Object> map = new HashMap<>();
                 map.put("accessToken", MApplication.getAccessToken(getContext()));
                 map.put("bookId", bookId == 0 ? "" : bookId);
@@ -246,7 +372,10 @@ public class DonateBookAct extends BaseActivity {
                 map.put("bookReview", memo);
                 map.put("summary", desc);
                 map.put("contentId", contentId == 0 ? "" : contentId);
-                Log.i("fancy", "data :" + map.toString());
+                map.put("province", province);
+                map.put("city", city);
+                map.put("county", county);
+                Log.i("fancy", "捐书数据 :" + map.toString());
                 donateBook(map);
                 break;
         }
@@ -349,7 +478,6 @@ public class DonateBookAct extends BaseActivity {
 
     private void getBookDetail(final String code) {
         //TODO 如果有条形码的规则就可以在这里进行判断
-//        if ()
         Log.i("fancy", " code =" + code);
         isbnCode = code;
         LoadDialog.show(getContext(), "数据请求中,稍候！");
@@ -386,7 +514,7 @@ public class DonateBookAct extends BaseActivity {
     }
 
     private void setBookDetail(BookDetailData data) {
-        if (data != null && data.getAuthor() != null) {
+        if (data != null && data.getTitle() != null) {
             String bookname = Utils.getValue(data.getTitle());
             if (bookname.equals(""))
                 etBookName.setClickable(true);
@@ -535,9 +663,78 @@ public class DonateBookAct extends BaseActivity {
         MobclickAgent.onResume(this);
     }
 
+    private void getPermission() {
+        AndPermission.with(this)
+                .runtime()
+                .permission(Permission.Group.LOCATION)
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+                        startLocation();
+                    }
+                }).onDenied(new Action<List<String>>() {
+            @Override
+            public void onAction(List<String> data) {
+                Log.i("fancy", "缺少定位权限!");
+            }
+        }).start();
+
+        AndPermission.with(this)
+                .runtime()
+                .permission(Permission.Group.STORAGE, Permission.Group.CAMERA)
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+
+                    }
+                }).onDenied(new Action<List<String>>() {
+            @Override
+            public void onAction(List<String> data) {
+                Log.i("fancy", "缺少相机+存储权限!");
+            }
+        }).start();
+    }
+
+    private Rationale mRationale = new Rationale() {
+
+        @Override
+        public void showRationale(Context context, Object data, final RequestExecutor executor) {
+            // 这里使用一个Dialog询问用户是否继续授权。
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("提示");
+            builder.setMessage("当前应用缺少必要权限。请点击\"设置\"-\"权限\"-打开所需权限。");
+
+            // 拒绝, 退出应用
+            builder.setNegativeButton("取消",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            executor.cancel();
+                        }
+                    });
+
+            builder.setPositiveButton("设置",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // 跳转至当前应用的权限设置页面
+//                            startAppSettings();
+                            // 如果用户继续：
+                            executor.execute();
+                        }
+                    });
+
+            builder.setCancelable(false);
+
+            builder.show();
+
+
+        }
+    };
+
     public void onPause() {
         super.onPause();
-        Utils.hideSoftInput(this);
         MobclickAgent.onPause(this);
     }
 
@@ -597,7 +794,7 @@ public class DonateBookAct extends BaseActivity {
     }
 
     private void checkGallery(Dialog dialog) {
-        if (checkPermissions()) {
+        if (AndPermission.hasPermissions(getContext(), Permission.Group.STORAGE)) {
             //启动严格模式，执行老方法
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
@@ -613,13 +810,15 @@ public class DonateBookAct extends BaseActivity {
             intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_MODE, MultiImageSelectorActivity.MODE_MULTI);
             startActivityForResult(intent, GET_IMAGE_VIA_SDCARD);
             dialog.dismiss();
+        } else {
+            showMissingPermissionDialog(false);
         }
     }
 
     private void checkCamera(Dialog dialog, boolean isScan) {
         //第二个参数是需要申请的权限
         //权限已经被授予，在这里直接写要执行的相应方法即可
-        if (checkPermissions()) {
+        if (AndPermission.hasPermissions(getContext(), Permission.Group.CAMERA)) {
             //启动严格模式，执行老方法
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
@@ -633,6 +832,8 @@ public class DonateBookAct extends BaseActivity {
                 startActivityForResult(intent, GET_IMAGE_VIA_CAMERA);
                 dialog.dismiss();
             }
+        } else {
+            showMissingPermissionDialog(true);
         }
     }
 
@@ -640,47 +841,6 @@ public class DonateBookAct extends BaseActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_DATA = 2;
     private static final int REQ_CODE_PERMISSION = 11;
 
-    private boolean checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this, "android.permission.CAMERA") != PackageManager.PERMISSION_GRANTED) {
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, "android.permission.CAMERA")) {
-                showMessageOKCancel("请允许使用相机！",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                ActivityCompat.requestPermissions(getContext(),
-                                        new String[]{"android.permission.CAMERA"}, MY_PERMISSIONS_REQUEST_USE_CAMERA);
-                            }
-                        });
-                return false;
-            }
-            ActivityCompat.requestPermissions(this, new String[]{"android.permission.CAMERA"}, MY_PERMISSIONS_REQUEST_USE_CAMERA);
-            return false;
-        } else if (ContextCompat.checkSelfPermission(this, "android.permission.READ_EXTERNAL_STORAGE") != PackageManager.PERMISSION_GRANTED) {
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, "android.permission.READ_EXTERNAL_STORAGE")) {
-                showMessageOKCancel("请允许读取相册！",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                ActivityCompat.requestPermissions(getContext(),
-                                        new String[]{"android.permission.READ_EXTERNAL_STORAGE"}, MY_PERMISSIONS_REQUEST_READ_DATA);
-                            }
-                        });
-                return false;
-            }
-            ActivityCompat.requestPermissions(this, new String[]{"android.permission.READ_EXTERNAL_STORAGE"}, MY_PERMISSIONS_REQUEST_READ_DATA);
-            return false;
-        } else
-            return true;
-    }
-
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(getContext())
-                .setMessage(message)
-                .setPositiveButton("好的", okListener)
-                .setNegativeButton("不行", null)
-                .create()
-                .show();
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -717,7 +877,7 @@ public class DonateBookAct extends BaseActivity {
                     startCaptureActivityForResult();
                 } else {
                     //权限开启失败 显示提示信息
-                    showMissingPermissionDialog();
+//                    showMissingPermissionDialog(true);
                 }
             }
             break;
@@ -747,7 +907,7 @@ public class DonateBookAct extends BaseActivity {
     /**
      * 显示提示信息
      */
-    private void showMissingPermissionDialog() {
+    private void showMissingPermissionDialog(final boolean isCamera) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("提示");
         builder.setMessage("当前应用缺少必要权限。请点击\"设置\"-\"权限\"-打开所需权限。");
@@ -757,11 +917,11 @@ public class DonateBookAct extends BaseActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-//                        finish();
+                        ;
                     }
                 });
 
-        builder.setPositiveButton("设置",
+        builder.setPositiveButton("去设置",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

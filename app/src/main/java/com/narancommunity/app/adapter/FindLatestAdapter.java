@@ -10,7 +10,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.index.BookDetailAct;
+import com.narancommunity.app.activity.index.book.BookDetailAct;
 import com.narancommunity.app.adapter.base.ListBaseAdapter;
 import com.narancommunity.app.adapter.base.SuperViewHolder;
 import com.narancommunity.app.common.Utils;
@@ -50,10 +50,14 @@ public class FindLatestAdapter extends ListBaseAdapter<RecEntity> {
 
     @Override
     public int getItemCount() {
-        if (super.getItemCount() > 8)
-            return 8;
-        else
+        if (isSearch) {
             return super.getItemCount();
+        } else {
+            if (super.getItemCount() > 8)
+                return 8;
+            else
+                return super.getItemCount();
+        }
     }
 
     @Override
@@ -85,12 +89,15 @@ public class FindLatestAdapter extends ListBaseAdapter<RecEntity> {
         tvName.setText(Utils.getValue(entity.getOrderTitle()));
         tvWriter.setText(Utils.getValue(entity.getOrderAuthor()));
         tvDesc.setText(Utils.getValue(entity.getOrderContent()));
-        tvDistance.setText(Utils.getValue("20"));
+        String address = Utils.getValue(entity.getProvince()) + Utils.getValue(entity.getCity()) + Utils.getValue(entity.getCounty());
+        if (address.equals(""))
+            address = "未知";
+        tvDistance.setText(address);
 
         if (!"".equals(Utils.getValue(entity.getOrderImgs()))) {
             Utils.setImgF(mContext, entity.getOrderImgs(), ivImg);
         } else {
-            Utils.setImgF(mContext, R.mipmap.bg, ivImg);
+            Utils.setImgF(mContext, R.mipmap.bitmap_book, ivImg);
         }
 
         if (isSearch) {

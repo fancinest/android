@@ -58,7 +58,7 @@
                                 android:layout_width="80dp"
                                 android:layout_height="120dp"
                                 android:scaleType="centerCrop"
-                                android:src="@mipmap/bg" />
+                                android:src="@mipmap/bitmap_book" />
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
@@ -72,9 +72,9 @@
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentTop="true"
                                     android:ellipsize="end"
+                                    android:maxEms="6"
                                     android:maxLines="1"
                                     android:text="书名"
-                                    android:maxEms="6"
                                     android:textColor="@color/color_333333"
                                     android:textSize="14sp" />
 
@@ -93,9 +93,9 @@
                                     android:layout_below="@id/iv_lend_card"
                                     android:layout_marginTop="4dp"
                                     android:ellipsize="end"
+                                    android:maxEms="8"
                                     android:maxLines="1"
                                     android:text="作者:"
-                                    android:maxEms="8"
                                     android:textColor="@color/color_999999"
                                     android:textSize="11sp" />
 
@@ -234,7 +234,10 @@
                                 android:layout_height="wrap_content"
                                 android:drawableLeft="@mipmap/list_icon_weizhi"
                                 android:drawablePadding="4dp"
+                                android:ellipsize="end"
+                                android:maxLines="1"
                                 android:gravity="center"
+                                android:maxLength="7"
                                 android:text="22km"
                                 android:textColor="@color/appBlue"
                                 android:textSize="14dp" />

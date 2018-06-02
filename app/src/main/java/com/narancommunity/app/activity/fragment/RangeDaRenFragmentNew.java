@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -17,8 +19,7 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.joooonho.SelectableRoundedImageView;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
-import com.narancommunity.app.adapter.BookRangeAdapter;
-import com.narancommunity.app.common.ItemDecoration.DividerItemDecoration;
+import com.narancommunity.app.adapter.RangeListRangeAdapter;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
@@ -39,17 +40,19 @@ import butterknife.ButterKnife;
 /**
  * Writer：fancy on 2017/12/27 11:49
  * Email：120760202@qq.com
- * FileName : 书籍赠书榜
+ * FileName : 公益达人
  */
 
-public class BookDonateRangeFragment extends Fragment {
+public class RangeDaRenFragmentNew extends Fragment {
 
     @BindView(R.id.recyclerView)
     XRecyclerView recyclerView;
-//    @BindView(R.id.swipe_refresh)
+    @BindView(R.id.rb_day)
+    RadioButton rbDay;
+    @BindView(R.id.tab_rdo_grp)
+    RadioGroup tabRdoGrp;
+    //    @BindView(R.id.swipe_refresh)
 //    SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.tv_alien)
-    TextView tvAlien;
     @BindView(R.id.iv_level)
     ImageView ivLevel;
     @BindView(R.id.tv_level)
@@ -69,31 +72,39 @@ public class BookDonateRangeFragment extends Fragment {
     @BindView(R.id.ln_me)
     LinearLayout lnMe;
 
-    List<RankEntity> listData = new ArrayList<>();
-    BookRangeAdapter adapter;
-
     int pageSize = 20;
     int pageNum = 1;
+
+    RangeListRangeAdapter adapter;
+    List<RankEntity> listData = new ArrayList<>();//全部要传值给他
     private int TOTAL_PAGE = 1;
-    int tag = 0;
+    int type = 0;
 
-    public static BookDonateRangeFragment newInstance() {
+    public static RangeDaRenFragmentNew newInstance() {
 
-        BookDonateRangeFragment fragment = new BookDonateRangeFragment();
+        RangeDaRenFragmentNew fragment = new RangeDaRenFragmentNew();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
 
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public void onResume() {
+        super.onResume();
+//        MobclickAgent.onPageStart("BookSortSonFragment");
+    }
+
+    public void onPause() {
+        super.onPause();
+//        MobclickAgent.onPageEnd("BookSortSonFragment");
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-    }
-
-    public void setTag(int tag) {
-        this.tag = tag;
     }
 
     View rootView;
@@ -102,10 +113,11 @@ public class BookDonateRangeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (rootView == null) {
-            rootView = inflater.inflate(R.layout.fragment_book_range, container, false);
+            rootView = inflater.inflate(R.layout.fragment_range_daren, container, false);
             ButterKnife.bind(this, rootView);
 
             setListView();
+            getData();
             return rootView;
         } else {
             //缓存的rootView需要判断是否已经被加过parent， 如果有parent需要从parent删除，要不然会发生这个rootview已经有parent的错误。
@@ -117,89 +129,112 @@ public class BookDonateRangeFragment extends Fragment {
         }
     }
 
-
-    public void onResume() {
-        super.onResume();
-        getData();
-//        MobclickAgent.onPageStart("BookDonateRangeFragment");
-    }
-
-    public void onPause() {
-        super.onPause();
-//        MobclickAgent.onPageEnd("BookDonateRangeFragment");
-    }
-
     private void getData() {
-        if (tag == 0) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("accessToken", MApplication.getAccessToken());
-            map.put("pageNum", pageNum);
-            map.put("pageSize", pageSize);
-            NRClient.getRankBookDonateList(map, new ResultCallback<Result<GradeData>>() {
-                @Override
-                public void onSuccess(Result<GradeData> result) {
-                    LoadDialog.dismiss(getContext());
-                    GradeData data = result.getData();
-                    if (data != null)
-                        setDataView(data);
-                }
-
-                @Override
-                public void onFailure(Throwable throwable) {
-                    LoadDialog.dismiss(getContext());
-                    Utils.showErrorToast(getContext(), throwable);
-                    recyclerView.loadMoreComplete();
-                    recyclerView.refreshComplete();
-                }
-            });
-        } else if (tag == 1) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("accessToken", MApplication.getAccessToken());
-            map.put("pageNum", pageNum);
-            map.put("pageSize", pageSize);
-            NRClient.getRankBookReadList(map, new ResultCallback<Result<GradeData>>() {
-                @Override
-                public void onSuccess(Result<GradeData> result) {
-                    LoadDialog.dismiss(getContext());
-                    GradeData data = result.getData();
-                    if (data != null)
-                        setDataView(data);
-                }
-
-                @Override
-                public void onFailure(Throwable throwable) {
-                    LoadDialog.dismiss(getContext());
-                    Utils.showErrorToast(getContext(), throwable);
-                    recyclerView.loadMoreComplete();
-                    recyclerView.refreshComplete();
-                }
-            });
-        } else if (tag == 2) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("accessToken", MApplication.getAccessToken());
-            map.put("pageNum", pageNum);
-            map.put("pageSize", pageSize);
-            NRClient.getRankBookReviewList(map, new ResultCallback<Result<GradeData>>() {
-                @Override
-                public void onSuccess(Result<GradeData> result) {
-                    LoadDialog.dismiss(getContext());
-                    GradeData data = result.getData();
-                    if (data != null)
-                        setDataView(data);
-                }
-
-                @Override
-                public void onFailure(Throwable throwable) {
-                    LoadDialog.dismiss(getContext());
-                    Utils.showErrorToast(getContext(), throwable);
-                    recyclerView.loadMoreComplete();
-                    recyclerView.refreshComplete();
-                }
-            });
+        switch (type) {
+            case 0:
+                getDayData();
+                break;
+            case 1:
+                getWeekData();
+                break;
+            case 2:
+                getMonthData();
+                break;
+            case 3:
+                getAllData();
+                break;
         }
     }
 
-    private void setDataView(GradeData data) {
+    private void getDayData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("accessToken", MApplication.getAccessToken());
+        map.put("pageNum", pageNum);
+        map.put("pageSize", pageSize);
+        NRClient.getDarenDayList(map, new ResultCallback<Result<GradeData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+                recyclerView.loadMoreComplete();
+                recyclerView.refreshComplete();
+            }
+
+            @Override
+            public void onSuccess(Result<GradeData> result) {
+                LoadDialog.dismiss(getContext());
+                setData(result.getData());
+            }
+        });
+    }
+
+    private void getWeekData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("accessToken", MApplication.getAccessToken());
+        map.put("pageNum", pageNum);
+        map.put("pageSize", pageSize);
+        NRClient.getDarenWeekList(map, new ResultCallback<Result<GradeData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+                recyclerView.loadMoreComplete();
+                recyclerView.refreshComplete();
+            }
+
+            @Override
+            public void onSuccess(Result<GradeData> result) {
+                LoadDialog.dismiss(getContext());
+                setData(result.getData());
+            }
+        });
+    }
+
+    private void getMonthData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("accessToken", MApplication.getAccessToken());
+        map.put("pageNum", pageNum);
+        map.put("pageSize", pageSize);
+        NRClient.getDarenMonthList(map, new ResultCallback<Result<GradeData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+                recyclerView.loadMoreComplete();
+                recyclerView.refreshComplete();
+            }
+
+            @Override
+            public void onSuccess(Result<GradeData> result) {
+                LoadDialog.dismiss(getContext());
+                setData(result.getData());
+            }
+        });
+    }
+
+    private void getAllData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("accessToken", MApplication.getAccessToken());
+        map.put("pageNum", pageNum);
+        map.put("pageSize", pageSize);
+        NRClient.getDarenAllList(map, new ResultCallback<Result<GradeData>>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                LoadDialog.dismiss(getContext());
+                Utils.showErrorToast(getContext(), throwable);
+                recyclerView.loadMoreComplete();
+                recyclerView.refreshComplete();
+            }
+
+            @Override
+            public void onSuccess(Result<GradeData> result) {
+                LoadDialog.dismiss(getContext());
+                setData(result.getData());
+            }
+        });
+    }
+
+    private void setData(GradeData data) {
         if (pageNum == 1) {
             listData.clear();
         }
@@ -239,18 +274,14 @@ public class BookDonateRangeFragment extends Fragment {
         tvRemark.setText("" + Utils.getValue(myRank.getAccountRemark()));
         tvGrades.setVisibility(View.GONE);
         rbStar.setVisibility(View.GONE);
-        tvTimes.setVisibility(View.GONE);
+        tvTimes.setText("" + Utils.getValue(myRank.getRankScore()));
+
     }
 
     private void setListView() {
-        DividerItemDecoration dividerItemDecoration =
-                new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
-        recyclerView.addItemDecoration(dividerItemDecoration);
-
         final LinearLayoutManager linearLayout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayout);
-
-        adapter = new BookRangeAdapter(getContext(), listData, 0);
+        adapter = new RangeListRangeAdapter(getContext(), listData, 0);
         recyclerView.setAdapter(adapter);
 
         recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {

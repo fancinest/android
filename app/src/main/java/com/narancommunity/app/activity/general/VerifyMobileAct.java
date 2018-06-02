@@ -14,6 +14,7 @@ import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.LoadDialog;
 import com.narancommunity.app.common.Toaster;
 import com.narancommunity.app.common.Utils;
+import com.narancommunity.app.entity.UserInfo;
 import com.narancommunity.app.net.NRClient;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
@@ -54,6 +55,12 @@ public class VerifyMobileAct extends BaseActivity {
         toolbar.setTitle("手机号验证");
         setBar(toolbar);
         etMobile.setMaxEms(11);
+
+        UserInfo mInfo = MApplication.getUserInfo(getContext());
+        String mobile = Utils.getValue(mInfo.getPhone());
+        if (!mobile.equals("")) {
+            etMobile.setText(mobile);
+        }
     }
 
     @OnClick({R.id.btn_get_code, R.id.btn_go})

@@ -29,12 +29,12 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.waste.AskPaperAct;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.activity.mine.AddressAct;
+import com.narancommunity.app.activity.waste.AskPaperAct;
 import com.narancommunity.app.adapter.PicUploadAdapter;
 import com.narancommunity.app.adapter.StationeryAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
@@ -156,6 +156,22 @@ public class MakeWishAct extends BaseActivity {
         setDifference();
         setView();
         setGrid();
+
+        AndPermission.with(this)
+                .runtime()
+                .permission(Permission.Group.CAMERA, Permission.Group.STORAGE)
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+
+                    }
+                }).onDenied(new Action<List<String>>() {
+            @Override
+            public void onAction(List<String> data) {
+
+            }
+        })
+                .start();
     }
 
     private void setDifference() {
@@ -417,21 +433,6 @@ public class MakeWishAct extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        AndPermission.with(this)
-                .runtime()
-                .permission(Permission.Group.CAMERA, Permission.Group.STORAGE)
-                .onGranted(new Action<List<String>>() {
-                    @Override
-                    public void onAction(List<String> data) {
-
-                    }
-                }).onDenied(new Action<List<String>>() {
-            @Override
-            public void onAction(List<String> data) {
-
-            }
-        })
-                .start();
         getStationery();
         MobclickAgent.onResume(getContext());
     }

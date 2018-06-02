@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.index.BookDetailAct;
+import com.narancommunity.app.activity.index.book.BookDetailAct;
 import com.narancommunity.app.adapter.base.ListBaseAdapter;
 import com.narancommunity.app.adapter.base.SuperViewHolder;
 import com.narancommunity.app.common.LoadDialog;

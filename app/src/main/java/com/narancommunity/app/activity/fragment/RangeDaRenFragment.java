@@ -42,7 +42,7 @@ import butterknife.ButterKnife;
 /**
  * Writer：fancy on 2017/12/27 11:49
  * Email：120760202@qq.com
- * FileName : 公益达人
+ * FileName : 公益达人(旧版)
  */
 
 public class RangeDaRenFragment extends Fragment {

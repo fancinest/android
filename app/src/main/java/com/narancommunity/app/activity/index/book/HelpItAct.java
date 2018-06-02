@@ -1,4 +1,4 @@
-package com.narancommunity.app.activity.index;
+package com.narancommunity.app.activity.index.book;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -25,9 +25,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.adapter.PicUploadAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.ExpandableHeightGridView;
@@ -131,6 +131,22 @@ public class HelpItAct extends BaseActivity {
         setGrid();
         setDesc();
         orderId = getIntent().getIntExtra("orderId", 0);
+
+        AndPermission.with(this)
+                .runtime()
+                .permission(Permission.Group.CAMERA, Permission.Group.STORAGE)
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+
+                    }
+                }).onDenied(new Action<List<String>>() {
+            @Override
+            public void onAction(List<String> data) {
+
+            }
+        })
+                .start();
     }
 
     private void setDesc() {
@@ -366,21 +382,6 @@ public class HelpItAct extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        AndPermission.with(this)
-                .runtime()
-                .permission(Permission.Group.CAMERA, Permission.Group.STORAGE)
-                .onGranted(new Action<List<String>>() {
-                    @Override
-                    public void onAction(List<String> data) {
-
-                    }
-                }).onDenied(new Action<List<String>>() {
-            @Override
-            public void onAction(List<String> data) {
-
-            }
-        })
-                .start();
         MobclickAgent.onResume(this);
     }
 

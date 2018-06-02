@@ -3,15 +3,15 @@ package com.narancommunity.app.activity.mine;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
-import com.narancommunity.app.activity.general.BaseActivity;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.index.LoveActionAct;
+import com.narancommunity.app.activity.general.BaseActivity;
+import com.narancommunity.app.activity.general.HtmlFiveAct;
 import com.narancommunity.app.adapter.AssistantAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.LoadDialog;
@@ -20,6 +20,7 @@ import com.narancommunity.app.common.Utils;
 import com.narancommunity.app.entity.AssistantEntity;
 import com.narancommunity.app.entity.AssistantMissionEntity;
 import com.narancommunity.app.net.NRClient;
+import com.narancommunity.app.net.NRConfig;
 import com.narancommunity.app.net.Result;
 import com.narancommunity.app.net.ResultCallback;
 import com.umeng.analytics.MobclickAgent;
@@ -43,9 +44,9 @@ public class MyAttendNewAct extends BaseActivity {
     @BindView(R.id.toolbar)
     CenteredToolbar toolbar;
     @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @BindView(R.id.swipe_refresh)
-    SwipeRefreshLayout swipeRefreshLayout;
+    XRecyclerView recyclerView;
+    @BindView(R.id.tv_no_data)
+    TextView tvNoData;
 
     AssistantAdapter adapter;
     private int TOTAL_PAGE = 1;
@@ -70,6 +71,7 @@ public class MyAttendNewAct extends BaseActivity {
         MobclickAgent.onResume(this);
         getAssistantData();
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -86,6 +88,8 @@ public class MyAttendNewAct extends BaseActivity {
             public void onFailure(Throwable throwable) {
                 LoadDialog.dismiss(getContext());
                 Utils.showErrorToast(getContext(), throwable);
+                recyclerView.loadMoreComplete();
+                recyclerView.refreshComplete();
             }
 
             @Override
@@ -104,36 +108,27 @@ public class MyAttendNewAct extends BaseActivity {
             listData.addAll(data.getActivitys());
             adapter.setList(listData);
             pageNum++;
+            tvNoData.setVisibility(View.GONE);
+        } else {
+            tvNoData.setVisibility(View.VISIBLE);
         }
         adapter.notifyDataSetChanged();
+        recyclerView.loadMoreComplete();
+        recyclerView.refreshComplete();
     }
 
     private void setView() {
         final LinearLayoutManager linearLayout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayout);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    int lastVisibleItemPosition = linearLayout.findLastVisibleItemPosition();
-                    Log.i("fancy", "最后的可见位置:" + lastVisibleItemPosition);
-                    int myCount = adapter.getItemCount();
-                    if (lastVisibleItemPosition + 1 == myCount) {
-                        if (pageNum <= TOTAL_PAGE) {
-                            getAssistantData();
-                        } else
-                            Toaster.toast(getContext(), "已无更多数据");
-                    }
-                }
-            }
-        });
-
         adapter = new AssistantAdapter(getContext(), listData);
         adapter.setListener(new com.narancommunity.app.MeItemInterface() {
             @Override
             public void OnItemClick(int position) {
-                startActivity(new Intent(getContext(), LoveActionAct.class));
+                startActivity(new Intent(getContext(), HtmlFiveAct.class)
+                        .putExtra("url", NRConfig.HTML_AIXIN_WORK +
+                                "?accessToken=" + MApplication.getAccessToken()
+                                + "&activityId=" + listData.get(position).getActivityId())
+                        .putExtra("title", "爱心行动"));
             }
 
             @Override
@@ -142,21 +137,34 @@ public class MyAttendNewAct extends BaseActivity {
             }
         });
         recyclerView.setAdapter(adapter);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
+        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(true);
-                recyclerView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        pageNum = 1;
-                        getAssistantData();
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                });
+                pageNum = 1;
+                getAssistantData();
+            }
+
+            @Override
+            public void onLoadMore() {
+                if (pageNum <= TOTAL_PAGE) {
+                    getAssistantData();
+                } else {
+                    recyclerView.loadMoreComplete();
+                    recyclerView.refreshComplete();
+                    Toaster.toast(getContext(), "已无更多数据");
+                }
             }
         });
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (recyclerView != null) {
+            recyclerView.destroy(); // this will totally release XR's memory
+            recyclerView = null;
+        }
+    }
 }

@@ -32,6 +32,7 @@ import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
 import com.narancommunity.app.activity.general.LoginAct;
+import com.narancommunity.app.activity.index.book.HelpItAct;
 import com.narancommunity.app.activity.picbroswer.ImagePagerActivity;
 import com.narancommunity.app.adapter.CommentAdapter;
 import com.narancommunity.app.adapter.GridImageAdapter;

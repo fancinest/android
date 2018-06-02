@@ -38,7 +38,7 @@ public class AppConstants {
     public static final String CODE_USER_INFOEXIST = "U1001";//	注册信息已存在
     public static final String CODE_USER_OLDPWDERR = "U1002";//	原密码验证错误
     public static final long TIME_KEEP = 60;//请求超时时间
-    public static final int IMAGE_SIZE_LIMITED = 3000;//图片大小限制
+    public static final int IMAGE_SIZE_LIMITED = 1000;//图片大小限制
 
 
 }

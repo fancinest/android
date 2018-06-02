@@ -74,11 +74,11 @@ public class CompanyDetailAct extends BaseActivity {
 
     private LoveIntroduceFragment mLove = LoveIntroduceFragment.newInstance();
     private LoveFootPrintFragment mFootprint = LoveFootPrintFragment.newInstance();
-    private LoveHonourFragment mHonour = LoveHonourFragment.newInstance();
+//    private LoveHonourFragment mHonour = LoveHonourFragment.newInstance();
     private final Fragment[] TABS_FRAGMENT = new Fragment[]{
             mLove,
             mFootprint,
-            mHonour
+//            mHonour
     };
     private int accountId;
 
@@ -121,9 +121,9 @@ public class CompanyDetailAct extends BaseActivity {
         fm.beginTransaction()
                 .add(R.id.content_frame, mLove)
                 .add(R.id.content_frame, mFootprint)
-                .add(R.id.content_frame, mHonour)
+//                .add(R.id.content_frame, mHonour)
                 .hide(mFootprint)
-                .hide(mHonour)
+//                .hide(mHonour)
                 .commit();
     }
 

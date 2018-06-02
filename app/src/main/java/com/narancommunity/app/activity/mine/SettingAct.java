@@ -108,6 +108,7 @@ public class SettingAct extends BaseActivity {
     private void getOut() {
         Toaster.toast(getContext(), "退出成功！");
         MApplication.logout(false);
+        MApplication.finishAllActivity();
         startActivity(new Intent(getContext(), LoginAct.class));
         finish();
     }

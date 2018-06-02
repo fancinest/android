@@ -1,4 +1,4 @@
-package com.narancommunity.app.activity.index;
+package com.narancommunity.app.activity.index.book;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -116,6 +116,7 @@ public class BookYSHYDetailAct extends BaseActivity {
         super.onResume();
         MobclickAgent.onResume(this);
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -297,9 +298,7 @@ public class BookYSHYDetailAct extends BaseActivity {
             @Override
             public void onSuccess(Result<Void> result) {
                 LoadDialog.dismiss(getContext());
-//                isCollect = true;
                 Toaster.toast(getContext(), "收藏成功！");
-//                setIsCollect();
             }
 
             @Override
@@ -319,6 +318,8 @@ public class BookYSHYDetailAct extends BaseActivity {
     PopupWindow mPop;
 
     private void setPopView() {
+        if (mPop != null)
+            mPop.dismiss();
         LayoutInflater inflater = LayoutInflater.from(this);
         final View v = inflater.inflate(R.layout.pop_function_new, null);
 
@@ -339,10 +340,16 @@ public class BookYSHYDetailAct extends BaseActivity {
 
                 @Override
                 public void onClick(View arg0) {
-
-                    if (MApplication.isAuthorisedSuccess(getContext())) {
+                    String state = MApplication.getAuthorisedState(getContext());
+                    if (state.equals(MApplication.AUTH_INITIAL)) {
+                        showPopView(view, "分享赠送陌生人\n实名认证更安全");
+                    } else if (state.equals(MApplication.AUTH_FAIL)) {
+                        showPopView(view, "您的实名认证失败，无法操作，是否重新提交？");
+                    } else if (state.equals(MApplication.AUTH_SUCCESS)) {
                         addCollect();
-                    } else showPopView(view, "分享赠送陌生人\n实名认证更安全");
+                    } else if (state.equals(MApplication.AUTH_GOING)) {
+                        Toaster.toastLong(getContext(), "您尚未通过实名认证,请等待认证完成再操作！");
+                    }
                 }
             });
             v.findViewById(R.id.iv_add_comment).setOnClickListener(new View.OnClickListener() {
@@ -350,13 +357,20 @@ public class BookYSHYDetailAct extends BaseActivity {
                 @Override
                 public void onClick(View arg0) {
 //                    showInputDialog(0, "");
-                    if (MApplication.isAuthorisedSuccess(getContext())) {
+                    String state = MApplication.getAuthorisedState(getContext());
+                    if (state.equals(MApplication.AUTH_INITIAL)) {
+                        showPopView(view, "分享赠送陌生人\n实名认证更安全");
+                    } else if (state.equals(MApplication.AUTH_FAIL)) {
+                        showPopView(view, "您的实名认证失败，无法操作，是否重新提交？");
+                    } else if (state.equals(MApplication.AUTH_SUCCESS)) {
                         startActivity(new Intent(getContext(), AddBookCommentAct.class)
                                 .putExtra("tag", 0)
                                 .putExtra("bookId", mData.getContentId())
                                 .putExtra("commentedId", "")
                                 .putExtra("replyName", ""));
-                    } else showPopView(view, "分享赠送陌生人\n实名认证更安全");
+                    } else if (state.equals(MApplication.AUTH_GOING)) {
+                        Toaster.toastLong(getContext(), "您尚未通过实名认证,请等待认证完成再操作！");
+                    }
                 }
             });
         }
@@ -364,6 +378,7 @@ public class BookYSHYDetailAct extends BaseActivity {
 
     private void showPop() {
         if (mPop != null && !mPop.isShowing()) {
+            mPop.dismiss();
             mPop.showAtLocation(lnComment, Gravity.BOTTOM | Gravity.RIGHT, 0, 0);
         }
     }

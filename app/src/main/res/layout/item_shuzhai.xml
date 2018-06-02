@@ -13,8 +13,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@color/white"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <ImageView
@@ -35,13 +35,14 @@
             android:src="@mipmap/shuzhai_fengxiang_blue1" />
 
         <ImageView
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:id="@+id/iv_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@id/iv_like"
-            android:src="@mipmap/pic_shuzhai_bj" />
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/pic_shuzhai_zhanweitu" />
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>

@@ -12,6 +12,7 @@ import com.joooonho.SelectableRoundedImageView;
 import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
+import com.narancommunity.app.activity.index.book.AddBookCommentAct;
 import com.narancommunity.app.adapter.CommentSonAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.LoadDialog;

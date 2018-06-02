@@ -1,4 +1,4 @@
-package com.narancommunity.app.activity.index;
+package com.narancommunity.app.activity.index.book;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -70,6 +70,7 @@ public class ShuzhaiAct extends BaseActivity {
         super.onResume();
         MobclickAgent.onResume(this);
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -139,6 +140,7 @@ public class ShuzhaiAct extends BaseActivity {
     }
 
     private void likeIt(int position) {
+        LoadDialog.show(getContext());
         Map<String, Object> map = new HashMap<>();
         map.put("accessToken", MApplication.getAccessToken());
         map.put("contentId", listData.get(position).getContentId());

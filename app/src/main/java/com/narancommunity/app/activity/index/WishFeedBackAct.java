@@ -17,9 +17,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.adapter.PicUploadAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.ExpandableHeightGridView;
@@ -79,6 +79,22 @@ public class WishFeedBackAct extends BaseActivity {
         toolbar.setTitle("感谢反馈");
         orderId = getIntent().getIntExtra("orderId", 0);
         setGrid();
+
+        AndPermission.with(this)
+                .runtime()
+                .permission(Permission.Group.CAMERA, Permission.Group.STORAGE)
+                .onGranted(new Action<List<String>>() {
+                    @Override
+                    public void onAction(List<String> data) {
+
+                    }
+                }).onDenied(new Action<List<String>>() {
+            @Override
+            public void onAction(List<String> data) {
+
+            }
+        })
+                .start();
     }
 
     private String getImages() {
@@ -237,21 +253,6 @@ public class WishFeedBackAct extends BaseActivity {
     protected void onResume() {
         super.onResume();
         MobclickAgent.onPause(getContext());
-        AndPermission.with(this)
-                .runtime()
-                .permission(Permission.Group.CAMERA, Permission.Group.STORAGE)
-                .onGranted(new Action<List<String>>() {
-                    @Override
-                    public void onAction(List<String> data) {
-
-                    }
-                }).onDenied(new Action<List<String>>() {
-            @Override
-            public void onAction(List<String> data) {
-
-            }
-        })
-                .start();
     }
 
 //    RationaleListener rationaleListener = new RationaleListener() {

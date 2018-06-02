@@ -1,4 +1,4 @@
-package com.narancommunity.app.activity.index;
+package com.narancommunity.app.activity.index.book;
 
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;

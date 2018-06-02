@@ -181,7 +181,7 @@
             android:layout_marginRight="16dp"
             android:paddingBottom="8dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/banner1"
+            android:src="@mipmap/bitmap_banner"
             android:visibility="gone" />
 
     </LinearLayout>

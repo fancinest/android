@@ -2,14 +2,14 @@ package com.narancommunity.app.activity.mine;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
-import com.narancommunity.app.activity.general.BaseActivity;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.R;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.adapter.MsgAdapter;
 import com.narancommunity.app.common.CenteredToolbar;
 import com.narancommunity.app.common.LoadDialog;
@@ -40,19 +40,19 @@ public class MsgAct extends BaseActivity {
     @BindView(R.id.toolbar)
     CenteredToolbar toolbar;
     @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @BindView(R.id.swipe_refresh)
-    SwipeRefreshLayout swipeRefresh;
+    XRecyclerView recyclerView;
+    //    @BindView(R.id.swipe_refresh)
+//    SwipeRefreshLayout swipeRefresh;
+    @BindView(R.id.tv_no_data)
+    TextView tvNoData;
 
     public MsgAdapter adapter;
 
     List<MsgEntity> listData = new ArrayList<>();
 
-    int tag;
     int pageNum = 1;
     int pageSize = 10;
 
-    int current_position = 1;
     int TOTAL_PAGE = 1;
 
     @Override
@@ -90,6 +90,8 @@ public class MsgAct extends BaseActivity {
             public void onFailure(Throwable throwable) {
                 LoadDialog.dismiss(getContext());
                 Utils.showErrorToast(getContext(), throwable);
+                recyclerView.loadMoreComplete();
+                recyclerView.refreshComplete();
             }
 
             @Override
@@ -103,65 +105,52 @@ public class MsgAct extends BaseActivity {
     private void setData(MsgData data) {
         if (pageNum == 1)
             listData.clear();
-        if (data != null) {
-            if (data.getNewss() != null && data.getNewss().size() > 0) {
-                listData.addAll(data.getNewss());
-                pageNum++;
-                adapter.setDataList(listData);
-                adapter.notifyDataSetChanged();
-            }
-        } else Toaster.toast(getContext(), "暂无消息!");
+        if (data != null && data.getNewss() != null && data.getNewss().size() > 0) {
+            listData.addAll(data.getNewss());
+            pageNum++;
+            tvNoData.setVisibility(View.GONE);
+        } else {
+            tvNoData.setVisibility(View.VISIBLE);
+        }
+        adapter.setDataList(listData);
+        adapter.notifyDataSetChanged();
+        recyclerView.loadMoreComplete();
+        recyclerView.refreshComplete();
     }
 
     private void setView() {
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-
-            @Override
-            public void onRefresh() {
-                swipeRefresh.setRefreshing(true);
-                recyclerView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        pageNum = 1;
-                        getData();
-                        swipeRefresh.setRefreshing(false);
-                    }
-                });
-            }
-        });
-//        DividerItemDecoration dividerItemDecoration =
-//                new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
-//        recyclerView.addItemDecoration(dividerItemDecoration);
-
         final LinearLayoutManager linearLayout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayout);
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                Log.i("fancy", "滑动时候的position：" + current_position);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    int lastVisibleItemPosition = linearLayout.findLastVisibleItemPosition();
-                    int myCount = adapter.getItemCount();
-                    if (lastVisibleItemPosition + 1 == myCount) {
-                        if (current_position < TOTAL_PAGE) {
-                            current_position++;
-                            getData();
-                        } else
-                            Toaster.toast(getContext(), "已无更多数据");
-                    }
-                }
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-        });
-
         adapter = new MsgAdapter(getContext());
         adapter.setDataList(listData);
         recyclerView.setAdapter(adapter);
+
+        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+                pageNum = 1;
+                getData();
+            }
+
+            @Override
+            public void onLoadMore() {
+                if (pageNum <= TOTAL_PAGE) {
+                    getData();
+                } else {
+                    recyclerView.loadMoreComplete();
+                    recyclerView.refreshComplete();
+                    Toaster.toast(getContext(), "已无更多数据");
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (recyclerView != null) {
+            recyclerView.destroy(); // this will totally release XR's memory
+            recyclerView = null;
+        }
     }
 }

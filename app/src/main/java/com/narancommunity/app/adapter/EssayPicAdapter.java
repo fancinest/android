@@ -49,7 +49,7 @@ public class EssayPicAdapter extends ListBaseAdapter<String> {
         if (!entity.equals("")) {
             Utils.setImgF(mContext, entity, pic);
         } else {
-            Utils.setImgF(mContext, R.mipmap.zw_morentouxiang, pic);
+            Utils.setImgF(mContext, R.mipmap.bitmap_shequliebiao, pic);
         }
         pic.setOnClickListener(new View.OnClickListener() {
             @Override

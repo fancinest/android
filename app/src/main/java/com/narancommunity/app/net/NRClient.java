@@ -17,6 +17,7 @@ import com.narancommunity.app.entity.BookInfo;
 import com.narancommunity.app.entity.BookLendCardData;
 import com.narancommunity.app.entity.BookListData;
 import com.narancommunity.app.entity.BookRelativeRecData;
+import com.narancommunity.app.entity.BookSortEntity;
 import com.narancommunity.app.entity.CommentDetail;
 import com.narancommunity.app.entity.CommentListEntity;
 import com.narancommunity.app.entity.CompanyData;
@@ -46,6 +47,7 @@ import com.narancommunity.app.entity.Zan;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.MediaType;
@@ -147,6 +149,32 @@ public class NRClient {
     }
 
     //TODO 以此为基础
+
+    /**
+     * @param callback
+     * @return
+     */
+    public static Call getBookSort(Map<String, Object> baseData, final ResultCallback<Result<List<BookSortEntity>>> callback) {
+
+        if (callback == null) throw new NullPointerException("callback == null");
+        NRService mService = ServiceFactory.createNewService(NRService.class);
+        Call<Result<List<BookSortEntity>>> call = mService.getBookSort(baseData);
+        Callback<Result<List<BookSortEntity>>> cbk = new Callback<Result<List<BookSortEntity>>>() {
+
+            @Override
+            public void onResponse(Call<Result<List<BookSortEntity>>> call,
+                                   Response<Result<List<BookSortEntity>>> response) {
+                Result.onResponse(response, callback);
+            }
+
+            @Override
+            public void onFailure(Call<Result<List<BookSortEntity>>> call, Throwable t) {
+                Result.onFailure(t, callback);
+            }
+        };
+        call.enqueue(cbk);
+        return call;
+    }
 
     /**
      * @param callback
@@ -420,8 +448,6 @@ public class NRClient {
         if (callback == null) throw new NullPointerException("callback == null");
         NRService mService = ServiceFactory.createNewService(NRService.class);
         HashMap<String, Object> header = new HashMap<>();
-        header.put("accessToken", MApplication.getAccessToken());
-        Log.i("fancy", header.get("accessToken") + "");
         Call<Result<AddressEntity>> call = mService.getAddressById(baseData);
         Callback<Result<AddressEntity>> cbk = new Callback<Result<AddressEntity>>() {
 

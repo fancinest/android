@@ -228,14 +228,21 @@ public class LoveFragment extends Fragment {
 
     @OnClick(R.id.tv_add_love)
     public void onViewClicked() {
-        if (MApplication.isAuthorisedSuccess(getContext())) {
+        String state = MApplication.getAuthorisedState(getContext());
+        if (state.equals(MApplication.AUTH_INITIAL)) {
+            showPopView(tvAddLove, "分享赠送陌生人\n实名认证更安全");
+        } else if (state.equals(MApplication.AUTH_FAIL)) {
+            showPopView(tvAddLove, "您的实名认证失败，无法操作，是否重新提交？");
+        } else if (state.equals(MApplication.AUTH_SUCCESS)) {
             startActivity(new Intent(getContext(), SettleDownAct.class));
-        } else showPopView(tvAddLove);
+        } else if (state.equals(MApplication.AUTH_GOING)) {
+            Toaster.toastLong(getContext(), "您尚未通过实名认证,请等待认证完成再操作！");
+        }
     }
 
     PopupWindow mPop;
 
-    private void showPopView(View view) {
+    private void showPopView(View view, String desc) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View v = inflater.inflate(R.layout.pop_authorise, null);
 
@@ -246,7 +253,7 @@ public class LoveFragment extends Fragment {
             mPop.setOutsideTouchable(true);
             mPop.setBackgroundDrawable(new BitmapDrawable());
             TextView tv_prompt = v.findViewById(R.id.tv_prompt);
-            tv_prompt.setText("分享赠送陌生人\n实名认证更安全");
+            tv_prompt.setText(desc);
             Button go = v.findViewById(R.id.btn_go);
             go.setOnClickListener(new View.OnClickListener() {
                 @Override

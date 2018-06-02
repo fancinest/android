@@ -3,15 +3,16 @@ package com.narancommunity.app.activity.index;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
-import com.narancommunity.app.activity.general.BaseActivity;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.narancommunity.app.MApplication;
 import com.narancommunity.app.MeItemInterface;
 import com.narancommunity.app.R;
+import com.narancommunity.app.activity.general.BaseActivity;
 import com.narancommunity.app.activity.general.HtmlFiveAct;
 import com.narancommunity.app.adapter.AssistantAdapter;
 import com.narancommunity.app.adapter.WeekRecAdapter;
@@ -48,7 +49,9 @@ public class FindFourAct extends BaseActivity {
     @BindView(R.id.toolbar)
     CenteredToolbar toolbar;
     @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
+    XRecyclerView recyclerView;
+    @BindView(R.id.tv_no_data)
+    TextView tvNoData;
 
     public WeekRecAdapter mWeekAdapter;
     public AssistantAdapter mAssistantAdapter;
@@ -59,8 +62,6 @@ public class FindFourAct extends BaseActivity {
     int tag;
     int pageNum = 1;
     int pageSize = 10;
-    @BindView(R.id.swipe_refresh)
-    SwipeRefreshLayout swipeRefresh;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,6 +102,8 @@ public class FindFourAct extends BaseActivity {
                 public void onFailure(Throwable throwable) {
                     LoadDialog.dismiss(getContext());
                     Utils.showErrorToast(getContext(), throwable);
+                    recyclerView.loadMoreComplete();
+                    recyclerView.refreshComplete();
                 }
 
                 @Override
@@ -119,6 +122,8 @@ public class FindFourAct extends BaseActivity {
                 public void onFailure(Throwable throwable) {
                     LoadDialog.dismiss(getContext());
                     Utils.showErrorToast(getContext(), throwable);
+                    recyclerView.loadMoreComplete();
+                    recyclerView.refreshComplete();
                 }
 
                 @Override
@@ -137,6 +142,8 @@ public class FindFourAct extends BaseActivity {
                 public void onFailure(Throwable throwable) {
                     LoadDialog.dismiss(getContext());
                     Utils.showErrorToast(getContext(), throwable);
+                    recyclerView.loadMoreComplete();
+                    recyclerView.refreshComplete();
                 }
 
                 @Override
@@ -149,34 +156,54 @@ public class FindFourAct extends BaseActivity {
     }
 
     private void setReportListData(WeekEntity data) {
-        if (data != null && data.getContents().size() > 0) {
-            TOTAL_PAGE = data.getTotalPageNum();
+        if (pageNum == 1)
+            listRecData.clear();
+        TOTAL_PAGE = data.getTotalPageNum();
+        if (data != null && data.getContents() != null && data.getContents().size() > 0) {
             listRecData.addAll(data.getContents());
-            mWeekAdapter.setList(listRecData);
-            mWeekAdapter.notifyDataSetChanged();
+            pageNum++;
+            tvNoData.setVisibility(View.GONE);
+        } else {
+            tvNoData.setVisibility(View.VISIBLE);
         }
+        mWeekAdapter.setList(listRecData);
+        mWeekAdapter.notifyDataSetChanged();
+        recyclerView.loadMoreComplete();
+        recyclerView.refreshComplete();
     }
 
     private void setRecListData(WeekEntity data) {
-        if (data == null)
-            return;
-        if (data != null && data.getContents().size() > 0) {
-            TOTAL_PAGE = data.getTotalPageNum();
+        if (pageNum == 1)
+            listRecData.clear();
+        TOTAL_PAGE = data.getTotalPageNum();
+        if (data != null && data.getContents() != null && data.getContents().size() > 0) {
             listRecData.addAll(data.getContents());
-            mWeekAdapter.setList(listRecData);
-            mWeekAdapter.notifyDataSetChanged();
+            pageNum++;
+            tvNoData.setVisibility(View.GONE);
+        } else {
+            tvNoData.setVisibility(View.VISIBLE);
         }
+        mWeekAdapter.setList(listRecData);
+        mWeekAdapter.notifyDataSetChanged();
+        recyclerView.loadMoreComplete();
+        recyclerView.refreshComplete();
     }
 
     private void setAssistantListData(AssistantEntity data) {
-        if (data == null)
-            return;
-        if (data != null && data.getActivitys().size() > 0) {
-            TOTAL_PAGE = data.getTotalPageNum();
+        if (pageNum == 1)
+            listAssistantData.clear();
+        TOTAL_PAGE = data.getTotalPageNum();
+        if (data != null && data.getActivitys() != null && data.getActivitys().size() > 0) {
             listAssistantData.addAll(data.getActivitys());
-            mAssistantAdapter.setList(listAssistantData);
-            mAssistantAdapter.notifyDataSetChanged();
+            pageNum++;
+            tvNoData.setVisibility(View.GONE);
+        } else {
+            tvNoData.setVisibility(View.VISIBLE);
         }
+        mAssistantAdapter.setList(listAssistantData);
+        mAssistantAdapter.notifyDataSetChanged();
+        recyclerView.loadMoreComplete();
+        recyclerView.refreshComplete();
     }
 
 
@@ -184,67 +211,12 @@ public class FindFourAct extends BaseActivity {
     int TOTAL_PAGE = 1;
 
     private void setView() {
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-
-            @Override
-            public void onRefresh() {
-                swipeRefresh.setRefreshing(true);
-                recyclerView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        getData();
-                        swipeRefresh.setRefreshing(false);
-                    }
-                });
-            }
-        });
         DividerItemDecoration dividerItemDecoration =
                 new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
-//                DividerItemDecoration divider = new DividerItemDecoration.Builder(getContext())
-//                        .setHeight(R.dimen.default_divider_height)
-//                        .setPadding(R.dimen.default_divider_padding)
-//                        .setColorResource(R.color.color_eeeeee)
-//                        .build();
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         final LinearLayoutManager linearLayout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayout);
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                Log.i("fancy", "滑动时候的position：" + current_position);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    int lastVisibleItemPosition = linearLayout.findLastVisibleItemPosition();
-                    int myCount = 0;
-                    switch (tag) {
-                        case 0:
-                            myCount = mWeekAdapter.getItemCount();
-                            break;
-                        case 1:
-                            myCount = mAssistantAdapter.getItemCount();
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            break;
-                    }
-                    if (lastVisibleItemPosition + 1 == myCount) {
-                        if (current_position < TOTAL_PAGE) {
-                            current_position++;
-                            getData();
-                        } else
-                            Toaster.toast(getContext(), "已无更多数据");
-                    }
-                }
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-        });
 
         switch (tag) {
             case 0:
@@ -278,7 +250,7 @@ public class FindFourAct extends BaseActivity {
                         startActivity(new Intent(getContext(), HtmlFiveAct.class)
                                 .putExtra("url", NRConfig.HTML_AIXIN_WORK +
                                         "?accessToken=" + MApplication.getAccessToken()
-                                        + "&activityid=" + listAssistantData.get(position).getActivityId())
+                                        + "&activityId=" + listAssistantData.get(position).getActivityId())
                                 .putExtra("title", "爱心行动"));
 //                        startActivity(new Intent(getContext(), AssistantDetailAct.class));
                     }
@@ -295,7 +267,11 @@ public class FindFourAct extends BaseActivity {
                 mWeekAdapter.setListener(new MeItemInterface() {
                     @Override
                     public void OnItemClick(int position) {
-                        Toaster.toast(getContext(), "准备跳转");
+                        startActivity(new Intent(getContext(), HtmlFiveAct.class)
+                                .putExtra("url", NRConfig.HTML_REPORT +
+                                        "?accessToken=" + MApplication.getAccessToken()
+                                        + "&contentId=" + listRecData.get(position).getContentId())
+                                .putExtra("title", "专题报道"));
                     }
 
                     @Override
@@ -309,6 +285,24 @@ public class FindFourAct extends BaseActivity {
             case 3:
                 break;
         }
+        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+                pageNum = 1;
+                getData();
+            }
+
+            @Override
+            public void onLoadMore() {
+                if (pageNum <= TOTAL_PAGE) {
+                    getData();
+                } else {
+                    recyclerView.loadMoreComplete();
+                    recyclerView.refreshComplete();
+                    Toaster.toast(getContext(), "已无更多数据");
+                }
+            }
+        });
     }
 
     private String getMyTitle(int tag) {
@@ -323,6 +317,15 @@ public class FindFourAct extends BaseActivity {
                 return "排行榜";
             default:
                 return "";
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (recyclerView != null) {
+            recyclerView.destroy(); // this will totally release XR's memory
+            recyclerView = null;
         }
     }
 }

@@ -80,9 +80,18 @@ public class MainActivity extends AppCompatActivity {
         iv_release.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (MApplication.isAuthorisedSuccess(MainActivity.this)) {
+
+                String state = MApplication.getAuthorisedState(MainActivity.this);
+                if (state.equals(MApplication.AUTH_INITIAL)) {
+                    showPopView(view, "分享赠送陌生人\n实名认证更安全");
+                } else if (state.equals(MApplication.AUTH_FAIL)) {
+                    showPopView(view, "您的实名认证失败，无法操作，是否重新提交？");
+                } else if (state.equals(MApplication.AUTH_SUCCESS)) {
                     startActivity(new Intent(MainActivity.this, DonateBookAct.class));
-                } else showPopView(iv_release);
+                } else if (state.equals(MApplication.AUTH_GOING)) {
+                    Toaster.toastLong(MainActivity.this, "您尚未通过实名认证,请等待认证完成再操作！");
+                }
+
             }
         });
         home_tab.setChecked(true);
@@ -99,11 +108,13 @@ public class MainActivity extends AppCompatActivity {
                 .hide(mMeFragment)
                 .commit();
         registerMessageReceiver();  // used for receive msg
+
+        MApplication.putActivity("Main", MainActivity.this);
     }
 
     PopupWindow mPop;
 
-    private void showPopView(View view) {
+    private void showPopView(View view, String desc) {
         LayoutInflater inflater = LayoutInflater.from(this);
         View v = inflater.inflate(R.layout.pop_authorise, null);
 
@@ -114,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             mPop.setOutsideTouchable(true);
             mPop.setBackgroundDrawable(new BitmapDrawable());
             TextView tv_prompt = v.findViewById(R.id.tv_prompt);
-            tv_prompt.setText("分享赠送陌生人\n实名认证更安全");
+            tv_prompt.setText(desc);
             Button go = v.findViewById(R.id.btn_go);
             go.setOnClickListener(new View.OnClickListener() {
                 @Override

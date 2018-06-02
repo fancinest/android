@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.narancommunity.app.R;
-import com.narancommunity.app.activity.index.BookOrdererListAct;
+import com.narancommunity.app.activity.index.book.BookOrdererListAct;
 import com.narancommunity.app.adapter.base.ListBaseAdapter;
 import com.narancommunity.app.adapter.base.SuperViewHolder;
 import com.narancommunity.app.common.Utils;

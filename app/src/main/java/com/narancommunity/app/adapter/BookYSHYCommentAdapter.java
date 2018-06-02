@@ -13,7 +13,7 @@
 //import com.joooonho.SelectableRoundedImageView;
 //import com.narancommunity.app.MeItemInterface;
 //import com.narancommunity.app.R;
-//import com.narancommunity.app.activity.index.MoreCommentAct;
+//import com.narancommunity.app.activity.index.book.MoreCommentAct;
 //import com.narancommunity.app.activity.index.SingleCommentDetailAct;
 //import com.narancommunity.app.common.Utils;
 //import com.narancommunity.app.common.adapter.EasyRecyclerAdapter;
